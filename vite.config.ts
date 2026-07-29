@@ -130,6 +130,9 @@ export default defineConfig({
             if ( rel ) {
               const dir = dirname(rel);
               const sourceExt = extname(original);
+              // If the "original" file is an HTML entry, the asset is a CSS/JS chunk
+              // extracted from that HTML — don't blindly append `.html` to its name.
+              if ( sourceExt === '.html' ) return name;
               // Vite 8 / Rolldown's `assetInfo.names[0]` is inconsistent across asset types. HTML-imported CSS uses basename without extension ( `֭ſɭᴜ ı__ɔ` ), while binary/text assets imported via CSS/JS chunks ( TTF/PNG/ICO/JSON ) have with the extension already on `name` ( `j͑ʃꞇȝ.ttf` ). Strip the source's extension off `name` if present, then always re-append.
               const withoutExt = sourceExt && name.endsWith(sourceExt)
                 ? name.slice(0, -sourceExt.length)
