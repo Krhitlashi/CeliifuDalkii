@@ -98,7 +98,21 @@ function toSourceRelative(id: string | null | undefined): string | null {
 }
 
 export default defineConfig({
-  plugins: [copyStaticFilesPlugin],
+  plugins: [
+    // Serve the main OS page at root URL
+    {
+      name: "serve-main-html",
+      configureServer( server ) {
+        server.middlewares.use( ( req, _res, next ) => {
+          if ( req.url === "/" || req.url === "/index.html" ) {
+            req.url = "/%C9%AD(%C9%AC%CD%B7%CC%97%20%C5%BF%C9%AD%C9%B9.html";
+          }
+          next();
+        } );
+      }
+    },
+    copyStaticFilesPlugin,
+  ],
   build: {
     rollupOptions: {
       input: getHtmlEntries(__dirname),
