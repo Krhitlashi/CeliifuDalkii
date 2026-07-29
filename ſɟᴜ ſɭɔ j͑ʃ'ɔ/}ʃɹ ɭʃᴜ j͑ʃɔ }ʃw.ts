@@ -253,7 +253,7 @@ class PanelaAdministranto {
     static baskuligiHorlogxoElsxovo(): void {
         return this.baskuligi( this.panels.clockFlyout, "clock-area", {
             onBefore: () => {
-                if ( ( window as any ).HorlogxoAdministranto ) ( window as any ).HorlogxoAdministranto.update();
+                if ( ( window as any ).HorlogxoAdministranto ) ( window as any ).HorlogxoAdministranto.aktualigi();
             }
         } );
     }

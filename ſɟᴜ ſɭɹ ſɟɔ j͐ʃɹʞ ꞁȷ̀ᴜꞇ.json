@@ -1,0 +1,10 @@
+{
+  "name": "Dalk2Cel2fu OS",
+  "short_name": "Dalk2Cel2fu",
+  "description": "An OS-like web desktop interface",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#181818",
+  "theme_color": "#181818",
+  "icons": []
+}
