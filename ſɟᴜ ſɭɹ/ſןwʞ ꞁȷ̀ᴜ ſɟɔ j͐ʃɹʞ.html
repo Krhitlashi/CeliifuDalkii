@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="aih">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="inline-size=device-inline-size, initial-scale=1">
+
+    <title data-oskakefani="app_browser"></title>
+    <link rel="icon" type="image/x-icon" href="../../../j͑ʃɹ ɭʃᴜɔ˞ ɭl̀ɔ j͑ʃᴜꞇ.ico">
+
+    <link rel="manifest" href="../../../ſɟᴜ ſɭɹ ſɟɔ j͐ʃɹʞ ꞁȷ̀ᴜꞇ.json">
+    <link rel="stylesheet" href="../../../֭ſɭᴜ ı],ɔ.css">
+</head>
+
+<body class="cepufal">
+    <div style="display: flex; flex-direction: row;">
+        <input type="text" style="inline-size: 100%;" id="url-bar" data-oskakefani="ph_url">
+        <button onclick="go()" data-oskakefani="cmd_go"></button>
+    </div>
+    <iframe style="block-size: 100%;" id="frame" src="https://www.wikipedia.org"></iframe>
+    
+</body>
+<script>
+    const urlBar = document.getElementById('url-bar');
+    const frame = document.getElementById('frame');
+    const saved = localStorage.getItem('browser-url');
+    if (saved) { urlBar.value = saved; frame.src = saved; }
+    function go() {
+        let url = urlBar.value;
+        if (!url.startsWith('http')) url = 'https://' + url;
+        frame.src = url;
+        localStorage.setItem('browser-url', url);
+    }
+    urlBar.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+    
+    const skakefani = {
+        aih: {
+            "app_browser": "ſןwʞ ꞁȷ̀ᴜ ſɟɔ j͐ʃɹʞ 🌐",
+            "ph_url": "ʃᴜ }ʃᴜ ɽ͑ʃ'w j͑ʃ'ᴜ",
+            "cmd_go": "ſɭɔ j͑ʃ'ɔ"
+        },
+        en: {
+            "app_browser": "Browser 🌐",
+            "ph_url": "Enter URL",
+            "cmd_go": "Go"
+        }
+    };
+</script>
+<script src="../../../ſɟᴜ ſɭɔ j͑ʃ'ɔ/j͑ʃƽᴜ ſɭɔʞ.js"></script>
+<script src="../../../ſɟᴜ ſɭɔ j͑ʃ'ɔ/ſɭɔ j͑ʃ'ɔ }ʃꞇ.js"></script>
+
+</html>

@@ -1,0 +1,529 @@
+/* ⟪ Layout Variables ⟫ */
+
+:root {
+    --taskbar-width: calc(var(--taskbar-icon-size, 32px) + var(--taskbar-padding, 8px) * 2);
+    --panel-inset-top: 0;
+    --panel-inset-bottom: 0;
+    --panel-inset-left: 0;
+    --panel-inset-right: 0;
+    --inset-gap: var(--អារេងព៏);
+}
+
+/* ⟪ Desktop & Background ⟫ */
+
+#os-root {
+    background-color: #808080;
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    transition: background 0.5s ease;
+}
+
+/* Gradient wallpaper support */
+#os-root.wallpaper-gradient {
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#desktop {
+    position: absolute;
+    top: var(--panel-inset-top);
+    right: var(--panel-inset-right);
+    bottom: var(--panel-inset-bottom);
+    left: var(--panel-inset-left);
+}
+
+/* ⟪ App Tile ⟫ */
+
+.app-tile {
+    position: absolute;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.app-tile .cepufal {
+    block-size: 100% !important;
+    inline-size: 100% !important;
+    overflow: hidden;
+}
+
+/* Orientation Logic for Tiles */
+
+.app-tile[data-position="left"] .cepufal,.app-tile[data-position="right"] .cepufal  {
+    flex-direction: column;
+}
+.app-tile[data-position="top"] .cepufal, .app-tile[data-position="bottom"] .cepufal {
+    flex-direction: row-reverse; 
+}
+.app-tile ksaka.title-bar {
+    padding: var(--អារេងមិ) var(--អារេង) !important;
+    min-block-size: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Pill Alignment in Tiles */
+
+.app-tile ksaka.title-bar[data-position="left"],
+.app-tile ksaka.title-bar[data-position="right"] {
+    writing-mode: sideways-lr;
+    inline-size: auto;
+    block-size: auto;
+}
+.app-tile ksaka.title-bar[data-position="top"],
+.app-tile ksaka.title-bar[data-position="bottom"] {
+    writing-mode: horizontal-tb;
+    inline-size: auto;
+    block-size: auto;
+}
+.app-tile .title-bar-title {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    line-height: 1.25;
+}
+.app-tile button {
+    flex: 1;
+    block-size: 100% !important;
+    inline-size: 100%;
+    background-color: var(--ឆាងាធីច្ហិ);
+    backdrop-filter: var(--ច្ហិនី);
+}
+.app-tile .icon {
+    font-size: 24px;
+    line-height: 1;
+}
+.app-tile .label.inside {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* ⟪ App Tile Resize Handle ⟫ */
+
+.app-tile .resize-handle {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    inline-size: 24px;
+    block-size: 24px;
+    cursor: se-resize;
+    z-index: 24;
+    background: var(--តានេក២);
+    border-radius: var(--ចិង);
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+.app-tile .resize-handle::after, .window .resize-handle-se::after, .window .resize-handle-sw::after, .window .resize-handle-ne::after, .window .resize-handle-nw::after {
+    content: '⟋';
+    color: var(--កេភ២);
+}
+
+/* Only show resize handles for desktop tiles in edit mode (not start menu) */
+#desktop.edit-mode .app-tile .resize-handle { display: flex; }
+#desktop.edit-mode .app-tile:hover {
+    background: var(--តានេកខេលេ);
+    border-radius: var(--អិត្ភេ);
+}
+.app-tile.dragging { 
+    opacity: 0.625;
+ }
+
+/* ⟪ Start Menu ⟫ */
+
+#start-menu {
+    position: absolute;
+    top: var(--panel-inset-top);
+    bottom: var(--panel-inset-bottom);
+    left: var(--panel-inset-left);
+    right: var(--panel-inset-right);
+    display: none;
+    flex-direction: column;
+    overflow: visible;
+    z-index: 2048;
+}
+#start-menu.open {
+    display: flex;
+}
+#start-menu-content {
+    flex-grow: 1;
+    position: relative;
+    overflow: auto;
+    min-height: 100%;
+}
+#start-menu .app-tile:hover {
+    background: var(--តានេក២);
+    border-radius: var(--អិត្ភេ);
+}
+
+/* ⟪ Mobile Grid Pagination ⟫ */
+
+/* Page indicator dots for mobile */
+.page-indicators {
+    position: fixed;
+    bottom: calc(var(--taskbar-width) + var(--អារេងព៏) + 0o20);
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    gap: 0o10;
+    z-index: 1000;
+}
+
+@media (max-width: 767px), (max-height: 767px) {
+    .page-indicators {
+        display: flex;
+    }
+    
+    .page-indicator {
+        width: 0o10;
+        height: 0o10;
+        border-radius: 50%;
+        background: var(--កេភ២);
+        opacity: 0.5;
+        transition: opacity 0.25s, background 0.25s;
+    }
+    
+    .page-indicator.active {
+        opacity: 1;
+        background: var(--កេភ);
+    }
+    
+    /* Touch-friendly window controls on mobile */
+    .window .title-bar {
+        min-height: 0o60;
+        touch-action: none;
+    }
+    
+    .window .control-btn {
+        min-width: 0o60;
+        min-height: 0o60;
+    }
+    
+    /* Larger resize handles for touch */
+    .window .resize-handle {
+        min-width: 0o30;
+        min-height: 0o30;
+    }
+}
+
+/* ⟪ Panels ⟫ */
+
+.system-panel {
+    max-inline-size: 25vh;
+}
+#quick-settings-container,
+#notifications-panel,
+#recents-panel,
+#clock-panel,
+#taskbar-dock,
+#context-menu {
+    position: fixed;
+    display: none;
+    z-index: 8192;
+}
+#quick-settings-sliders.visible,
+#quick-settings-buttons.visible,
+#notifications-panel.visible,
+#recents-panel.visible,
+#clock-panel.visible,
+#taskbar-dock.visible,
+#context-menu.visible,
+.system-panel.visible,
+#quick-settings-container.visible > .system-panel {
+    display: flex !important;
+}
+#context-menu button {
+    block-size: auto;
+}
+#quick-settings-container {
+    flex-direction: column;
+}
+
+/* Customization Visuals */
+
+.qs-editing .xeku1okek {
+    cursor: grab;
+    animation: qsWobble 0.25s ease-in-out infinite alternate;
+    position: relative;
+}
+.qs-remove-btn {
+    display: none;
+}
+.xeku1okek, .qs-editing .qs-remove-btn {
+    display: flex;
+}
+.xeku1okek ciihii {
+    inline-size: 100%;
+}
+.xeku1okek button:not( .qs-remove-btn ) {
+    flex: 1;
+}
+.qs-dragging {
+    opacity: 0.5;
+}
+
+@keyframes qsWobble {
+    from { transform: translateY(-1px); }
+    to { transform: translateY(1px); }
+}
+
+/* ⟪ Notifications ⟫ */
+
+.notif-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: var(--តានេកខេលេ);
+}
+.notif-desc {
+    color: var(--កេភ២);
+}
+.control-btn {
+    inline-size: 100%;
+}
+
+/* ⟪ Recent Apps ⟫ */
+
+.recents-card {
+    border-radius: var(--អិត្ភេចិ);
+    display: flex;
+    flex-direction: column;
+}
+.recents-card .recents-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    block-size: 100%;
+    background: var(--តានេកខេលេ);
+    border-radius: var(--អិត្ភេចិ);
+}
+.recents-card:hover .recents-preview {
+    background: var(--តានេក២);
+}
+
+/* ⟪ Clock Flyout ⟫ */
+
+#clock-panel {
+    flex-direction: column;
+    padding: var(--អារេងព៏);
+}
+
+/* ⟪ Taskbar ⟫ */
+
+#taskbar, #taskbar.thala {
+    position: absolute;
+    justify-content: space-between;
+    padding: var(--អារេង);
+    writing-mode: horizontal-tb;
+    align-items: center;
+}
+#taskbar[data-position="left"], #taskbar[data-position="right"] {
+    top: var(--អារេងព៏);
+    bottom: var(--អារេងព៏);
+    width: var(--taskbar-width) !important;
+    flex-direction: column;
+}
+#taskbar[data-position="left"] { left: var(--អារេងព៏); }
+#taskbar[data-position="right"] { right: var(--អារេងព៏); }
+#taskbar[data-position="bottom"], #taskbar[data-position="top"] {
+    left: var(--អារេងព៏);
+    right: var(--អារេងព៏);
+    height: var(--taskbar-width) !important;
+    flex-direction: row;
+}
+#taskbar[data-position="bottom"] { bottom: var(--អារេងព៏); }
+#taskbar[data-position="top"] { top: var(--អារេងព៏); }
+#taskbar .taskbar-section {
+    display: flex;
+    gap: var(--អារេង);
+}
+#taskbar[data-position="left"] > *,
+#taskbar[data-position="right"] > * {
+    inline-size: 100%;
+}
+#taskbar[data-position="bottom"] > *,
+#taskbar[data-position="top"] > * {
+    block-size: 100%;
+}
+#taskbar[data-position="left"] .taskbar-section,
+#taskbar[data-position="right"] .taskbar-section {
+    flex-direction: column;
+}
+#taskbar[data-position="bottom"] .taskbar-section,
+#taskbar[data-position="top"] .taskbar-section {
+    flex-direction: row;
+}
+#taskbar[data-position="bottom"] .taskbar-section button,
+#taskbar[data-position="top"] .taskbar-section button {
+    block-size: auto;
+}
+
+.home-bar {
+    background: var(--កេភ);
+    inline-size: 64px;
+    block-size: 4px;
+    transition: opacity 0.25s;
+    display: none;
+    border-radius: var(--ចិង);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+}
+#taskbar[data-position="left"] .home-bar, #taskbar[data-position="right"] .home-bar {
+    inline-size: 4px;
+    block-size: 64px;
+}
+
+/* ⟪ Mobile view ⟫ - show home bar, hide start button */
+
+@media (max-width: 767px), (max-height: 767px) {
+    #taskbar .home-bar {
+        display: flex !important;
+        inline-size: 48px;
+        block-size: 4px;
+    }
+    #taskbar[data-position="left"] .home-bar,
+    #taskbar[data-position="right"] .home-bar {
+        inline-size: 4px;
+        block-size: 48px;
+    }
+    #taskbar .home-bar-icon { display: none; }
+    
+    @media (orientation: portrait) {
+        #taskbar[data-position="bottom"] {
+            display: flex !important;
+        }
+        #taskbar[data-position="left"],
+        #taskbar[data-position="right"],
+        #taskbar[data-position="top"] {
+            display: none !important;
+        }
+        #taskbar[data-position="bottom"] .home-bar {
+            inline-size: 48px;
+            block-size: 4px;
+        }
+    }
+    
+    @media (orientation: landscape) {
+        #taskbar[data-position="left"],
+        #taskbar[data-position="right"] {
+            display: flex !important;
+        }
+        #taskbar[data-position="bottom"],
+        #taskbar[data-position="top"] {
+            display: none !important;
+        }
+        /* Home bar vertical on side taskbars */
+        #taskbar[data-position="left"] .home-bar,
+        #taskbar[data-position="right"] .home-bar {
+            inline-size: 4px;
+            block-size: 48px;
+        }
+    }
+}
+@media (min-width: 768px) and (min-height: 768px) {
+    #taskbar .home-bar {
+        display: flex !important;
+        inline-size: 48px !important;
+        block-size: 48px !important;
+        background: transparent !important;
+        border-radius: var(--អិត្ភេចិ) !important;
+        overflow: hidden;
+    }
+    #taskbar .home-bar .home-bar-icon {
+        display: block;
+    }
+    #taskbar .taskbar-app-btn { display: flex; }
+}
+
+/* ⟪ Windows ⟫ */
+
+#window-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    block-size: 100%;
+    inline-size: 100%;
+}
+.window {
+    pointer-events: auto;
+    position: absolute;
+    min-inline-size: 256px;
+    min-block-size: 256px;
+    overflow: visible;
+}
+.window.minimized {
+    visibility: hidden;
+    pointer-events: none;
+}
+.window.maximized {
+    min-inline-size: 0;
+    min-block-size: 0;
+    top: var(--panel-inset-top, 0) !important;
+    bottom: var(--panel-inset-bottom, 0) !important;
+    left: var(--panel-inset-left, 0) !important;
+    right: var(--panel-inset-right, 0) !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+/* Horizontal Title Bars (Top/Bottom) */
+
+.title-bar[data-position="top"] {
+    order: -1; flex-direction: row-reverse;
+}
+.title-bar[data-position="bottom"] {
+    order: 1; flex-direction: row-reverse;
+}
+
+/* Rotate controls for horizontal titlebars */
+
+.title-bar[data-position="top"] .window-controls,
+.title-bar[data-position="bottom"] .window-controls {
+    flex-direction: row-reverse;
+}
+.window .resize-handle {
+    position: absolute;
+    z-index: 128;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.25s;
+    border-radius: var(--ចិង);
+    background: transparent;
+    pointer-events: auto;
+}
+.window:not(.maximized):not(.fullscreen) .resize-handle:hover {
+    opacity: 1;
+    background-color: var(--តានេក);
+}
+
+/* Corner resize handles */
+
+.window .resize-handle-se, .window .resize-handle-sw, .window .resize-handle-ne, .window .resize-handle-nw {
+    width: 24px;
+    height: 24px;
+}
+.window .resize-handle-se { bottom: 0; right: 0; cursor: se-resize; }
+.window .resize-handle-sw { bottom: 0; left: 0; cursor: sw-resize; }
+.window .resize-handle-ne { top: 0; right: 0; cursor: ne-resize; }
+.window .resize-handle-nw { top: 0; left: 0; cursor: nw-resize; }
+.window .resize-handle-sw::after { transform: scaleX(-1); }
+.window .resize-handle-ne::after { transform: scaleY(-1); }
+.window .resize-handle-nw::after { transform: scale(-1); }
+
+/* Edge resize handles - side resize */
+
+.window .resize-handle-s { bottom: -4px; left: 0; right: 0; height: 8px; cursor: s-resize; }
+.window .resize-handle-n { top: -4px; left: 0; right: 0; height: 8px; cursor: n-resize; }
+.window .resize-handle-e { top: 0; right: -4px; bottom: 0; width: 8px; cursor: e-resize; }
+.window .resize-handle-w { top: 0; left: -4px; bottom: 0; width: 8px; cursor: w-resize; }
+.window > iframe { flex: 1; min-block-size: 0; min-inline-size: 0; }
+
+/* ⟪ Utility Classes ⟫ */
+
+.dragging { z-index: 1024 !important; }
+.taskbar-app-btn { opacity: 1; transition: opacity 0.25s ease; }
+#desktop.edit-mode, #start-menu-content.edit-mode { cursor: grab; }
+#desktop.edit-mode:active, #start-menu-content.edit-mode:active { cursor: grabbing; }
+#os-root[data-brightness] { filter: brightness(calc(0.5 + var(--brightness-value, 0.5))); }

@@ -1,0 +1,34 @@
+{
+  "name": "krhitlashi-github-io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "npx tsgo --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "echo \"( Error ) no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.10",
+    "@ffmpeg/util": "^0.12.1",
+    "@typescript/native-preview": "^7.0.0-dev.20260326.1",
+    "heic2any": "^0.0.4",
+    "qrcode": "^1.5.4",
+    "simplex-noise": "^4.0.3",
+    "three": "^0.183.1",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@types/qrcode": "^1.5.6",
+    "@types/three": "^0.183.1",
+    "@vitejs/plugin-react": "^6.0.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.16"
+  }
+}

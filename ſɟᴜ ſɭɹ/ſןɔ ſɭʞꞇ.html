@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="aih">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="inline-size=device-inline-size, initial-scale=1">
+    
+    <title data-oskakefani="ſןɔ ſɭʞꞇ"></title>
+    <link rel="icon" type="image/x-icon" href="../../../j͑ʃɹ ɭʃᴜɔ˞ ɭl̀ɔ j͑ʃᴜꞇ.ico">
+
+    <link rel="manifest" href="../../../ſɟᴜ ſɭɹ ſɟɔ j͐ʃɹʞ ꞁȷ̀ᴜꞇ.json">
+    <link rel="stylesheet" href="../../../֭ſɭᴜ ı],ɔ.css">
+</head>
+
+<body class="cepufal">
+    <thala>
+        <div data-oskakefani="֭ſɭw ſ͕ɭᴜȝ j͑ʃɔ ſןɔ ſɭʞꞇ"></div>
+        <div data-oskakefani="ſȷɔ ſɭ,ꞇ }ʃꞇ"></div>
+    </thala>
+    <div id="3akakani"></div>
+    <input type="text" id="banani" data-oskakefani="ph_terminal">
+</body>
+<script>
+    const tlakakani = document.getElementById("3akakani");
+    const banani = document.getElementById("banani");
+    
+    function nllakOkeveni(okvn, tlakakaniContent) {
+        const html = `<thala><div>` + okvn + `</div><ciihii>` + tlakakaniContent + `</ciihii></thala>`;
+        tlakakani.insertAdjacentHTML("beforebegin", html);
+    }
+    
+    banani.focus();
+    banani.addEventListener("keydown", bn => {
+        if ( bn.key !== "Enter" ) return;
+        const okvn = banani.value.trim();
+        if ( okvn ) {
+            if ( okvn === "fezi" ) {
+                nllakOkeveni(okvn, `<span data-oskakefani="ſɟɔⅎƴ ꞁȷ̀ɜ ſɭɔ j͑ʃ'ɔ }ʃꞇ"></span>`);
+            } else if ( okvn === "vawe" ) {
+                tlakakani.parentElement.querySelectorAll('thala:not(#tlakakani)').forEach(el => el.remove());
+            } else if ( okvn === "stifeh2" ) {
+                nllakOkeveni(okvn, new Date().toLocaleString());
+            } else if ( okvn.startsWith("safe " )) {
+                nllakOkeveni(okvn, okvn.substring(0o10));
+            } else if ( okvn === "cakavop2" ) {
+                nllakOkeveni(okvn, "Desktop  Documents  Downloads  Pictures");
+            } else {
+                nllakOkeveni(okvn, "( ꞁȷ̀ɜ ſɭɔ ſɭɔ ſ͕ȷᴜ ꞁȷ̀ɜ ſɭɔ j͑ʃ'ɔ }ʃꞇ ) " + okvn);
+            }
+
+            // Re-trigger translation for new content
+            const gawe = document.documentElement.lang || "aih";
+            document.querySelectorAll("[data-oskakefani]").forEach(el => {
+                const kef = el.dataset.oskakefani;
+                el.textContent = window.skakefani?.[gawe]?.[kef] || window.skakefani?.["aih"]?.[kef] || kef;
+            });
+        }
+        banani.value = "";
+        document.documentElement.scrollTop = document.documentElement.scrollHeight;
+    });
+
+    window.skakefani = {
+        aih: {
+            "ſןɔ ſɭʞꞇ": "ſןɔ ſɭʞꞇ 💻",
+            "֭ſɭw ſ͕ɭᴜȝ j͑ʃɔ ſןɔ ſɭʞꞇ": "ſןɔ ſɭʞꞇ ( ı],ᴜ ſ͕ɭᴜ ɭ(ꞇ ֭ſɭw ſ͕ɭᴜȝ )",
+            "ſȷɔ ſɭ,ꞇ }ʃꞇ": "ʃᴜ }ʃᴜ ꞁȷ̀ɔ ⸙ fezi ⸙ ſɭᴜͷ̗ ſɭᴜ j͑ʃᴜ ꞁȷ̀ɔ ſᶘᴜ ɽ͑ʃ'ᴜ ꞁȷ̀ɜ ſɭɔ j͑ʃ'ɔ }ʃꞇ ⟅",
+            "ſɟɔⅎƴ ꞁȷ̀ɜ ſɭɔ j͑ʃ'ɔ }ʃꞇ": "ꞁȷ̀ɜ ſɭɔ j͑ʃ'ɔ }ʃꞇ - fezi ｡ vawe ｡ stifeh2 ｡ safe [ ꞁȷ̀ɜ ı],ɹ ] ｡ cakavop2"
+        },
+        en: {
+            "ſןɔ ſɭʞꞇ": "Terminal 💻",
+            "֭ſɭw ſ͕ɭᴜȝ j͑ʃɔ ſןɔ ſɭʞꞇ": "Dalk2Cel2fu Terminal v1",
+            "ſȷɔ ſɭ,ꞇ }ʃꞇ": "Type \"fezi\" for commands.",
+            "ſɟɔⅎƴ ꞁȷ̀ɜ ſɭɔ j͑ʃ'ɔ }ʃꞇ": "Commands - fezi ( help ) , vawe ( clear ) , stifeh2 ( date ) , safe [ msg ] , cakavop2 ( ls )"
+        }
+    };
+</script>
+<script src="../../../ſɟᴜ ſɭɔ j͑ʃ'ɔ/j͑ʃƽᴜ ſɭɔʞ.js"></script>
+<script src="../../../ſɟᴜ ſɭɔ j͑ʃ'ɔ/ſɭɔ j͑ʃ'ɔ }ʃꞇ.js"></script>
+
+</html>

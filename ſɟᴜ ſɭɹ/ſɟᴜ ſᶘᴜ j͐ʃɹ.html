@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="aih">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="inline-size=device-inline-size, initial-scale=1">
+
+    <title data-oskakefani="app_notetaker"></title>
+    <link rel="icon" type="image/x-icon" href="../../../j͑ʃɹ ɭʃᴜɔ˞ ɭl̀ɔ j͑ʃᴜꞇ.ico">
+
+    <link rel="manifest" href="../../../ſɟᴜ ſɭɹ ſɟɔ j͐ʃɹʞ ꞁȷ̀ᴜꞇ.json">
+    <link rel="stylesheet" href="../../../֭ſɭᴜ ı],ɔ.css">
+</head>
+
+<body class="cepufal">
+    <thala>
+        <maxema class="c2w2qkuba">
+            <button onclick="wrapText('≺⧼ ',' ⧽≻')">≺⧼ ⧽≻</button>
+            <button onclick="wrapText('⟪ ',' ⟫')">⟪ ⟫</button>
+            <button onclick="wrapText('⟨ ',' ⟩')">⟨ ⟩</button>
+            <sak></sak>
+            <button onclick="wrapText('≺ ',' ≻')">≺ ≻</button>
+            <button onclick="wrapText('• ',' •')">• •</button>
+        </maxema>
+    </thala>
+    <textarea id="notepad" data-oskakefani="ph_start_typing"></textarea>
+    <button onclick="saveNotes()" data-oskakefani="cmd_save"></button>
+    <p id="status" style="opacity: 0; transition: opacity 0.25s;" data-oskakefani="msg_saved"></p>
+</body>
+<script>
+    const pad = document.getElementById("notepad");
+    const status = document.getElementById("status");
+    pad.value = localStorage.getItem("notetaker-notes") || "";
+    function saveNotes() {
+        const blob = new Blob([pad.value], { type: "text/plain" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "ſᶘᴜ j͐ʃɹ.txt";
+        a.click();
+        URL.revokeObjectURL(a.href);
+        status.style.opacity = "1";
+        setTimeout(() => status.style.opacity = '0', 0o3000);
+    }
+    function wrapText(before, after) {
+        const start = pad.selectionStart;
+        const end = pad.selectionEnd;
+        const selected = pad.value.substring(start, end);
+        const wrapped = before + selected + after;
+        pad.setRangeText(wrapped, start, end, "select");
+        pad.focus();
+        if ( selected.length === 0 ) {
+            const cursorPos = start + before.length;
+            pad.setSelectionRange(cursorPos, cursorPos);
+        }
+    }
+
+    const skakefani = {
+        aih: {
+            "app_notetaker": "ſɟᴜ ſᶘᴜ j͐ʃɹ 📝",
+            "ph_start_typing": "ʃᴜ }ʃᴜ",
+            "cmd_save": "j͑ʃ'ɔ ſ̀ȷᴜȝ 💾",
+            "msg_saved": "ſ̀ȷᴜ ſɭᴜƽ ✅"
+        },
+        en: {
+            "app_notetaker": "NoteTaker 📝",
+            "ph_start_typing": "Type",
+            "cmd_save": "Save 💾",
+            "msg_saved": "Saved ✅"
+        }
+    };
+</script>
+<script src="../../../ſɟᴜ ſɭɔ j͑ʃ'ɔ/j͑ʃƽᴜ ſɭɔʞ.js"></script>
+<script src="../../../ſɟᴜ ſɭɔ j͑ʃ'ɔ/ſɭɔ j͑ʃ'ɔ }ʃꞇ.js"></script>
+
+</html>

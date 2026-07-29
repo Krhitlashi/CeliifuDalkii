@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="aih">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="inline-size=device-inline-size, initial-scale=1">
+    <title data-oskakefani="ɭ(ᴜͷ̗ ſɭɹ"></title>
+    <link rel="icon" type="image/x-icon" href="../../j͑ʃɹ ɭʃᴜɔ˞ ɭl̀ɔ j͑ʃᴜꞇ.ico">
+    <link rel="manifest" href="../../ſɟᴜ ſɭɹ ſɟɔ j͐ʃɹʞ ꞁȷ̀ᴜꞇ.json">
+
+    <link rel="stylesheet" href="https://krhitlashi.github.io/%D6%AD%C5%BF%C9%AD%E1%B4%9C%20%C4%B1__%C9%94.css">
+    <link rel="stylesheet" href="֭ſɭᴜ ı],ɔ.css">
+</head>
+
+<body class="cepufal">
+    <div id="os-root">
+        <!-- Desktop Icons Area -->
+        <div id="desktop">
+            <!-- Icons will be injected by DesktopIconManager.js -->
+        </div>
+
+        <!-- Start Menu (All Apps / Folders) -->
+        <thala id="start-menu" class="n2tase">
+            <div id="start-menu-content"></div>
+        </thala>
+
+        <!-- Window Container -->
+        <div id="window-container">
+            <!-- Windows will be injected here -->
+        </div>
+
+        <!-- Taskbar -->
+        <thala id="taskbar" class="n2tase" data-position="left">
+            <div class="taskbar-section taskbar-left">
+                <button id="status-area">
+                    <span class="status-icons">📶 🔋</span>
+                </button>
+                <button id="recents-btn">
+                    <span class="active-apps-count">ɔ</span>
+                </button>
+            </div>
+
+            <button class="taskbar-center" id="home-area">
+                <!-- Home Bar / Start Button -->
+                <div class="home-bar" id="home-bar" aria-label="Home">
+                    <span class="home-bar-icon">🔼</span>
+                </div>
+                <!-- App buttons injected here by WindowManager when taskbar is large -->
+            </button>
+
+            <div class="taskbar-section taskbar-right">
+                <button id="notification-btn">
+                    <span class="notification-count">ɔ</span>
+                </button>
+                <button id="clock-area">
+                    <span id="clock">ıɿ.ɔɔ</span>
+                </button>
+            </div>
+        </thala>
+
+        <div id="quick-settings-container">
+            <thala id="quick-settings-sliders" class="system-panel n2tase"></thala>
+            <thala id="quick-settings-buttons" class="system-panel n2tase"></thala>
+            <div id="qs-edit-actions" class="qs-edit-actions"></div>
+        </div>
+
+        <!-- Notifications Flyout -->
+        <thala id="notifications-panel" class="system-panel n2tase">
+            <div class="panel-header">
+                <h3 data-oskakefani="notif_title">Notifications 🔔</h3>
+                <button class="control-btn" onclick="clearNotifications()" data-oskakefani="cmd_clear">🗑️</button>
+            </div>
+            <ariiba class="notif-list" id="notif-list">
+                <!-- Dynamically injected by System.js -->
+            </ariiba>
+        </thala>
+
+        <!-- Recent Apps Panel -->
+        <thala id="recents-panel" class="system-panel n2tase">
+            <ariiba class="recents-list" id="recents-list">
+                <!-- Dynamically injected by showRecents() -->
+            </ariiba>
+        </thala>
+
+        <!-- Clock Flyout -->
+        <thala id="clock-panel" class="system-panel n2tase">
+            <div>
+                <div class="clock-details">
+                    <div id="full-clock-time" class="large-clock"></div>
+                    <div id="full-clock-date" class="date-details"></div>
+                </div>
+            </div>
+        </thala>
+
+        <!-- Context Menu -->
+        <thala id="context-menu" class="n2tase">
+            <button data-action="edit-mode">
+                <span data-oskakefani="ctx_edit_mode">Edit Mode</span>
+                <span>✏️</span>
+            </button>
+            <button data-action="refresh" title="Refresh" >🔄</button>
+            <button data-action="new-note" title="New Note">📝</button>
+            <button data-action="terminal" title="Terminal">💻</button>
+        </thala>
+    </div>
+</body>
+
+<script src="j͑ʃƽᴜ ſɭɔʞ ꞁȷ̀ᴜ }ʃꞇ.js"></script>
+
+<!-- Global Library Dependencies ( Must load first ) -->
+<script src="https://krhitlashi.github.io/%C5%BF%C9%9F%E1%B4%9C%20%C5%BF%C9%AD%C9%94%20j%CD%91%CA%83'%C9%94/j%CD%91%CA%83%C6%BD%E1%B4%9C%20%C5%BF%C9%AD%C9%94%CA%9E.js"></script>
+<script src="https://krhitlashi.github.io/%C5%BF%C9%9F%E1%B4%9C%20%C5%BF%C9%AD%C9%94%20j%CD%91%CA%83'%C9%94/%C5%BF%C9%9F%E1%B4%9C%20%C4%B1],%C9%B9%CD%B7%CC%97.js"></script>
+<script src="https://krhitlashi.github.io/%C5%BF%C9%9F%E1%B4%9C%20%C5%BF%C9%AD%C9%94%20j%CD%91%CA%83'%C9%94/%C5%BF%C9%AD%C9%94%20j%CD%91%CA%83'%C9%94%20%7D%CA%83%EA%9E%87.js"></script>
+
+<!-- OS Main Entry Point ( Loads all modules in order ) -->
+<script type="module" src="ſɟᴜ ſɭɔ j͑ʃ'ɔ/ſɭɔ j͑ʃ'ɔ }ʃꞇ.ts"></script>
+</html>
