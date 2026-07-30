@@ -6,9 +6,9 @@ declare const kjesaiGawe: any;
 declare const skakefani: any;
 declare const FenestraAdministranto: any;
 
-interface TaskbretoInfo {
+interface TaskobretaInformo {
     pos: string;
-    isVertical: boolean;
+    estasVertikala: boolean;
 }
 
 /**
@@ -18,9 +18,6 @@ interface TaskbretoInfo {
 function akiriTaskobreton(): HTMLElement | null {
     return document.getElementById( "taskbar" );
 }
-
-// Alkroĉi al fenestro por tutmonda aliro
-( window as any ).getTaskbar = akiriTaskobreton;
 
 /**
  * Akiri la komencan menuon
@@ -56,12 +53,12 @@ function akiriMalfermajnFenestrojn(): NodeListOf<HTMLElement> {
 
 /**
  * Akiri taskobretan pozicion kaj orientiĝan informon
- * @returns {{pos: string, isVertical: boolean}}
+ * @returns {{pos: string, estasVertikala: boolean}}
  */
-function akiriTaskbretonInfo(): TaskbretoInfo {
+function akiriTaskbretonInfo(): TaskobretaInformo {
     const taskbar = akiriTaskobreton();
     const pos = taskbar?.dataset.position || "left";
-    return { pos, isVertical: pos === "left" || pos === "right" };
+    return { pos, estasVertikala: pos === "left" || pos === "right" };
 }
 
 /**
@@ -69,27 +66,27 @@ function akiriTaskbretonInfo(): TaskbretoInfo {
  * @returns {boolean}
  */
 function cxuTaskbretoGranda(): boolean {
-    const isVertical = window.innerWidth <= window.innerHeight;
-    return isVertical ? window.innerWidth >= CONSTANTS.BREAKPOINTS.MOBILE : window.innerHeight >= CONSTANTS.BREAKPOINTS.MOBILE;
+    const estasVertikala = window.innerWidth <= window.innerHeight;
+    return estasVertikala ? window.innerWidth >= CONSTANTS.BREAKPOINTS.MOBILE : window.innerHeight >= CONSTANTS.BREAKPOINTS.MOBILE;
 }
 
 /**
  * Akiri fenestran titolon el fenestra elemento
- * @param {HTMLElement} win
+ * @param {HTMLElement} fenestro
  * @returns {string}
  */
-function akiriFenestranTitolon( win: HTMLElement ): string {
-    return ( win.querySelector( ".title-bar-title" ) as HTMLElement )?.innerText || "App";
+function akiriFenestranTitolon( fenestro: HTMLElement ): string {
+    return ( fenestro.querySelector( ".title-bar-title" ) as HTMLElement )?.innerText || "App";
 }
 
 /**
  * Akiri aplikaĵan piktogramon el APPS-datumaro
- * @param {string} title
+ * @param {string} titolo
  * @returns {string}
  */
-function akiriAplikoPiktogramon( title: string ): string {
+function akiriAplikoPiktogramon( titolo: string ): string {
     if ( typeof APPS === "undefined" ) return "🖥️";
-    const app = ( APPS as any[] ).find( ( a: any ) => a.app === title );
+    const app = ( APPS as any[] ).find( ( a: any ) => a.app === titolo );
     return app?.icon || "🖥️";
 }
 
@@ -112,14 +109,17 @@ function akiriFenestranAdministranton(): any {
     return ( window as any ).FenestraAdministranto || ( typeof FenestraAdministranto !== "undefined" ? FenestraAdministranto : null );
 }
 
-// Alkroĉi ĉiujn utilaĵojn al fenestro por tutmonda aliro
-( window as any ).getStartMenu = akiriKomencanMenuon;
-( window as any ).getHomeArea = akiriHejmanAreon;
-( window as any ).getWindowContainer = akiriFenestranUjon;
-( window as any ).getOpenWindows = akiriMalfermajnFenestrojn;
-( window as any ).getTaskbarInfo = akiriTaskbretonInfo;
-( window as any ).isTaskbarLarge = cxuTaskbretoGranda;
-( window as any ).getWindowTitle = akiriFenestranTitolon;
-( window as any ).getAppIcon = akiriAplikoPiktogramon;
-( window as any ).getStrings = akiriTextojn;
-( window as any ).getWindowManager = akiriFenestranAdministranton;
+// ⟪ Konsoliditaj Fenestraj Eksportoj ⟫
+Object.assign( window as any, {
+    getTaskbar: akiriTaskobreton,
+    getStartMenu: akiriKomencanMenuon,
+    getHomeArea: akiriHejmanAreon,
+    getWindowContainer: akiriFenestranUjon,
+    getOpenWindows: akiriMalfermajnFenestrojn,
+    getTaskbarInfo: akiriTaskbretonInfo,
+    isTaskbarLarge: cxuTaskbretoGranda,
+    getWindowTitle: akiriFenestranTitolon,
+    getAppIcon: akiriAplikoPiktogramon,
+    getStrings: akiriTextojn,
+    getWindowManager: akiriFenestranAdministranton,
+} );

@@ -22,6 +22,6 @@ function forigiEventajnAuskultantojn(
     list.forEach( el => el?.removeEventListener( event, handler, options ) );
 }
 
-// Attach to window for global access
+// Alkroĉi al fenestro por tutmonda aliro
 ( window as any ).addEventListeners = aldoniEventajnAuskultantojn;
 ( window as any ).removeEventListeners = forigiEventajnAuskultantojn;

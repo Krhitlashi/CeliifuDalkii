@@ -202,10 +202,11 @@ export class PiktogramaKrado {
         const el = document.createElement( "div" );
         el.className = "app-tile";
         el.dataset.app = appData.app;
+        el.dataset.title = appData.name;
         el.dataset.colSpan = "1";
         el.dataset.rowSpan = "1";
 
-        let isDragging = false;
+        let estasTrenanta = false;
 
         // Krei cepufal-envolvaĵon (kiel lastatempa karto)
         const cepufalEl = document.createElement( "div" );
@@ -213,23 +214,24 @@ export class PiktogramaKrado {
         cepufalEl.style.padding = "0";
 
         // Krei butonan areon
-        const buttonEl = document.createElement( "button" );
-        buttonEl.style.blockSize = "100%";
-        buttonEl.style.inlineSize = "100%";
-        buttonEl.onclick = ( e: MouseEvent ) => {
+        const butonEl = document.createElement( "button" );
+        butonEl.style.blockSize = "100%";
+        butonEl.style.inlineSize = "100%";
+        butonEl.onclick = ( e: MouseEvent ) => {
             e.stopPropagation();
-            // Open app if not in edit mode, not resizing, and not dragging
-            if ( !this.redaktaReĝimo && !el.classList.contains( "resizing" ) && !isDragging ) {
+            // Malfermi aplikaĵon se ne en redakta reĝimo, ne regrandigata, kaj ne trenata
+            if ( !this.redaktaReĝimo && !el.classList.contains( "resizing" ) && !estasTrenanta ) {
                 const wm = ( window as any ).FenestraAdministranto || ( window as any ).getWindowManager();
                 if ( wm && wm.sxargiAplikonDeVojo ) {
-                    wm.sxargiAplikonDeVojo( appData.app, appData.name );
+                    const vivaTitolo = el.dataset.title || appData.name;
+                    wm.sxargiAplikonDeVojo( appData.app, vivaTitolo );
                 } else {
-                    console.error( "FenestraAdministranto ne disponeblas" );
+                    console.error( "( ſ̀ȷɜᴜ̩ ſɭɹ }ʃꞇ ) FenestraAdministranto ne disponeblas" );
                 }
             }
-            isDragging = false;
+            estasTrenanta = false;
         };
-        buttonEl.oncontextmenu = ( e: MouseEvent ) => {
+        butonEl.oncontextmenu = ( e: MouseEvent ) => {
             e.stopPropagation();
             e.preventDefault();
             if ( ( window as any ).KuntekstaMenuoAdministranto ) {
@@ -240,41 +242,41 @@ export class PiktogramaKrado {
         // Aldoni etikedon laŭ reĝimo
         if ( this.etikedReĝimo === "inside" ) {
             // Interna reĝimo: etikedo ene de butona areo
-            const labelSpan = document.createElement( "span" );
-            labelSpan.className = "label inside";
-            labelSpan.innerText = appData.name;
-            buttonEl.appendChild( labelSpan );
+            const etikedaSpan = document.createElement( "span" );
+            etikedaSpan.className = "label inside";
+            etikedaSpan.innerText = appData.name;
+            butonEl.appendChild( etikedaSpan );
         } else if ( this.etikedReĝimo !== "hidden" && this.etikedReĝimo !== "off" ) {
             // Ekstera reĝimo: krei titolbreton (ksaka - kiel lastatempa karto)
-            const labelContainer = document.createElement( "ksaka" );
-            labelContainer.className = "title-bar";
-            const textSpan = document.createElement( "p" );
-            textSpan.className = "title-bar-title";
-            textSpan.innerText = appData.name;
-            labelContainer.appendChild( textSpan );
-            cepufalEl.appendChild( labelContainer );
+            const etikedaUjo = document.createElement( "ksaka" );
+            etikedaUjo.className = "title-bar";
+            const tekstaSpan = document.createElement( "p" );
+            tekstaSpan.className = "title-bar-title";
+            tekstaSpan.innerText = appData.name;
+            etikedaUjo.appendChild( tekstaSpan );
+            cepufalEl.appendChild( etikedaUjo );
         }
 
-        const iconSpan = document.createElement( "span" );
-        iconSpan.className = "icon";
-        iconSpan.innerText = appData.icon;
-        buttonEl.appendChild( iconSpan );
+        const piktogramaSpan = document.createElement( "span" );
+        piktogramaSpan.className = "icon";
+        piktogramaSpan.innerText = appData.icon;
+        butonEl.appendChild( piktogramaSpan );
 
-        cepufalEl.appendChild( buttonEl );
+        cepufalEl.appendChild( butonEl );
         el.appendChild( cepufalEl );
 
-        const handle = document.createElement( "div" );
-        handle.className = "resize-handle";
-        const onResizeStart = ( e: any ) => {
+        const tenilo = document.createElement( "div" );
+        tenilo.className = "resize-handle";
+        const cxeRegrandigaKomenco = ( e: any ) => {
             e.stopPropagation();
             e.preventDefault();
-            const pos = EnigaAdministranto.getPointerPos( e );
-            agordiKaheloGrandSxangxi( this, el, pos.x, pos.y );
+            const poz = EnigaAdministranto.getPointerPos( e );
+            agordiKaheloGrandSxangxi( this, el, poz.x, poz.y );
         };
-        handle.addEventListener( "mousedown", onResizeStart );
-        handle.addEventListener( "touchstart", onResizeStart, { passive: false } );
+        tenilo.addEventListener( "mousedown", cxeRegrandigaKomenco );
+        tenilo.addEventListener( "touchstart", cxeRegrandigaKomenco, { passive: false } );
 
-        el.appendChild( handle );
+        el.appendChild( tenilo );
 
         if ( this.container ) this.container.appendChild( el );
         this.alakrogiAlKrado( el, index );
@@ -283,27 +285,27 @@ export class PiktogramaKrado {
         // Spuri regrandigan staton sur la elemento mem
         ( el as CustomHTMLElement )._isResizing = false;
 
-        // Handle mousedown and touchstart for drag initiation
-        const onPointerDown = ( e: any ) => {
-            // Check if clicking directly on resize handle element
-            const isResizeHandle = e.target === handle;
-            const canDrag = this.redaktaReĝimo || ( this.containerId === "desktop" && !isResizeHandle );
+        // Pritrakti mousedown kaj touchstart por tren-komenco
+        const cxeMontrilPremo = ( e: any ) => {
+            // Kontroli ĉu oni rekte alklakas regrandig-tenilan elementon
+            const estasRegrandigaTenilo = e.target === tenilo;
+            const povasTreni = this.redaktaReĝimo || ( this.containerId === "desktop" && !estasRegrandigaTenilo );
 
-            // Block drag if currently resizing or on resize handle
-            if ( ( el as CustomHTMLElement )._isResizing || isResizeHandle ) {
+            // Bloki trenon se nuntempe regrandigata aŭ sur regrandiga tenilo
+            if ( ( el as CustomHTMLElement )._isResizing || estasRegrandigaTenilo ) {
                 return;
             }
 
-            if ( canDrag ) {
-                const pos = EnigaAdministranto.getPointerPos( e );
-                agordiKaheloTreni( this, el, pos.x, pos.y, () => {
-                    isDragging = false;
+            if ( povasTreni ) {
+                const poz = EnigaAdministranto.getPointerPos( e );
+                agordiKaheloTreni( this, el, poz.x, poz.y, () => {
+                    estasTrenanta = false;
                 } );
             }
         };
 
-        el.addEventListener( "mousedown", onPointerDown );
-        el.addEventListener( "touchstart", onPointerDown, { passive: true } );
+        el.addEventListener( "mousedown", cxeMontrilPremo );
+        el.addEventListener( "touchstart", cxeMontrilPremo, { passive: true } );
 
         return el;
     }
@@ -333,10 +335,10 @@ export class PiktogramaKrado {
         // Komenca menuo: uzi plenan indekson por ruluma aranĝo
         const taskbar = typeof getTaskbar === "function" ? getTaskbar() : document.getElementById( "taskbar" );
         const taskbarPos = taskbar?.dataset.position || "left";
-        const isVerticalTaskbar = taskbarPos === "left" || taskbarPos === "right";
+        const estasVertikalaTaskobreto = taskbarPos === "left" || taskbarPos === "right";
 
         // Adapta etendado
-        if ( isVerticalTaskbar ) {
+        if ( estasVertikalaTaskobreto ) {
             el.dataset.colSpan = "2";
             el.dataset.rowSpan = "1";
         } else {
@@ -347,7 +349,7 @@ export class PiktogramaKrado {
         const { colSpan: cs, rowSpan: rs } = getElementSpans( el );
 
         // Plenigi vertikale (malsupre supren), poste horizontale
-        if ( isVerticalTaskbar ) {
+        if ( estasVertikalaTaskobreto ) {
             const itemsPerCol = this.rows;
             const colGroup = Math.floor( index / itemsPerCol );
             const c = colGroup * cs;

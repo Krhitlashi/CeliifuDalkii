@@ -1,14 +1,14 @@
 // ≺⧼ Eniga Traktilo - Unuigitaj Tuŝaj kaj Musaj Regiloj ⧽≻
 
-// Runtime: get CONSTANTS from window (loaded by HTML script tag)
+// Rultempe: prenu CONSTANTS el fenestro ( ŝargita per HTML-skripta etikedo )
 const CONSTANTS = (window as any).CONSTANTS;
 
-interface PointerData {
+interface MontrilajDatumoj {
     x?: number;
     y?: number;
     deltaX?: number;
     deltaY?: number;
-    handle?: string;
+    tenilo?: string;
 }
 
 const InputHandler = {
@@ -54,6 +54,9 @@ const InputHandler = {
     ): () => void {
         let moveHandler: ((ev: Event) => void) | null = null;
         let endHandler: ((ev: Event) => void) | null = null;
+        let moveEvent: string = "";
+        let endEvent: string = "";
+        let target: EventTarget | null = null;
 
         const handleStart = (e: Event) => {
             if (isResize) {
@@ -71,12 +74,12 @@ const InputHandler = {
 
             handlers.onStart(e, { x: pos.x, y: pos.y });
 
-            // Determine event targets and types
-            const moveEvent = this.isTouch ? "touchmove" : "mousemove";
-            const endEvent = this.isTouch ? "touchend" : "mouseup";
-            const target = (isResize || this.isTouch) ? document : element;
+            // Determini eventajn celojn kaj tipojn
+            moveEvent = this.isTouch ? "touchmove" : "mousemove";
+            endEvent = this.isTouch ? "touchend" : "mouseup";
+            target = (isResize || this.isTouch) ? document : element;
 
-            // Create move handler
+            // Krei mov-traktilon
             moveHandler = (ev: Event) => {
                 if (!this.activeElement) return;
                 if (this.isTouch && !isResize) ev.preventDefault();
@@ -97,16 +100,16 @@ const InputHandler = {
                 });
             };
 
-            // Create end handler
+            // Krei fin-traktilon
             endHandler = (ev: Event) => {
                 if (!this.activeElement) return;
                 if (isResize) this.isResizing = false;
                 handlers.onEnd(ev);
                 this.cleanup();
 
-                // Remove listeners after end
-                if (moveHandler) target.removeEventListener(moveEvent, moveHandler);
-                if (endHandler) target.removeEventListener(endEvent, endHandler);
+                // Forigi aŭskultilojn post fino
+                if (moveHandler) target!.removeEventListener(moveEvent, moveHandler);
+                if (endHandler) target!.removeEventListener(endEvent, endHandler);
                 moveHandler = null;
                 endHandler = null;
             };
@@ -120,11 +123,8 @@ const InputHandler = {
 
         return () => {
             this.cleanup();
-            // Cleanup any lingering listeners
-            if (moveHandler || endHandler) {
-                const moveEvent = this.isTouch ? "touchmove" : "mousemove";
-                const endEvent = this.isTouch ? "touchend" : "mouseup";
-                const target = (isResize || this.isTouch) ? document : element;
+            // Purigi iujn postrestantajn aŭskultilojn
+            if ((moveHandler || endHandler) && target) {
                 if (moveHandler) target.removeEventListener(moveEvent, moveHandler);
                 if (endHandler) target.removeEventListener(endEvent, endHandler);
             }
@@ -134,9 +134,9 @@ const InputHandler = {
     // ⟪ Agordaj Funkcioj ⟫
     setupDrag(
         element: HTMLElement,
-        onStart: ((e: Event, data: PointerData) => void) | null,
-        onMove: ((e: Event, data: PointerData) => void) | null,
-        onEnd: ((e: Event, data: PointerData) => void) | null
+        onStart: ((e: Event, datumoj: MontrilajDatumoj) => void) | null,
+        onMove: ((e: Event, datumoj: MontrilajDatumoj) => void) | null,
+        onEnd: ((e: Event, datumoj: MontrilajDatumoj) => void) | null
     ): (() => void) | undefined {
         if (!element) return;
 
@@ -152,17 +152,17 @@ const InputHandler = {
 
     setupResize(
         element: HTMLElement,
-        handle: string,
-        onStart: ((e: Event, data: PointerData) => void) | null,
-        onMove: ((e: Event, data: PointerData) => void) | null,
-        onEnd: ((e: Event, data: PointerData) => void) | null
+        tenilo: string,
+        onStart: ((e: Event, datumoj: MontrilajDatumoj) => void) | null,
+        onMove: ((e: Event, datumoj: MontrilajDatumoj) => void) | null,
+        onEnd: ((e: Event, datumoj: MontrilajDatumoj) => void) | null
     ): (() => void) | undefined {
         if (!element) return;
 
         return this.setupPointerHandlers(element, true, {
-            onStart: (e, pos) => onStart?.(e, { x: pos.x, y: pos.y, handle }),
-            onMove: (e, pos) => onMove?.(e, { x: pos.x, y: pos.y, deltaX: pos.deltaX, deltaY: pos.deltaY, handle }),
-            onEnd: (e) => onEnd?.(e, { handle })
+            onStart: (e, pos) => onStart?.(e, { x: pos.x, y: pos.y, tenilo }),
+            onMove: (e, pos) => onMove?.(e, { x: pos.x, y: pos.y, deltaX: pos.deltaX, deltaY: pos.deltaY, tenilo }),
+            onEnd: (e) => onEnd?.(e, { tenilo })
         });
     },
 
@@ -173,139 +173,137 @@ const InputHandler = {
     ): void {
         if (!element) return;
 
-        let timer: number | null = null;
-        let isTouch = false;
+        let tempigilo: number | null = null;
+        let estasTusxo = false;
 
-        const handleStart = (e: Event) => {
-            isTouch = this.isTouchEvent(e);
+        const pritraktiKomencon = (e: Event) => {
+            estasTusxo = this.isTouchEvent(e);
 
-            if (isTouch && onLongPress) {
-                timer = window.setTimeout(() => {
+            if (estasTusxo && onLongPress) {
+                tempigilo = window.setTimeout(() => {
                     onLongPress(e);
-                    timer = null;
+                    tempigilo = null;
                 }, this.longPressDuration);
             }
         };
 
-        const handleEnd = (e: Event) => {
-            if (timer) {
-                window.clearTimeout(timer);
+        const pritraktiFinon = (e: Event) => {
+            if (tempigilo) {
+                window.clearTimeout(tempigilo);
                 if (onTap) onTap(e);
             }
-            timer = null;
+            tempigilo = null;
         };
 
-        element.addEventListener("mousedown", handleStart);
-        element.addEventListener("mouseup", handleEnd);
-        element.addEventListener("touchstart", handleStart, { passive: true });
-        element.addEventListener("touchend", handleEnd);
+        element.addEventListener("mousedown", pritraktiKomencon);
+        element.addEventListener("mouseup", pritraktiFinon);
+        element.addEventListener("touchstart", pritraktiKomencon, { passive: true });
+        element.addEventListener("touchend", pritraktiFinon);
     },
 
     setupSwipe(
         element: HTMLElement,
-        onSwipe: ((direction: string, data: { diffX: number; diffY: number }) => void) | null,
-        threshold: number = CONSTANTS.INPUT.SWIPE_THRESHOLD
+        onSwipe: ((direkto: string, datumoj: { difX: number; difY: number }) => void) | null,
+        sojlo: number = CONSTANTS.INPUT.SWIPE_THRESHOLD
     ): void {
         if (!element) return;
 
-        let startX = 0;
-        let startY = 0;
+        let komencoX = 0;
+        let komencoY = 0;
 
-        const handleStart = (e: Event) => {
-            const pos = this.getPointerPos(e);
-            startX = pos.x;
-            startY = pos.y;
+        const pritraktiKomencon = (e: Event) => {
+            const poz = this.getPointerPos(e);
+            komencoX = poz.x;
+            komencoY = poz.y;
         };
 
-        const handleEnd = (e: Event) => {
-            const pos = this.getPointerPos(e);
-            const diffX = pos.x - startX;
-            const diffY = pos.y - startY;
+        const pritraktiFinon = (e: Event) => {
+            const poz = this.getPointerPos(e);
+            const difX = poz.x - komencoX;
+            const difY = poz.y - komencoY;
 
-            if (Math.abs(diffX) < threshold && Math.abs(diffY) < threshold) return;
+            if (Math.abs(difX) < sojlo && Math.abs(difY) < sojlo) return;
 
-            let direction: string;
-            if (Math.abs(diffX) > Math.abs(diffY)) {
-                direction = diffX > 0 ? "right" : "left";
+            let direkto: string;
+            if (Math.abs(difX) > Math.abs(difY)) {
+                direkto = difX > 0 ? "right" : "left";
             } else {
-                direction = diffY > 0 ? "down" : "up";
+                direkto = difY > 0 ? "down" : "up";
             }
 
-            if (onSwipe) onSwipe(direction, { diffX, diffY });
+            if (onSwipe) onSwipe(direkto, { difX, difY });
         };
 
-        element.addEventListener("touchstart", handleStart, { passive: true });
-        element.addEventListener("touchend", handleEnd);
+        element.addEventListener("touchstart", pritraktiKomencon, { passive: true });
+        element.addEventListener("touchend", pritraktiFinon);
     },
 
     setupPinch(
         element: HTMLElement,
-        onPinch: ((scale: number, data: { startDistance: number; currentDistance: number }) => void) | null
+        onPinch: ((skalo: number, datumoj: { komencaDistanco: number; nunaDistanco: number }) => void) | null
     ): void {
         if (!element) return;
 
-        let startDistance = 0;
-        let startScale = 1;
+        let komencaDistanco = 0;
 
-        const getDistance = (touches: TouchList): number => {
-            const dx = touches[0].clientX - touches[1].clientX;
-            const dy = touches[0].clientY - touches[1].clientY;
+        const akiriDistancon = (tusxoj: TouchList): number => {
+            const dx = tusxoj[0].clientX - tusxoj[1].clientX;
+            const dy = tusxoj[0].clientY - tusxoj[1].clientY;
             return Math.sqrt(dx * dx + dy * dy);
         };
 
-        const handleStart = (e: Event) => {
-            const touches = (e as TouchEvent).touches;
-            if (touches?.length === 2) {
-                startDistance = getDistance(touches);
-                startScale = 1;
+        const pritraktiKomencon = (e: Event) => {
+            const tusxoj = (e as TouchEvent).touches;
+            if (tusxoj?.length === 2) {
+                komencaDistanco = akiriDistancon(tusxoj);
             }
         };
 
-        const handleMove = (e: Event) => {
-            const touches = (e as TouchEvent).touches;
-            if (touches?.length === 2) {
+        const pritraktiMovon = (e: Event) => {
+            const tusxoj = (e as TouchEvent).touches;
+            if (tusxoj?.length === 2) {
                 e.preventDefault();
-                const currentDistance = getDistance(touches);
-                const scale = currentDistance / startDistance;
+                const nunaDistanco = akiriDistancon(tusxoj);
+                const skalo = nunaDistanco / komencaDistanco;
 
-                if (onPinch) onPinch(scale, { startDistance, currentDistance });
+                if (onPinch) onPinch(skalo, { komencaDistanco, nunaDistanco });
             }
         };
 
-        element.addEventListener("touchstart", handleStart, { passive: true });
-        element.addEventListener("touchmove", handleMove, { passive: false });
+        element.addEventListener("touchstart", pritraktiKomencon, { passive: true });
+        element.addEventListener("touchmove", pritraktiMovon, { passive: false });
     },
 
     setupDoubleTap(
         element: HTMLElement,
         onDoubleTap: ((e: Event) => void) | null,
-        delay: number = CONSTANTS.INPUT.DOUBLE_TAP_DELAY
+        prokrasto: number = CONSTANTS.INPUT.DOUBLE_TAP_DELAY
     ): void {
         if (!element) return;
 
-        let lastTap = 0;
+        let lastaFrapo = 0;
 
-        const handleTap = (e: Event) => {
-            const now = Date.now();
-            if (now - lastTap < delay) {
+        const pritraktiFrapeton = (e: Event) => {
+            const nun = Date.now();
+            if (nun - lastaFrapo < prokrasto) {
                 if (onDoubleTap) onDoubleTap(e);
                 e.preventDefault();
             }
-            lastTap = now;
+            lastaFrapo = nun;
         };
 
-        element.addEventListener("click", handleTap);
-        element.addEventListener("touchend", handleTap);
+        element.addEventListener("click", pritraktiFrapeton);
+        element.addEventListener("touchend", pritraktiFrapeton);
     },
 
     setupPan(
         element: HTMLElement,
-        onPan: ((e: Event, data: PointerData) => void) | null,
+        onPan: ((e: Event, datumoj: MontrilajDatumoj) => void) | null,
         onPanStart: ((e: Event) => void) | null,
         onPanEnd: ((e: Event) => void) | null
     ): (() => void) | undefined {
-        return this.setupDrag(element, onPanStart, (e, data) => {
-            if (onPan) onPan(e, data);
+        return this.setupDrag(element, onPanStart, (e, datumoj) => {
+            if (onPan) onPan(e, datumoj);
         }, onPanEnd);
     },
 
@@ -347,18 +345,20 @@ function isResizing(): boolean {
     return InputHandler.isResizing;
 }
 
-function setDraggingState(state: boolean): void {
-    InputHandler.isDragging = state;
-    document.body.classList.toggle("is-dragging", state);
+function setDraggingState(stato: boolean): void {
+    InputHandler.isDragging = stato;
+    document.body.classList.toggle("is-dragging", stato);
 }
 
-function setResizingState(state: boolean): void {
-    InputHandler.isResizing = state;
+function setResizingState(stato: boolean): void {
+    InputHandler.isResizing = stato;
 }
 
-// Aldoni al fenestro por tutmonda aliro
-( window as any ).EnigaAdministranto = InputHandler;
-(window as any).isDragging = isDragging;
-(window as any).isResizing = isResizing;
-(window as any).setDraggingState = setDraggingState;
-(window as any).setResizingState = setResizingState;
+// ⟪ Konsoliditaj Fenestraj Eksportoj ⟫
+Object.assign( window as any, {
+    EnigaAdministranto: InputHandler,
+    isDragging,
+    isResizing,
+    setDraggingState,
+    setResizingState,
+} );

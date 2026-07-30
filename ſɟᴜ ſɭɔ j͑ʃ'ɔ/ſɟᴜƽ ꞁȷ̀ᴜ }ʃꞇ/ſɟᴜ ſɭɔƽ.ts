@@ -3,70 +3,45 @@
 declare const CONSTANTS: any;
 
 /**
- * Get container dimensions (fixed or from element)
- * @param {number|null} fixedWidth - Fixed width or null
- * @param {number|null} fixedHeight - Fixed height or null
- * @param {HTMLElement|null} container - Container element
+ * Akiri ujajn dimensiojn ( fiksitaj aŭ el elemento )
+ * @param {number|null} fiksaLarĝo - Fiksita larĝo aŭ null
+ * @param {number|null} fiksaAlto - Fiksita alto aŭ null
+ * @param {HTMLElement|null} ujo - Uja elemento
  * @returns {{width: number, height: number}}
  */
-export function akiriUjonGrandecojn( fixedWidth: number | null, fixedHeight: number | null, container: HTMLElement | null ): { width: number; height: number } {
+export function akiriUjonGrandecojn( fiksaLarĝo: number | null, fiksaAlto: number | null, ujo: HTMLElement | null ): { width: number; height: number } {
     return {
-        width: fixedWidth ?? ( container?.clientWidth || window.innerWidth ),
-        height: fixedHeight ?? ( container?.clientHeight || window.innerHeight )
+        width: fiksaLarĝo ?? ( ujo?.clientWidth || window.innerWidth ),
+        height: fiksaAlto ?? ( ujo?.clientHeight || window.innerHeight )
     };
 }
 
 /**
- * Check if point is within bounds
+ * Kontroli ĉu punkto estas ene de limoj
  * @param {number} x
  * @param {number} y
- * @param {DOMRect} bounds
+ * @param {DOMRect} limoj
  * @returns {boolean}
  */
-export function cxuEnLimoj( x: number, y: number, bounds: DOMRect ): boolean {
-    return x >= bounds.left && x <= bounds.right && y >= bounds.top && y <= bounds.bottom;
+export function cxuEnLimoj( x: number, y: number, limoj: DOMRect ): boolean {
+    return x >= limoj.left && x <= limoj.right && y >= limoj.top && y <= limoj.bottom;
 }
 
-// Attach to window for global access
-( window as any ).getContainerDimensions = akiriUjonGrandecojn;
-( window as any ).isWithinBounds = cxuEnLimoj;
-
 /**
- * Set aria-pressed state on a button
- * @param {string|HTMLElement} btn - Button ID or element
- * @param {boolean} pressed
+ * Agordi aria-pressed staton sur butono
+ * @param {string|HTMLElement} btn - Butona ID aŭ elemento
+ * @param {boolean} premata
  */
-function setButtonPressed( btn: string | HTMLElement, pressed: boolean ): void {
+function setButtonPressed( btn: string | HTMLElement, premata: boolean ): void {
     const el = typeof btn === "string" ? document.getElementById( btn ) : btn;
     if ( el ) {
-        if ( pressed ) {
-            el.setAttribute( "aria-pressed", "true" );
-        } else {
-            el.removeAttribute( "aria-pressed" );
-        }
+        if ( premata ) el.setAttribute( "aria-pressed", "true" );
+        else el.removeAttribute( "aria-pressed" );
     }
 }
 
 /**
- * Show element with fade-in animation
- * @param {HTMLElement} el
- */
-function showWithAnimation( el: HTMLElement ): void {
-    el.classList.add( "visible" );
-}
-
-/**
- * Hide element with fade-out animation
- * @param {HTMLElement} el
- * @param {number} duration - Animation duration in ms
- */
-function hideWithAnimation( el: HTMLElement, duration: number = 0o300 ): void {
-    el.classList.remove( "visible" );
-    setTimeout( () => el.style.display = "none", duration );
-}
-
-/**
- * Get element span values from dataset
+ * Akiri elementajn span-valorojn el datumaro
  * @param {HTMLElement} el
  * @returns {{colSpan: number, rowSpan: number}}
  */
@@ -78,35 +53,16 @@ function getElementSpans( el: HTMLElement ): { colSpan: number; rowSpan: number 
 }
 
 /**
- * Set element span values
+ * Agordi elementan tren-statatributon ( klaso )
  * @param {HTMLElement} el
- * @param {number} colSpan
- * @param {number} rowSpan
+ * @param {boolean} trenanta
  */
-function setElementSpans( el: HTMLElement, colSpan: number, rowSpan: number ): void {
-    el.dataset.colSpan = colSpan.toString();
-    el.dataset.rowSpan = rowSpan.toString();
+function setElementDragging( el: HTMLElement, trenanta: boolean ): void {
+    el.classList.toggle( "dragging", trenanta );
 }
 
 /**
- * Set element dragging state ( class )
- * @param {HTMLElement} el
- * @param {boolean} dragging
- */
-function setElementDragging( el: HTMLElement, dragging: boolean ): void {
-    el.classList.toggle( "dragging", dragging );
-}
-
-/**
- * Force reflow on element ( triggers layout recalculation )
- * @param {HTMLElement} el
- */
-function forceReflow( el: HTMLElement ): void {
-    void el.offsetWidth;
-}
-
-/**
- * Get element position and span values from dataset
+ * Akiri elementan pozicion kaj span-valorojn el datumaro
  * @param {HTMLElement} el
  * @returns {{col: number, row: number, colSpan: number, rowSpan: number}}
  */
@@ -120,54 +76,42 @@ export function akiriElementanPozicion( el: HTMLElement ): { col: number; row: n
 }
 
 /**
- * Toggle class on element
+ * Aldoni klason al elemento
  * @param {HTMLElement} el
- * @param {string} className
- * @param {boolean} force
+ * @param {string} klasaNomo
  */
-function toggleClass( el: HTMLElement | null, className: string, force?: boolean ): void {
-    if ( !el ) return;
-    el.classList.toggle( className, force );
+function addClass( el: HTMLElement | null | undefined, klasaNomo: string ): void {
+    el?.classList.add( klasaNomo );
 }
 
 /**
- * Add class to element
+ * Forigi klason el elemento
  * @param {HTMLElement} el
- * @param {string} className
+ * @param {string} klasaNomo
  */
-function addClass( el: HTMLElement | null | undefined, className: string ): void {
-    el?.classList.add( className );
+function removeClass( el: HTMLElement | null | undefined, klasaNomo: string ): void {
+    el?.classList.remove( klasaNomo );
 }
 
 /**
- * Remove class from element
+ * Kontroli ĉu elemento havas klason
  * @param {HTMLElement} el
- * @param {string} className
- */
-function removeClass( el: HTMLElement | null | undefined, className: string ): void {
-    el?.classList.remove( className );
-}
-
-/**
- * Check if element has class
- * @param {HTMLElement} el
- * @param {string} className
+ * @param {string} klasaNomo
  * @returns {boolean}
  */
-function hasClass( el: HTMLElement | null | undefined, className: string ): boolean {
-    return el?.classList.contains( className ) ?? false;
+function hasClass( el: HTMLElement | null | undefined, klasaNomo: string ): boolean {
+    return el?.classList.contains( klasaNomo ) ?? false;
 }
 
-// Attach to window for global access
-( window as any ).setButtonPressed = setButtonPressed;
-( window as any ).showWithAnimation = showWithAnimation;
-( window as any ).hideWithAnimation = hideWithAnimation;
-( window as any ).getElementSpans = getElementSpans;
-( window as any ).setElementSpans = setElementSpans;
-( window as any ).setElementDragging = setElementDragging;
-( window as any ).forceReflow = forceReflow;
-( window as any ).getElementPosition = akiriElementanPozicion;
-( window as any ).toggleClass = toggleClass;
-( window as any ).addClass = addClass;
-( window as any ).removeClass = removeClass;
-( window as any ).hasClass = hasClass;
+// ⟪ Konsoliditaj Fenestraj Eksportoj ⟫
+Object.assign( window as any, {
+    getContainerDimensions: akiriUjonGrandecojn,
+    isWithinBounds: cxuEnLimoj,
+    setButtonPressed,
+    getElementSpans,
+    setElementDragging,
+    getElementPosition: akiriElementanPozicion,
+    addClass,
+    removeClass,
+    hasClass,
+} );

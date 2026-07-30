@@ -1,8 +1,8 @@
 // ≺⧼ Ĉenaj Utilajoj ⧽≻
 
 /**
- * Escape HTML special characters
- * @param {string} str
+ * Escape HTML-specialajn signojn
+ * @param {string} ĉeno
  * @returns {string}
  */
 function eskapiHtml( str: string ): string {
@@ -13,9 +13,9 @@ function eskapiHtml( str: string ): string {
 }
 
 /**
- * Truncate string to max length
- * @param {string} str
- * @param {number} maxLength
+ * Detranĉi ĉenon al maksimuma longo
+ * @param {string} ĉeno
+ * @param {number} maksLongo
  * @returns {string}
  */
 function trancxi( str: string, maxLength: number = 0o40 ): string {
@@ -24,9 +24,9 @@ function trancxi( str: string, maxLength: number = 0o40 ): string {
 }
 
 /**
- * Check if string contains any of the terms
- * @param {string} str
- * @param {string[]} terms
+ * Kontroli ĉu ĉeno enhavas iun el la terminoj
+ * @param {string} ĉeno
+ * @param {string[]} terminoj
  * @returns {boolean}
  */
 function cxuEnhavasIun( str: string, terms: string[] ): boolean {
@@ -34,7 +34,7 @@ function cxuEnhavasIun( str: string, terms: string[] ): boolean {
     return terms.some( term => str.includes( term ) );
 }
 
-// Attach to window for global access
+// Alkroĉi al fenestro por tutmonda aliro
 ( window as any ).escapeHtml = eskapiHtml;
 ( window as any ).truncate = trancxi;
 ( window as any ).containsAny = cxuEnhavasIun;

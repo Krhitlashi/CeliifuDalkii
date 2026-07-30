@@ -2,9 +2,9 @@
 
 const KonservejaUtilo = {
     /**
-     * Get item from localStorage
-     * @param {string} key
-     * @param {any} defaultValue
+     * Akiri eron el localStorage
+     * @param {string} ŝlosilo
+     * @param {any} defaŭltaValoro
      * @returns {any}
      */
     get( key: string, defaultValue: any = null ): any {
@@ -17,30 +17,30 @@ const KonservejaUtilo = {
     },
 
     /**
-     * Set item in localStorage
-     * @param {string} key
-     * @param {any} value
+     * Agordi eron en localStorage
+     * @param {string} ŝlosilo
+     * @param {any} valoro
      */
     set( key: string, value: any ): void {
         try {
             localStorage.setItem( key, JSON.stringify( value ) );
         } catch ( e ) {
-            console.error( "Storage set failed", e );
+            console.error( "( ſ̀ȷɜᴜ̩ ſɭɹ }ʃꞇ ) Storage set failed", e );
         }
     },
 
     /**
-     * Remove item from localStorage
-     * @param {string} key
+     * Forigi eron el localStorage
+     * @param {string} ŝlosilo
      */
     remove( key: string ): void {
         localStorage.removeItem( key );
     },
 
     /**
-     * Get item from localStorage merged with defaults
-     * @param {string} key
-     * @param {object} defaults
+     * Akiri eron el localStorage kunfandita kun defaŭltoj
+     * @param {string} ŝlosilo
+     * @param {object} defaŭltoj
      * @returns {object}
      */
     loadWithDefaults( key: string, defaults: object ): object {
@@ -55,9 +55,9 @@ const KonservejaUtilo = {
     },
 
     /**
-     * Save desktop tile positions and sizes to localStorage
-     * @param {HTMLElement[]} tiles - Array of tile elements
-     * @param {string} storageKey - Key for localStorage ( default: "desktopTileLayout" )
+     * Konservi labortablajn kahelajn poziciojn kaj grandojn al localStorage
+     * @param {HTMLElement[]} kaheloj - Tabelo de kahelaj elementoj
+     * @param {string} stokejaŝlosilo - Ŝlosilo por localStorage ( defaŭlte: "desktopTileLayout" )
      */
     saveTileLayout( tiles: HTMLElement[], storageKey: string = "desktopTileLayout" ): void {
         try {
@@ -71,13 +71,13 @@ const KonservejaUtilo = {
             
             localStorage.setItem( storageKey, JSON.stringify( layout ) );
         } catch ( e ) {
-            console.error( "Failed to save tile layout", e );
+            console.error( "( ſ̀ȷɜᴜ̩ ſɭɹ }ʃꞇ ) Failed to save tile layout", e );
         }
     },
 
     /**
-     * Load desktop tile positions and sizes from localStorage
-     * @param {string} storageKey - Key for localStorage ( default: "desktopTileLayout" )
+     * Ŝargi labortablajn kahelajn poziciojn kaj grandojn el localStorage
+     * @param {string} stokejaŝlosilo - Ŝlosilo por localStorage ( defaŭlte: "desktopTileLayout" )
      * @returns {Array<{id: string, col: number, row: number, colSpan: number, rowSpan: number}>}
      */
     loadTileLayout( storageKey: string = "desktopTileLayout" ): Array<{id: string, col: number, row: number, colSpan: number, rowSpan: number}> {
@@ -90,10 +90,10 @@ const KonservejaUtilo = {
     },
 
     /**
-     * Apply saved tile positions and sizes to tile elements
-     * @param {HTMLElement[]} tiles - Array of tile elements
-     * @param {string} storageKey - Key for localStorage ( default: "desktopTileLayout" )
-     * @param {(tile: HTMLElement, col: number, row: number, colSpan: number, rowSpan: number) => void} applyPositionFn - Optional function to apply positions
+     * Apliki konservitajn kahelajn poziciojn kaj grandojn al kahelaj elementoj
+     * @param {HTMLElement[]} kaheloj - Tabelo de kahelaj elementoj
+     * @param {string} stokejaŝlosilo - Ŝlosilo por localStorage ( defaŭlte: "desktopTileLayout" )
+     * @param {(tile: HTMLElement, col: number, row: number, colSpan: number, rowSpan: number) => void} aplikiPozicionFn - Laŭvola funkcio por apliki poziciojn
      */
     applyTileLayout( tiles: HTMLElement[], storageKey: string = "desktopTileLayout", applyPositionFn?: ( tile: HTMLElement, col: number, row: number, colSpan: number, rowSpan: number ) => void ): void {
         const savedLayout = this.loadTileLayout( storageKey );
@@ -115,13 +115,13 @@ const KonservejaUtilo = {
     },
 
     /**
-     * Clear saved tile layout from localStorage
-     * @param {string} storageKey - Key for localStorage ( default: "desktopTileLayout" )
+     * Forviŝi konservitan kahelan aranĝon el localStorage
+     * @param {string} stokejaŝlosilo - Ŝlosilo por localStorage ( defaŭlte: "desktopTileLayout" )
      */
     clearTileLayout( storageKey: string = "desktopTileLayout" ): void {
         this.remove( storageKey );
     }
 };
 
-// Attach to window for global access - use StorageUtil to avoid conflict with native Storage
+// Alkroĉi al fenestro por tutmonda aliro - uzu StorageUtil por eviti konflikton kun indiĝena Storage
 ( window as any ).StorageUtil = KonservejaUtilo;

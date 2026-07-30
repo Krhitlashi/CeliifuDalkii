@@ -71,7 +71,7 @@ export const LabortablaPiktogramoAdministranto = {
 
     transigiPiktogramonDeKomencaMenuo( el: HTMLElement ) {
         const appData = {
-            name: el.dataset.app?.split( "/" ).pop()?.replace( ".html", "" ) || "App",
+            name: el.dataset.title || el.dataset.app?.split( "/" ).pop()?.replace( ".html", "" ) || "App",
             icon: ( el.querySelector( ".icon" ) as HTMLElement )?.innerText || "🖥️",
             app: el.dataset.app || ""
         };
@@ -109,7 +109,7 @@ export const LabortablaPiktogramoAdministranto = {
         ( this.komencaMenuo as any ).startMenu = this.komencaMenuo;
 
         APPS = APPS_DATA.map( ( app: any ) => ( {
-            name: app.path.split( "/" ).pop().replace( ".html", "" ),
+            name: app.title || app.path.split( "/" ).pop().replace( ".html", "" ),
             icon: app.emoji,
             app: app.path
         } ) );
@@ -118,6 +118,9 @@ export const LabortablaPiktogramoAdministranto = {
             this.labortablo?.aldoniPiktogramon( app, i );
             this.komencaMenuo?.aldoniPiktogramon( app, i );
         } );
+
+        // ⟨ Ŝargi titolojn de paĝoj mem por lokal aplikaĵoj ⟩
+        this._sxargiTitolojnDeLokalajPaĝoj();
 
         // Apliki konservitan kahelan aranĝon el stokejo
         if ( StorageUtil && this.labortablo?.container ) {
@@ -142,10 +145,55 @@ export const LabortablaPiktogramoAdministranto = {
         if ( (window as any).SciigoAdministranto ) (window as any).SciigoAdministranto.inicii();
     },
 
+    // ⟪ Ŝargi titolojn de paĝoj mem per HTTP ( fetch + DOMParser ) ⟫
+    // Por lokal aplikaĵoj ( relativaj vojoj ) ni ricevas la realan <title> el la HTML.
+    // Por eksteraj URLoj ( https://… ) CORS blokas la peton — ni simple silentas kaj
+    // uzas la jam ekzistantan nomon ( el app.title aŭ dosiernomo ).
+    _sxargiTitolojnDeLokalajPaĝoj() {
+        const cxuLoka = ( p: string ): boolean => !p.startsWith( "http://" ) && !p.startsWith( "https://" );
+
+        APPS_DATA.forEach( ( appData: any, idx: number ) => {
+            if ( !cxuLoka( appData.path ) ) return;
+
+            const path = appData.path;
+            fetch( path )
+                .then( res => {
+                    if ( !res.ok ) throw new Error( `HTTP ${res.status}` );
+                    return res.text();
+                } )
+                .then( html => {
+                    const doc = new DOMParser().parseFromString( html, "text/html" );
+                    const titleEl = doc.querySelector( "title" );
+                    if ( !titleEl || !titleEl.textContent ) return;
+
+                    const title = titleEl.textContent.trim();
+                    if ( !title ) return;
+
+                    // Ĝisdatigi la kahelojn sur ambaŭ kradoj
+                    [ ( window as any ).LabortablaPiktogramoAdministranto?.labortablo,
+                      ( window as any ).LabortablaPiktogramoAdministranto?.komencaMenuo ]
+                        .forEach( ( grid: any ) => {
+                            if ( !grid?.container ) return;
+                            const tiles = grid.container.querySelectorAll( ".app-tile" ) as NodeListOf<HTMLElement>;
+                            for ( const tile of tiles ) {
+                                if ( tile.dataset.app === path ) {
+                                    tile.dataset.title = title;
+                                    const label = tile.querySelector( ".title-bar-title, .label" );
+                                    if ( label ) label.textContent = title;
+                                }
+                            }
+                        } );
+                } )
+                .catch( () => {
+                    // Silenti: CORS, reta eraro, ktp. — uzu la defaŭltan nomon.
+                } );
+        } );
+    },
+
     _kreiPaĝajnIndikilojn() {
         // Forigi ekzistantajn indikilojn
-        const existing = document.querySelector( ".page-indicators" );
-        if ( existing ) existing.remove();
+        const ekzistanta = document.querySelector( ".page-indicators" );
+        if ( ekzistanta ) ekzistanta.remove();
 
         // Krei paĝajn indikilojn por portebla reĝimo
         const itemsPerPage = MOBILE_GRID_ROWS * MOBILE_GRID_COLS;
@@ -190,10 +238,10 @@ export const LabortablaPiktogramoAdministranto = {
 
         if ( !qsContainer || !qsGrid || !slidersContainer || !editActions ) return;
 
-        const storage = StorageUtil;
-        const savedToggleOrder = storage.get( "xeku1okek-order", null );
-        const savedSliderOrder = storage.get( "qs-slider-order", null );
-        const savedContainerOrder = storage.get( "qs-container-order", [ "quick-settings-sliders", "quick-settings-buttons" ] );
+        const stokejo = StorageUtil;
+        const savedToggleOrder = stokejo.get( "xeku1okek-order", null );
+        const savedSliderOrder = stokejo.get( "qs-slider-order", null );
+        const savedContainerOrder = stokejo.get( "qs-container-order", [ "quick-settings-sliders", "quick-settings-buttons" ] );
 
         const currentContainers: { [ key: string ]: HTMLElement | null } = { "quick-settings-buttons": qsGrid, "quick-settings-sliders": slidersContainer };
         savedContainerOrder.forEach( ( id: string ) => {
@@ -238,14 +286,14 @@ export const LabortablaPiktogramoAdministranto = {
         ` ).join( "" );
 
         if ( !editActions.querySelector( ".qs-edit-btn" ) ) {
-            const editBtn = document.createElement( "button" );
-            editBtn.className = "qs-edit-btn n2tase";
-            editBtn.innerHTML = "✏️";
-            editBtn.onclick = () => {
-                const isEditing = qsContainer.classList.toggle( "qs-editing" );
-                editBtn.innerHTML = isEditing ? "✅" : "✏️";
+            const redaktiButono = document.createElement( "button" );
+            redaktiButono.className = "qs-edit-btn n2tase";
+            redaktiButono.innerHTML = "✏️";
+            redaktiButono.onclick = () => {
+                const estasRedaktata = qsContainer.classList.toggle( "qs-editing" );
+                redaktiButono.innerHTML = estasRedaktata ? "✅" : "✏️";
             };
-            editBtn.oncontextmenu = ( e: MouseEvent ) => {
+            redaktiButono.oncontextmenu = ( e: MouseEvent ) => {
                 e.preventDefault();
                 if ( !qsContainer.classList.contains( "qs-editing" ) ) return;
                 const curT = Array.from( qsGrid.querySelectorAll( "[data-qs-id]" ) ).map( ( el: any ) => ( el as HTMLElement ).dataset.qsId );
@@ -256,19 +304,19 @@ export const LabortablaPiktogramoAdministranto = {
                 if ( ( (window as any).KuntekstaMenuoAdministranto ) ) {
                     const addA = [ ...remT.map( ( t: any ) => ( { action: `add-qs-${t.id}`, label: `+ ${t.label}`, icon: t.icon } ) ), ...remS.map( ( s: any ) => ( { action: `add-qs-${s.id}`, label: `+ ${s.label}`, icon: "S" } ) ) ];
                     ( window as any ).KuntekstaMenuoAdministranto.bildigiMenuon( [], addA, e.clientX, e.clientY );
-                    const origH = ( window as any ).KuntekstaMenuoAdministranto.pritraktiAgadon;
-                    ( window as any ).KuntekstaMenuoAdministranto.pritraktiAgadon = ( act: string ) => {
-                        if ( act.startsWith( "add-qs-" ) ) {
-                            const id = act.replace( "add-qs-", "" ), isS = ( id === "volume" || id === "brightness" );
-                            const storage = StorageUtil;
-                            const key = isS ? "qs-slider-order" : "xeku1okek-order", ord = storage.get( key, [] );
-                            ord.push( id ); storage.set( key, ord ); this._iniciiRapidaAgordojn();
-                        } else origH.call( ( window as any ).KuntekstaMenuoAdministranto, act );
-                        ( window as any ).KuntekstaMenuoAdministranto.pritraktiAgadon = origH;
+                    const originalaH = ( window as any ).KuntekstaMenuoAdministranto.pritraktiAgadon;
+                    ( window as any ).KuntekstaMenuoAdministranto.pritraktiAgadon = ( ago: string ) => {
+                        if ( ago.startsWith( "add-qs-" ) ) {
+                            const id = ago.replace( "add-qs-", "" ), estasSxovilo = ( id === "volume" || id === "brightness" );
+                            const stokejo = StorageUtil;
+                            const sxlosilo = estasSxovilo ? "qs-slider-order" : "xeku1okek-order", ord = stokejo.get( sxlosilo, [] );
+                            ord.push( id ); stokejo.set( sxlosilo, ord ); this._iniciiRapidaAgordojn();
+                        } else originalaH.call( ( window as any ).KuntekstaMenuoAdministranto, ago );
+                        ( window as any ).KuntekstaMenuoAdministranto.pritraktiAgadon = originalaH;
                     };
                 }
             };
-            editActions.appendChild( editBtn );
+            editActions.appendChild( redaktiButono );
         }
 
         [ qsGrid, slidersContainer ].forEach( c => this._agordiRAATreniReordigxon( c ) );
@@ -287,59 +335,59 @@ export const LabortablaPiktogramoAdministranto = {
     },
 
     _forigiRAAElementon( storageKey: string, id: string ) {
-        const storage = StorageUtil;
-        const ord = storage.get( storageKey, [] ).filter( ( itemId: string ) => itemId !== id );
-        storage.set( storageKey, ord ); this._iniciiRapidaAgordojn();
+        const stokejo = StorageUtil;
+        const ord = stokejo.get( storageKey, [] ).filter( ( itemId: string ) => itemId !== id );
+        stokejo.set( storageKey, ord ); this._iniciiRapidaAgordojn();
     },
 
     _agordiRAATeniLonTreni( container: HTMLElement | null ) {
         if ( !container ) return;
-        const storage = StorageUtil;
+        const stokejo = StorageUtil;
         ( container as any ).onmousedown = ( e: MouseEvent ) => {
             if ( !container.classList.contains( "qs-editing" ) ) return;
-            const target = ( e.target as HTMLElement ).closest( "#quick-settings-buttons, #quick-settings-sliders" ) as HTMLElement | null;
-            if ( !target || ( e.target as HTMLElement ).tagName === "INPUT" || ( e.target as HTMLElement ).closest( "[data-qs-id]" ) ) return;
-            const move = ( ev: any, data: any ) => {
-                const hover = document.elementFromPoint( data.x, data.y )?.closest( "#quick-settings-buttons, #quick-settings-sliders" ) as HTMLElement | null;
-                if ( hover && hover !== target ) {
-                    if ( Array.from( container.children ).indexOf( target ) < Array.from( container.children ).indexOf( hover ) ) hover.after( target );
-                    else hover.before( target );
-                    storage.set( "qs-container-order", Array.from( container.children ).filter( c => c.id === "quick-settings-buttons" || c.id === "quick-settings-sliders" ).map( c => c.id ) );
+            const celo = ( e.target as HTMLElement ).closest( "#quick-settings-buttons, #quick-settings-sliders" ) as HTMLElement | null;
+            if ( !celo || ( e.target as HTMLElement ).tagName === "INPUT" || ( e.target as HTMLElement ).closest( "[data-qs-id]" ) ) return;
+            const movi = ( ev: any, datumoj: any ) => {
+                const svebanta = document.elementFromPoint( datumoj.x, datumoj.y )?.closest( "#quick-settings-buttons, #quick-settings-sliders" ) as HTMLElement | null;
+                if ( svebanta && svebanta !== celo ) {
+                    if ( Array.from( container.children ).indexOf( celo ) < Array.from( container.children ).indexOf( svebanta ) ) svebanta.after( celo );
+                    else svebanta.before( celo );
+                    stokejo.set( "qs-container-order", Array.from( container.children ).filter( c => c.id === "quick-settings-buttons" || c.id === "quick-settings-sliders" ).map( c => c.id ) );
                 }
             };
             // Uzi unuecigitan enigan traktilon
             const EnigaAdministranto = ( window as any ).EnigaAdministranto;
             if ( EnigaAdministranto ) {
-                EnigaAdministranto.setupDrag( target, null, move, () => {} );
+                EnigaAdministranto.setupDrag( celo, null, movi, () => {} );
             }
         };
     },
 
     _agordiRAATreniReordigxon( container: HTMLElement | null ) {
         if ( !container ) return;
-        const storage = StorageUtil;
+        const stokejo = StorageUtil;
         container.addEventListener( "mousedown", ( e: MouseEvent ) => {
             const qsContainer = document.getElementById( "quick-settings-container" );
             if ( !qsContainer?.classList.contains( "qs-editing" ) ) return;
-            const item = ( e.target as HTMLElement ).closest( "[data-qs-id]" ) as HTMLElement | null;
-            if ( !item || !container.contains( item ) ) return;
-            e.preventDefault(); item.classList.add( "qs-dragging" );
-            const move = ( ev: any, data: any ) => {
-                const drop = document.elementFromPoint( data.x, data.y )?.closest( "[data-qs-id]" ) as HTMLElement | null;
-                if ( drop && drop !== item && container.contains( drop ) ) {
-                    const all = Array.from( container.querySelectorAll( "[data-qs-id]" ) ) as HTMLElement[];
-                    if ( all.indexOf( item ) < all.indexOf( drop ) ) drop.after( item ); else drop.before( item );
+            const ero = ( e.target as HTMLElement ).closest( "[data-qs-id]" ) as HTMLElement | null;
+            if ( !ero || !container.contains( ero ) ) return;
+            e.preventDefault(); ero.classList.add( "qs-dragging" );
+            const movi = ( ev: any, datumoj: any ) => {
+                const faligi = document.elementFromPoint( datumoj.x, datumoj.y )?.closest( "[data-qs-id]" ) as HTMLElement | null;
+                if ( faligi && faligi !== ero && container.contains( faligi ) ) {
+                    const cxiuj = Array.from( container.querySelectorAll( "[data-qs-id]" ) ) as HTMLElement[];
+                    if ( cxiuj.indexOf( ero ) < cxiuj.indexOf( faligi ) ) faligi.after( ero ); else faligi.before( ero );
                 }
             };
-            const up = () => {
-                item.classList.remove( "qs-dragging" );
-                const key = ( container.id === "quick-settings-buttons" ) ? "xeku1okek-order" : "qs-slider-order";
-                storage.set( key, Array.from( container.querySelectorAll( "[data-qs-id]" ) ).map( el => ( el as HTMLElement ).dataset.qsId ) );
+            const supren = () => {
+                ero.classList.remove( "qs-dragging" );
+                const sxlosilo = ( container.id === "quick-settings-buttons" ) ? "xeku1okek-order" : "qs-slider-order";
+                stokejo.set( sxlosilo, Array.from( container.querySelectorAll( "[data-qs-id]" ) ).map( el => ( el as HTMLElement ).dataset.qsId ) );
             };
             // Uzi unuecigitan enigan traktilon
             const EnigaAdministranto = ( window as any ).EnigaAdministranto;
             if ( EnigaAdministranto ) {
-                EnigaAdministranto.setupDrag( item, null, move, up );
+                EnigaAdministranto.setupDrag( ero, null, movi, supren );
             }
         } );
     },

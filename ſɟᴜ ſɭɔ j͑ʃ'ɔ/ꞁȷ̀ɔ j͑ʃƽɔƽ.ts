@@ -143,17 +143,17 @@
 
     // ⟨ App Configuration ⟩
     APPS_DATA: [
-        { path: "ſɟᴜ ſɭɹ/ſןwʞ ꞁȷ̀ᴜ ſɟɔ j͐ʃɹʞ.html", emoji: "🌐" },
-        { path: "ſɟᴜ ſɭɹ/ſɟᴜ ſᶘᴜ j͐ʃɹ.html", emoji: "📝" },
-        { path: "ſɟᴜ ſɭɹ/ſɭw ſᶘɜ.html", emoji: "⚙️" },
-        { path: "ſɟᴜ ſɭɹ/ſןɔ ſɭʞꞇ.html", emoji: "💻" },
-        { path: "../../ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/j͐ʃᴜ ſ͔ɭᴜ.html", emoji: "🔤" },
-        { path: "../../ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/j͑ʃ'ᴜ ɭʃᴜ ֭ſɭᴜȝ ſ͔ɭᴜ ᶅſɔ ſɭɹʞ/j͑ʃ'ᴜ ɭʃᴜ ֭ſɭᴜȝ ſ͔ɭᴜ ᶅſɔ ſɭɹʞ.html", emoji: "🌍" },
-        { path: "../../ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ſɟᴜ ſɭɹ ſȷɔ/ſɟᴜ ſɭɹ ſȷɔ.html", emoji: "🎨" },
-        { path: "../../ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ſɟᴜ ʃᴜ j͐ʃɹ ı],ᴜ/ſɟᴜ ʃᴜ j͐ʃɹ ı],ᴜ.html", emoji: "🧮" },
-        { path: "../../ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/֭ſɭᴜ ı],ɔ ſɭɹ ſןɹ.html", emoji: "🧩" },
-        { path: "../ſɟᴜƽ ꞁȷ̀ᴜ ſɭɹʞ/ſɟᴜƽ ꞁȷ̀ᴜ ſɭɹʞ.html", emoji: "🖌️" },
-        { path: "../../ſ͔ɭᴜ ᶅſɔ/ſȷᴜͷ̗ ſɭɔʞ ꞁȷ̀ᴜꞇ/ſȷſɭ ꞁȷ̀ɹ ſɭˬꞇᴜ.html", emoji: "📖" }
+        { path: "ſɟᴜ ſɭɹ/ſןwʞ ꞁȷ̀ᴜ ſɟɔ j͐ʃɹʞ.html", emoji: "🌐", title: "ſןwʞ ꞁȷ̀ᴜ ſɟɔ j͐ʃɹʞ" },
+        { path: "ſɟᴜ ſɭɹ/ſɟᴜ ſᶘᴜ j͐ʃɹ.html", emoji: "📝", title: "ſɟᴜ ſᶘᴜ j͐ʃɹ" },
+        { path: "ſɟᴜ ſɭɹ/ſɭw ſᶘɜ.html", emoji: "⚙️", title: "ſɭw ſᶘɜ" },
+        { path: "ſɟᴜ ſɭɹ/ſןɔ ſɭʞꞇ.html", emoji: "💻", title: "ſןɔ ſɭʞꞇ" },
+        { path: "https://krhitlashi.github.io/%C5%BF%C9%9F%E1%B4%9C%C6%BD%20%EA%9E%81%C8%B7%CC%80%E1%B4%9C%20%7D%CA%83%EA%9E%87/j%CD%90%CA%83%E1%B4%9C%20%C5%BF%CD%94%C9%AD%E1%B4%9C.html", emoji: "🔤", title: "Ŝlosilaro" },
+        { path: "https://krhitlashi.github.io/%C5%BF%C9%9F%E1%B4%9C%C6%BD%20%EA%9E%81%C8%B7%CC%80%E1%B4%9C%20%7D%CA%83%EA%9E%87/j%CD%91%CA%83'%E1%B4%9C%20%C9%AD%CA%83%E1%B4%9C%20%D6%AD%C5%BF%C9%AD%E1%B4%9C%C8%9D%20%C5%BF%CD%94%C9%AD%E1%B4%9C%20%E1%B6%85%C5%BF%C9%94%20%C5%BF%C9%AD%C9%B9%CA%9E/j%CD%91%CA%83'%E1%B4%9C%20%C9%AD%CA%83%E1%B4%9C%20%D6%AD%C5%BF%C9%AD%E1%B4%9C%C8%9D%20%C5%BF%CD%94%C9%AD%E1%B4%9C%20%E1%B6%85%C5%BF%C9%94%20%C5%BF%C9%AD%C9%B9%CA%9E.html", emoji: "📜", title: "Cafalkefu" },
+        { path: "https://krhitlashi.github.io/%C5%BF%C9%9F%E1%B4%9C%C6%BD%20%EA%9E%81%C8%B7%CC%80%E1%B4%9C%20%7D%CA%83%EA%9E%87/%C5%BF%C9%9F%E1%B4%9C%20%CA%83%E1%B4%9C%20j%CD%90%CA%83%C9%B9%20%C4%B1],%E1%B4%9C/%C5%BF%C9%9F%E1%B4%9C%20%CA%83%E1%B4%9C%20j%CD%90%CA%83%C9%B9%20%C4%B1],%E1%B4%9C.html", emoji: "🗺️", title: "Mapo" },
+        { path: "https://krhitlashi.github.io/%C5%BF%C9%9F%E1%B4%9C%C6%BD%20%EA%9E%81%C8%B7%CC%80%E1%B4%9C%20%7D%CA%83%EA%9E%87/%C5%BF%C9%9F%E1%B4%9C%20%C5%BF%C9%AD%C9%B9%20%C5%BF%C8%B7%C9%94/%C5%BF%C9%9F%E1%B4%9C%20%C5%BF%C9%AD%C9%B9%20%C5%BF%C8%B7%C9%94.html", emoji: "🧮", title: "Kalkulilo" },
+        { path: "https://krhitlashi.github.io/%C5%BF%C9%9F%E1%B4%9C%C6%BD%20%EA%9E%81%C8%B7%CC%80%E1%B4%9C%20%7D%CA%83%EA%9E%87/%D6%AD%C5%BF%C9%AD%E1%B4%9C%20%C4%B1],%C9%94%20%C5%BF%C9%AD%C9%B9%20%C5%BF%D7%9F%C9%B9.html", emoji: "🧩", title: "Puzlo" },
+        { path: "https://cakanisakfii.vercel.app/%C5%BF%C9%9F%E1%B4%9C%C6%BD%20%EA%9E%81%C8%B7%CC%80%E1%B4%9C%20%C5%BF%C9%AD%C9%B9%CA%9E/%C5%BF%C9%9F%E1%B4%9C%C6%BD%20%EA%9E%81%C8%B7%CC%80%E1%B4%9C%20%C5%BF%C9%AD%C9%B9%CA%9E.html", emoji: "🖌️", title: "Desegnilo" },
+        { path: "https://krhitlashi.github.io/%C5%BF%CD%94%C9%AD%E1%B4%9C%20%E1%B6%85%C5%BF%C9%94/%C5%BF%C8%B7%E1%B4%9C%CD%B7%CC%97%20%C5%BF%C9%AD%C9%94%CA%9E%20%EA%9E%81%C8%B7%CC%80%E1%B4%9C%EA%9E%87/%C5%BF%C8%B7%C5%BF%C9%AD%20%EA%9E%81%C8%B7%CC%80%C9%B9%20%C5%BF%C9%AD%CB%AC%EA%9E%87%E1%B4%9C.html", emoji: "📖", title: "Libro" }
     ],
 
     // ⟨ Quick Settings ⟩

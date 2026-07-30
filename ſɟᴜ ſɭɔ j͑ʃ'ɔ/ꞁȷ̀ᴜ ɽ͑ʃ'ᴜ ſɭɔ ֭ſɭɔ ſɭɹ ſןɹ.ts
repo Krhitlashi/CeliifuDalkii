@@ -195,53 +195,61 @@ class FenestraAdministranto {
         };
     }
 
-    static _kreiFenestranElementon( id: string, title: string ): HTMLElement {
-        const win = document.createElement( "div" );
-        win.classList.add( "window" );
-        win.id = id;
-        return win;
+    static _kreiFenestranElementon( id: string, titolo: string ): HTMLElement {
+        const fenestro = document.createElement( "div" );
+        fenestro.classList.add( "window" );
+        fenestro.id = id;
+        return fenestro;
     }
 
-    static _agordiFenestrajnInteragojn( win: HTMLElement, id: string, title: string ): void {
-        win.addEventListener( "mousedown", () => { win.style.zIndex = ( ++this.statikaZIndekso ).toString(); } );
-        this.agordiAplikonAktiva( title, true );
+    static _agordiFenestrajnInteragojn( fenestro: HTMLElement, id: string, titolo: string ): void {
+        fenestro.addEventListener( "mousedown", () => { fenestro.style.zIndex = ( ++this.statikaZIndekso ).toString(); } );
+        this.agordiAplikonAktiva( titolo, true );
     }
 
     static _injektiStilojnEnIframon( iframeId: string ): void {
-        const iframe = document.getElementById( iframeId ) as HTMLIFrameElement | null;
-        if ( !iframe ) return;
+        const iframo = document.getElementById( iframeId ) as HTMLIFrameElement | null;
+        if ( !iframo ) return;
 
-        iframe.onload = (): void => {
+        iframo.onload = (): void => {
             try {
-                const doc = iframe.contentDocument || ( iframe.contentWindow as Window )?.document;
-                if ( !doc?.head ) return;
+                const dokumento = iframo.contentDocument || ( iframo.contentWindow as Window )?.document;
+                if ( !dokumento?.head ) return;
 
-                // Inject override styles
-                if ( !doc.getElementById( "injected-style" ) ) {
-                    const style = doc.createElement( "style" );
-                    style.id = "injected-style";
-                    style.textContent = `
+                // Injekti superregajn stilojn
+                if ( !dokumento.getElementById( "injected-style" ) ) {
+                    const stilo = dokumento.createElement( "style" );
+                    stilo.id = "injected-style";
+                    stilo.textContent = `
                         h1, .saxesukef, .cakaxa, .sozanu, nav, footer, header { display: none !important; }
                         body { background-color: transparent !important; padding: var(--អារេងព៏) !important; }
                         ciihii {
                         background-color: var(--តានេក) !important; }
                     `;
-                    doc.head.appendChild( style );
+                    dokumento.head.appendChild( stilo );
                 }
 
-                // Link the global stylesheet for full design system
-                if ( !doc.getElementById( "injected-global-css" ) ) {
-                    const globalCss = document.querySelector( 'link[href*="֭ſɭᴜ ı],ɔ.css"]' ) as HTMLLinkElement | null;
-                    if ( globalCss ) {
-                        const link = doc.createElement( "link" );
-                        link.id = "injected-global-css";
-                        link.rel = "stylesheet";
-                        link.href = globalCss.href;
-                        doc.head.appendChild( link );
+                // Ligi la tutmondan stilfolion por plena dezajna sistemo
+                if ( !dokumento.getElementById( "injected-global-css" ) ) {
+                    const tutmondaCss = document.querySelector( 'link[href*="%C4%B1__%C9%94.css"]' ) as HTMLLinkElement | null;
+                    if ( tutmondaCss ) {
+                        const ligilo = dokumento.createElement( "link" );
+                        ligilo.id = "injected-global-css";
+                        ligilo.rel = "stylesheet";
+                        ligilo.href = tutmondaCss.href;
+                        dokumento.head.appendChild( ligilo );
                     }
                 }
+
+                // Adopti la propran <title> de la pagio al OS-titola-breto ( lokaj aplikoj, https, same-origin ).
+                // Cross-origin https paĝoj ĵetos Sekurec-Eroron ĉi tie — la ekzista try / catch englutos ĝin
+                if ( dokumento.title ) {
+                    const fenestraId = iframeId.replace( /^iframe-/, "" );
+                    const titolaP = document.getElementById( fenestraId )?.querySelector( ".title-bar-title" );
+                    if ( titolaP ) titolaP.textContent = dokumento.title;
+                }
             } catch ( e ) {
-                // Cross-origin iframes will throw; silently ignore
+                // Cross-origin iframes ĵetos eraron; silente ignoru
             }
         };
     }
@@ -289,166 +297,166 @@ class FenestraAdministranto {
     // ⟪ Alenporti Fenestron al Frunto ⟫
 
     static alenportiAlFrunto( id: string ): void {
-        const win = document.getElementById( id );
-        if ( win ) {
-            win.style.zIndex = ( ++this.statikaZIndekso ).toString();
+        const fenestro = document.getElementById( id );
+        if ( fenestro ) {
+            fenestro.style.zIndex = ( ++this.statikaZIndekso ).toString();
         }
     }
 
     // ⟪ Ŝargi Aplikon el Vojo ⟫
 
-    static sxargiAplikonDeVojo( path: string, title: string ): void {
-        const container = getWindowContainer();
+    static sxargiAplikonDeVojo( path: string, titolo: string ): void {
+        const ujo = getWindowContainer();
 
-        // Check if app is already open
-        const existingWin = Array.from( document.querySelectorAll( ".window" ) ).find( ( win: any ) => {
-            const iframe = win.querySelector( "iframe" );
-            return iframe && iframe.src.includes( path );
+        // Kontroli ĉu aplikaĵo jam estas malfermita
+        const ekzistantaFenestro = Array.from( document.querySelectorAll( ".window" ) ).find( ( f: any ) => {
+            const iframo = f.querySelector( "iframe" );
+            return iframo && iframo.src.includes( path );
         } );
         
         
-        if ( existingWin ) {
-            // App is already open - focus it and refresh recents
-            this.fokusigiFenestron( existingWin.id );
+        if ( ekzistantaFenestro ) {
+            // Aplikaĵo jam malfermita — fokusigi ĝin kaj refreŝigi lastatempajn
+            this.fokusigiFenestron( ekzistantaFenestro.id );
             this.renderiLastatempajn();
             return;
         }
 
         const id = "win-" + Date.now();
-        const win = this._kreiFenestranElementon( id, title );
+        const fenestro = this._kreiFenestranElementon( id, titolo );
         const app = ( typeof CONSTANTS.APPS_DATA !== "undefined" ) ? CONSTANTS.APPS_DATA.find( ( a: any ) => a.path === path ) : null;
-        win.dataset.emoji = app?.emoji || "🖥️";
+        fenestro.dataset.emoji = app?.emoji || "🖥️";
         const { x, y } = this._aleatoriaFenestraPozicio( CONSTANTS.WM.WINDOW_BASE_Y_LOAD );
-        win.style.left = x + "px";
-        win.style.top = y + "px";
-        win.style.zIndex = ( ++this.statikaZIndekso ).toString();
+        fenestro.style.left = x + "px";
+        fenestro.style.top = y + "px";
+        fenestro.style.zIndex = ( ++this.statikaZIndekso ).toString();
 
         const iframeId = "iframe-" + id;
-        win.innerHTML = `
+        fenestro.innerHTML = `
         <div class="cepufal" style="padding: 0; inline-size: 100%;">
-            ${this._konstruiTitolaBreton( id, title, true )}
+            ${this._konstruiTitolaBreton( id, titolo, true )}
             ${this._konstruiIframanEnhavon( iframeId, path )}
         </div>
         ` + this._konstruiGrandSxangxilojn( id );
 
-        container.appendChild( win );
-        this._agordiFenestrajnInteragojn( win, id, title );
+        ujo.appendChild( fenestro );
+        this._agordiFenestrajnInteragojn( fenestro, id, titolo );
         this.gxisdatigiTaskobretajnAplikojn();
         this._injektiStilojnEnIframon( iframeId );
 
-        // Animate window opening with fractions
-        AnimacioAdministranto.fenestroMalfermi( win, { ...CONSTANTS.ANIM_SETTINGS.windowOpen } );
+        // Animacii fenestran malfermon kun frakcioj
+        AnimacioAdministranto.fenestroMalfermi( fenestro, { ...CONSTANTS.ANIM_SETTINGS.windowOpen } );
 
-        // Refresh recents to show new window
+        // Refreŝigi lastatempajn por montri novan fenestron
         this.renderiLastatempajn();
     }
 
     // ⟪ Krei Fenestron ⟫
 
-    static kreiFenestron( path: string, content: string = "" ): void {
+    static kreiFenestron( path: string, enhavo: string = "" ): void {
         const id = "win-" + Date.now();
-        const title = path.split( "/" ).pop()?.replace( ".html", "" ) || "App";
-        const container = getWindowContainer();
-        const win = this._kreiFenestranElementon( id, title );
+        const titolo = path.split( "/" ).pop()?.replace( ".html", "" ) || "App";
+        const ujo = getWindowContainer();
+        const fenestro = this._kreiFenestranElementon( id, titolo );
         const app = ( typeof CONSTANTS.APPS_DATA !== "undefined" ) ? CONSTANTS.APPS_DATA.find( ( a: any ) => a.path === path ) : null;
-        win.dataset.emoji = app?.emoji || "🖥️";
+        fenestro.dataset.emoji = app?.emoji || "🖥️";
         const { x, y } = this._aleatoriaFenestraPozicio( CONSTANTS.WM.WINDOW_BASE_Y_CREATE );
-        win.style.left = x + "px";
-        win.style.top = y + "px";
-        win.style.zIndex = ( ++this.statikaZIndekso ).toString();
+        fenestro.style.left = x + "px";
+        fenestro.style.top = y + "px";
+        fenestro.style.zIndex = ( ++this.statikaZIndekso ).toString();
 
-        const appUrl = this.aplikaĵajURLoj[ path ];
+        const aplikaĵaUrl = this.aplikaĵajURLoj[ path ];
         const iframeId = "iframe-" + id;
-        const internalContent = appUrl
-            ? this._konstruiIframanEnhavon( iframeId, appUrl )
-            : ( content || `<div><p>${title}</p></div>` );
+        const internaEnhavo = aplikaĵaUrl
+            ? this._konstruiIframanEnhavon( iframeId, aplikaĵaUrl )
+            : ( enhavo || `<div><p>${titolo}</p></div>` );
 
-        win.innerHTML = this._konstruiTitolaBreton( id, title ) + internalContent +
+        fenestro.innerHTML = this._konstruiTitolaBreton( id, titolo ) + internaEnhavo +
             this._konstruiGrandSxangxilojn( id );
 
-        this._agordiFenestrajnInteragojn( win, id, title );
-        container.appendChild( win );
+        this._agordiFenestrajnInteragojn( fenestro, id, titolo );
+        ujo.appendChild( fenestro );
         this.gxisdatigiTaskobretajnAplikojn();
 
-        if ( appUrl ) {
+        if ( aplikaĵaUrl ) {
             this._injektiStilojnEnIframon( iframeId );
         }
 
-        // Animate window opening with fractions
-        AnimacioAdministranto.fenestroMalfermi( win, { ...CONSTANTS.ANIM_SETTINGS.windowOpen } );
+        // Animacii fenestran malfermon kun frakcioj
+        AnimacioAdministranto.fenestroMalfermi( fenestro, { ...CONSTANTS.ANIM_SETTINGS.windowOpen } );
     }
 
     // ⟪ Komenci GrandŜanĝon ⟫
 
-    static komenciGrandSxangxon( e: MouseEvent | TouchEvent, id: string, handle: string ): void {
+    static komenciGrandSxangxon( e: MouseEvent | TouchEvent, id: string, tenilo: string ): void {
         e.stopPropagation();
         e.preventDefault();
 
-        const win = document.getElementById( id );
-        if ( !win || win.classList.contains( "maximized" ) || win.classList.contains( "fullscreen" ) ) return;
+        const fenestro = document.getElementById( id );
+        if ( !fenestro || fenestro.classList.contains( "maximized" ) || fenestro.classList.contains( "fullscreen" ) ) return;
 
-        // Set resizing flag
-        ( win as any )._isResizing = true;
+        // Agordi regrandigan flagon
+        ( fenestro as any )._isResizing = true;
         setDraggingState( true );
 
-        const rect = win.getBoundingClientRect();
-        const startLeft = win.offsetLeft;
-        const startTop = win.offsetTop;
-        const startWidth = win.offsetWidth;
-        const startHeight = win.offsetHeight;
-        const startRight = startLeft + startWidth;
-        const startBottom = startTop + startHeight;
+        const rekt = fenestro.getBoundingClientRect();
+        const komencaMaldekstro = fenestro.offsetLeft;
+        const komencaSupro = fenestro.offsetTop;
+        const komencaLarĝo = fenestro.offsetWidth;
+        const komencaAlto = fenestro.offsetHeight;
+        const komencaDekstro = komencaMaldekstro + komencaLarĝo;
+        const komencaMalsupro = komencaSupro + komencaAlto;
 
-        // Get pointer position using unified handler
-        const pos = akiriMontranPunkton( e );
-        const startX = pos.x;
-        const startY = pos.y;
+        // Akiri montrilan pozicion per unuecigita traktilo
+        const poz = akiriMontranPunkton( e );
+        const komencoX = poz.x;
+        const komencoY = poz.y;
 
-        // Calculate cursor offset from window edge ( handles extend outside window )
-        const isWest = handle.includes( "w" );
-        const isEast = handle.includes( "e" );
-        const isNorth = handle.includes( "n" );
-        const isSouth = handle.includes( "s" );
-        const offsetX = isWest ? startX - rect.left : 0;
-        const offsetY = isNorth ? startY - rect.top : 0;
+        // Kalkuli kursoran ofseton de fenestra rando ( teniloj etendiĝas ekster fenestron )
+        const estasOkcidento = tenilo.includes( "w" );
+        const estasOriento = tenilo.includes( "e" );
+        const estasNordo = tenilo.includes( "n" );
+        const estasSudo = tenilo.includes( "s" );
+        const ofsetoX = estasOkcidento ? komencoX - rekt.left : 0;
+        const ofsetoY = estasNordo ? komencoY - rekt.top : 0;
 
-        const doDrag = ( clientX: number, clientY: number ) => {
-            const dx = clientX - startX;
-            const dy = clientY - startY;
+        const fariTrenon = ( klientoX: number, klientoY: number ) => {
+            const dx = klientoX - komencoX;
+            const dy = klientoY - komencoY;
 
-            // Calculate new position and size using direction flags
-            let newLeft = startLeft;
-            let newTop = startTop;
-            let newRight = startRight;
-            let newBottom = startBottom;
+            // Kalkuli novan pozicion kaj grandecon per direktaj flagoj
+            let novaMaldekstro = komencaMaldekstro;
+            let novaSupro = komencaSupro;
+            let novaDekstro = komencaDekstro;
+            let novaMalsupro = komencaMalsupro;
 
-            if ( isWest ) newLeft = startLeft + dx + offsetX;
-            else if ( isEast ) newRight = startRight + dx;
+            if ( estasOkcidento ) novaMaldekstro = komencaMaldekstro + dx + ofsetoX;
+            else if ( estasOriento ) novaDekstro = komencaDekstro + dx;
 
-            if ( isNorth ) newTop = startTop + dy + offsetY;
-            else if ( isSouth ) newBottom = startBottom + dy;
+            if ( estasNordo ) novaSupro = komencaSupro + dy + ofsetoY;
+            else if ( estasSudo ) novaMalsupro = komencaMalsupro + dy;
 
-            // Calculate final position and size
-            const finalWidth = Math.max( CONSTANTS.INPUT.RESIZE_MIN_WIDTH, newRight - newLeft );
-            const finalHeight = Math.max( CONSTANTS.INPUT.RESIZE_MIN_HEIGHT, newBottom - newTop );
+            // Kalkuli finan pozicion kaj grandecon
+            const finaLarĝo = Math.max( CONSTANTS.INPUT.RESIZE_MIN_WIDTH, novaDekstro - novaMaldekstro );
+            const finaAlto = Math.max( CONSTANTS.INPUT.RESIZE_MIN_HEIGHT, novaMalsupro - novaSupro );
 
-            win.style.left = newLeft + "px";
-            win.style.top = newTop + "px";
-            win.style.width = finalWidth + "px";
-            win.style.height = finalHeight + "px";
+            fenestro.style.left = novaMaldekstro + "px";
+            fenestro.style.top = novaSupro + "px";
+            fenestro.style.width = finaLarĝo + "px";
+            fenestro.style.height = finaAlto + "px";
         };
 
-        // Create move handler
-        const onMove = ( ev: any ) => {
+        // Krei mov-traktilon
+        const cxeMov = ( ev: any ) => {
             ev.preventDefault();
             const p = akiriMontranPunkton( ev );
-            doDrag( p.x, p.y );
+            fariTrenon( p.x, p.y );
         };
 
         // Agordi komunajn montradajn eventojn (forigiEventojn estas vokata en la onEnd-fino)
-        const forigiEventojn = setupMontrajnEventojn( onMove, () => {
+        const forigiEventojn = setupMontrajnEventojn( cxeMov, () => {
             setDraggingState( false );
-            ( win as any )._isResizing = false;
+            ( fenestro as any )._isResizing = false;
             forigiEventojn();
         } );
     }
@@ -456,14 +464,14 @@ class FenestraAdministranto {
     // ⟪ Fermi Fenestron ⟫
 
     static fermiFenestron( id: string ): void {
-        const win = document.getElementById( id );
-        if ( win ) {
-            const title = getWindowTitle( win );
+        const fenestro = document.getElementById( id );
+        if ( fenestro ) {
+            const titolo = getWindowTitle( fenestro );
 
-            // Animate window closing with fractions
-            AnimacioAdministranto.fenestroFermi( win, { ...CONSTANTS.ANIM_SETTINGS.windowClose } ).then( () => {
-                this.agordiAplikonAktiva( title, false );
-                win.remove();
+            // Animacii fenestran fermon kun frakcioj
+            AnimacioAdministranto.fenestroFermi( fenestro, { ...CONSTANTS.ANIM_SETTINGS.windowClose } ).then( () => {
+                this.agordiAplikonAktiva( titolo, false );
+                fenestro.remove();
                 this.gxisdatigiTaskobretajnAplikojn();
                 this.renderiLastatempajn();
             } );
@@ -477,77 +485,77 @@ class FenestraAdministranto {
     static komenciTrenadon( e: MouseEvent | TouchEvent, id: string ): void {
         e.preventDefault();
 
-        const win = document.getElementById( id );
-        if ( !win || ( win as any )._isResizing ) return;
+        const fenestro = document.getElementById( id );
+        if ( !fenestro || ( fenestro as any )._isResizing ) return;
 
         setDraggingState( true );
-        const rect = win.getBoundingClientRect();
+        const rekt = fenestro.getBoundingClientRect();
 
-        // Get pointer position using unified handler
-        const pos = akiriMontranPunkton( e );
-        const clientX = pos.x;
-        const clientY = pos.y;
-        const shiftX = clientX - rect.left;
-        const shiftY = clientY - rect.top;
+        // Akiri montrilan pozicion per unuecigita traktilo
+        const poz = akiriMontranPunkton( e );
+        const klientoX = poz.x;
+        const klientoY = poz.y;
+        const ŝovoX = klientoX - rekt.left;
+        const ŝovoY = klientoY - rekt.top;
 
-        const doDrag = ( newX: number, newY: number ) => {
-            win.style.left = ( newX - shiftX ) + "px";
-            win.style.top = ( newY - shiftY ) + "px";
+        const fariTrenon = ( novaX: number, novaY: number ) => {
+            fenestro.style.left = ( novaX - ŝovoX ) + "px";
+            fenestro.style.top = ( novaY - ŝovoY ) + "px";
         };
 
-        const stopDrag = () => {
+        const haltiTrenon = () => {
             setDraggingState( false );
         };
 
-        // Use unified input handler for both mouse and touch
-        const onMove = ( ev: any, data: any ) => {
-            doDrag( data.x, data.y );
+        // Uzi unuecigitan enigan traktilon por ambaŭ muso kaj tuŝo
+        const cxeMov = ( ev: any, datumoj: any ) => {
+            fariTrenon( datumoj.x, datumoj.y );
         };
 
-        const onEnd = () => {
-            stopDrag();
+        const cxeFin = () => {
+            haltiTrenon();
         };
 
-        EnigaAdministranto.setupDrag( win, null, onMove, onEnd );
+        EnigaAdministranto.setupDrag( fenestro, null, cxeMov, cxeFin );
     }
 
     // ⟪ Baskuli Maksimumigon ⟫
 
     static baskuligiMaksimumigxon( id: string ): void {
-        const win = document.getElementById( id );
-        if ( !win ) return;
+        const fenestro = document.getElementById( id );
+        if ( !fenestro ) return;
 
-        if ( win.classList.contains( "maximized" ) ) {
-            // Play unmaximize animation first
-            AnimacioAdministranto.malmaksimumigiFenestron( win, {
+        if ( fenestro.classList.contains( "maximized" ) ) {
+            // Ludi malmaksimumigan animacion unue
+            AnimacioAdministranto.malmaksimumigiFenestron( fenestro, {
                 duration: CONSTANTS.ANIM_SETTINGS.windowMaximize.duration,
                 easing: CONSTANTS.ANIM_SETTINGS.windowMaximize.easing,
                 toScale: CONSTANTS.ANIM_SETTINGS.windowMaximize.scale
             } );
-            // Restore previous dimensions
-            win.style.width = win.dataset.prevWidth || "";
-            win.style.height = win.dataset.prevHeight || "";
-            win.style.left = win.dataset.prevLeft || "";
-            win.style.top = win.dataset.prevTop || "";
-            ( win.style as any ).right = "";
-            ( win.style as any ).bottom = "";
-            win.classList.remove( "maximized" );
+            // Restarigi antaŭajn dimensiojn
+            fenestro.style.width = fenestro.dataset.prevWidth || "";
+            fenestro.style.height = fenestro.dataset.prevHeight || "";
+            fenestro.style.left = fenestro.dataset.prevLeft || "";
+            fenestro.style.top = fenestro.dataset.prevTop || "";
+            ( fenestro.style as any ).right = "";
+            ( fenestro.style as any ).bottom = "";
+            fenestro.classList.remove( "maximized" );
         } else {
-            // Save current dimensions
-            win.dataset.prevWidth = win.style.width || win.offsetWidth + "px";
-            win.dataset.prevHeight = win.style.height || win.offsetHeight + "px";
-            win.dataset.prevLeft = win.style.left || win.offsetLeft + "px";
-            win.dataset.prevTop = win.style.top || win.offsetTop + "px";
-            // Clear inline styles so CSS .maximized rules take over
-            win.style.width = "";
-            win.style.height = "";
-            win.style.left = "";
-            win.style.top = "";
-            ( win.style as any ).right = "";
-            ( win.style as any ).bottom = "";
-            win.classList.add( "maximized" );
-            // Play maximize animation
-            AnimacioAdministranto.maksimumigiFenestron( win, {
+            // Konservi nunajn dimensiojn
+            fenestro.dataset.prevWidth = fenestro.style.width || fenestro.offsetWidth + "px";
+            fenestro.dataset.prevHeight = fenestro.style.height || fenestro.offsetHeight + "px";
+            fenestro.dataset.prevLeft = fenestro.style.left || fenestro.offsetLeft + "px";
+            fenestro.dataset.prevTop = fenestro.style.top || fenestro.offsetTop + "px";
+            // Forviŝi enliniajn stilojn por ke CSS .maximized reguloj transprenu
+            fenestro.style.width = "";
+            fenestro.style.height = "";
+            fenestro.style.left = "";
+            fenestro.style.top = "";
+            ( fenestro.style as any ).right = "";
+            ( fenestro.style as any ).bottom = "";
+            fenestro.classList.add( "maximized" );
+            // Ludi maksimumigan animacion
+            AnimacioAdministranto.maksimumigiFenestron( fenestro, {
                 duration: CONSTANTS.ANIM_SETTINGS.windowMaximize.duration,
                 easing: CONSTANTS.ANIM_SETTINGS.windowMaximize.easing,
                 fromScale: CONSTANTS.ANIM_SETTINGS.windowMaximize.scale
@@ -558,15 +566,15 @@ class FenestraAdministranto {
     // ⟪ Minimumigi Fenestron ⟫
 
     static minimumigiFenestron( id: string ): void {
-        const win = document.getElementById( id );
-        if ( win ) {
-            // Add minimized class immediately to trigger state change,
-            // but animation manager will handle the visual part.
-            AnimacioAdministranto.minimumigiFenestron( win, {
+        const fenestro = document.getElementById( id );
+        if ( fenestro ) {
+            // Aldoni minimumigitan klason tuj por ekigi ŝtatŝanĝon,
+            // sed la animacia administranto pritraktos la vidan parton.
+            AnimacioAdministranto.minimumigiFenestron( fenestro, {
                 duration: CONSTANTS.ANIM_SETTINGS.windowMinimize.duration,
                 easing: CONSTANTS.ANIM_SETTINGS.windowMinimize.easing
             } ).then( () => {
-                win.classList.add( "minimized" );
+                fenestro.classList.add( "minimized" );
                 this.gxisdatigiTaskobretajnAplikojn();
                 this.renderiLastatempajn();
                 if ( typeof updateDock === "function" ) updateDock();
@@ -577,13 +585,13 @@ class FenestraAdministranto {
     // ⟪ Fokusigi Fenestron ⟫
 
     static fokusigiFenestron( id: string ): void {
-        const win = document.getElementById( id );
-        if ( win ) {
-            if ( win.classList.contains( "minimized" ) ) {
-                win.classList.remove( "minimized" );
-                AnimacioAdministranto.restaŭriFenestron( win );
+        const fenestro = document.getElementById( id );
+        if ( fenestro ) {
+            if ( fenestro.classList.contains( "minimized" ) ) {
+                fenestro.classList.remove( "minimized" );
+                AnimacioAdministranto.restaŭriFenestron( fenestro );
             }
-            win.style.zIndex = ( ++this.statikaZIndekso ).toString();
+            fenestro.style.zIndex = ( ++this.statikaZIndekso ).toString();
             if ( ( window as any ).PanelaAdministranto ) ( window as any ).PanelaAdministranto.fermiCxiujnPanelojn();
             this.gxisdatigiTaskobretajnAplikojn();
         }
@@ -591,29 +599,29 @@ class FenestraAdministranto {
 
     // ⟪ Bildigi Lastatempajn ⟫
     static renderiLastatempajn(): void {
-        const list = document.getElementById( "recents-list" );
-        if ( !list ) return;
+        const listo = document.getElementById( "recents-list" );
+        if ( !listo ) return;
 
-        const windows = document.querySelectorAll( ".window" );
-        const strings = typeof getStrings === "function" ? getStrings() : {};
+        const fenestroj = document.querySelectorAll( ".window" );
+        const tekstoj = typeof getStrings === "function" ? getStrings() : {};
 
-        if ( windows.length === 0 ) {
-            list.innerHTML = `<div style="padding: 24px; text-align: center; opacity: 0.5;">${strings.recents_no_apps || "No open apps"}</div>`;
+        if ( fenestroj.length === 0 ) {
+            listo.innerHTML = `<div style="padding: 24px; text-align: center; opacity: 0.5;">${tekstoj.recents_no_apps || "No open apps"}</div>`;
             return;
         }
 
-        list.innerHTML = Array.from( windows ).map( ( win: any ) => {
-            const title = win.querySelector( ".title-bar-title" )?.innerText || "App";
-            const emoji = win.dataset.emoji || "🖥️";
-            const id = win.id;
+        listo.innerHTML = Array.from( fenestroj ).map( ( f: any ) => {
+            const titolo = f.querySelector( ".title-bar-title" )?.innerText || "App";
+            const emoĝio = f.dataset.emoji || "🖥️";
+            const id = f.id;
             return `
                 <div class="recents-card" onclick="FenestraAdministranto.fokusigiFenestron('${id}')">
                     <ksaka class="title-bar">
                         <button class="recents-close-btn" onclick="event.stopPropagation(); FenestraAdministranto.fermiFenestron('${id}'); FenestraAdministranto.renderiLastatempajn();">/</button>
-                        <p class="title-bar-title">${title}</p>
+                        <p class="title-bar-title">${titolo}</p>
                     </ksaka>
                     <div class="recents-preview">
-                        ${emoji}
+                        ${emoĝio}
                     </div>
                 </div>
             `;
@@ -623,22 +631,22 @@ class FenestraAdministranto {
     // ⟪ Ĝisdatigi Dokon ⟫
 
     static gxisdatigiDokon(): void {
-        const dock = document.getElementById( "taskbar-dock" );
-        if ( !dock ) return;
+        const doko = document.getElementById( "taskbar-dock" );
+        if ( !doko ) return;
 
-        const windows = document.querySelectorAll( ".window" );
-        if ( windows.length === 0 ) {
-            dock.classList.remove( "visible" );
+        const fenestroj = document.querySelectorAll( ".window" );
+        if ( fenestroj.length === 0 ) {
+            doko.classList.remove( "visible" );
             return;
         }
 
-        dock.innerHTML = Array.from( windows ).map( ( win: any ) => {
-            const title = win.querySelector( ".title-bar-title" )?.innerText || "App";
-            const id = win.id;
-            const isMinimized = win.classList.contains( "minimized" );
+        doko.innerHTML = Array.from( fenestroj ).map( ( f: any ) => {
+            const titolo = f.querySelector( ".title-bar-title" )?.innerText || "App";
+            const id = f.id;
+            const estasMinimumigita = f.classList.contains( "minimized" );
             return `
-                <button class="dock-btn n2tase ${isMinimized ? "minimized" : ""}" onclick="FenestraAdministranto.fokusigiFenestron('${id}')" title="${title}">
-                    ${title[ 0 ].toUpperCase()}
+                <button class="dock-btn n2tase ${estasMinimumigita ? "minimized" : ""}" onclick="FenestraAdministranto.fokusigiFenestron('${id}')" title="${titolo}">
+                    ${titolo[ 0 ].toUpperCase()}
                 </button>
             `;
         } ).join( "" );
@@ -647,23 +655,23 @@ class FenestraAdministranto {
     // ⟪ Agordi Aplikon Aktiva ⟫
 
     static agordiAplikonAktiva( appName: string | null, active: boolean | null ): void {
-        const countSpan = document.querySelector( ".active-apps-count" ) as HTMLElement | null;
-        if ( countSpan ) {
-            const count = document.querySelectorAll( ".window" ).length;
-            countSpan.innerText = typeof ( window as any ).vab6caja === "function" ? ( window as any ).vab6caja( count ) : count.toString();
+        const nombraSpan = document.querySelector( ".active-apps-count" ) as HTMLElement | null;
+        if ( nombraSpan ) {
+            const nombro = document.querySelectorAll( ".window" ).length;
+            nombraSpan.innerText = typeof ( window as any ).vab6caja === "function" ? ( window as any ).vab6caja( nombro ) : nombro.toString();
         }
     }
 
     // ⟪ Ĝisdatigi Taskobretajn Aplikojn ⟫
 
     static gxisdatigiTaskobretajnAplikojn(): void {
-        const center = getHomeArea();
-        const taskbar = getTaskbar();
-        if ( !center || !taskbar ) return;
+        const centro = getHomeArea();
+        const taskobar = getTaskbar();
+        if ( !centro || !taskobar ) return;
 
-        center.querySelectorAll( ".taskbar-app-btn" ).forEach( ( b: HTMLElement ) => b.remove() );
+        centro.querySelectorAll( ".taskbar-app-btn" ).forEach( ( b: HTMLElement ) => b.remove() );
 
-        // Recent apps only shown in recents panel and start menu, not in taskbar
+        // Lastatempaj aplikaĵoj nur montrataj en lastatempa panelo kaj komenca menuo, ne en taskobreto
         this.agordiAplikonAktiva( null, null );
     }
 
@@ -672,12 +680,12 @@ class FenestraAdministranto {
     static gxisdatigiTaskobretajnAgordojn( val: string ): void {
         document.documentElement.style.setProperty( "--taskbar-width", val + "px" );
 
-        const taskbar = getTaskbar();
-        if ( taskbar ) {
-            taskbar.dataset.large = ( parseInt( val ) >= CONSTANTS.WM.TASKBAR_LARGE_THRESHOLD ) ? "true" : "false";
+        const taskobar = getTaskbar();
+        if ( taskobar ) {
+            taskobar.dataset.large = ( parseInt( val ) >= CONSTANTS.WM.TASKBAR_LARGE_THRESHOLD ) ? "true" : "false";
         }
         
-        // Save to localStorage
+        // Konservi al localStorage
         localStorage.setItem( "os-taskbar-size", val );
     }
 
@@ -685,9 +693,9 @@ class FenestraAdministranto {
 
     static agordiTemon( theme: string ): void {
         if ( theme === "detect" ) {
-            const isDark = window.matchMedia( "(prefers-color-scheme: dark)" ).matches;
-            this.aplikiTemon( isDark );
-            // Watch for system changes
+            const estasMalhela = window.matchMedia( "(prefers-color-scheme: dark)" ).matches;
+            this.aplikiTemon( estasMalhela );
+            // Observi sistemajn ŝanĝojn
             if ( !this.statikaTemoVigladilo ) {
                 this.statikaTemoVigladilo = ( e: MediaQueryListEvent ) => {
                     if ( this.statikaNunaTemo === "detect" ) this.aplikiTemon( e.matches );
@@ -711,12 +719,12 @@ class FenestraAdministranto {
             "--តានេក": "#00000010", "--តានេកខេលេ": "#00000008", "--តានេក២": "#00000020",
             "--ឆាងាធី": "#f4f4f4", "--ឆាងាធីច្ហិ": "#f4f4f4c0"
         };
-        const applyTo = ( doc: Document | null ) => {
-            if ( !doc?.documentElement ) return;
-            Object.entries( themeVars ).forEach( ( [ p, v ] ) => doc.documentElement.style.setProperty( p, v ) );
+        const aplikiAl = ( dokumento: Document | null ) => {
+            if ( !dokumento?.documentElement ) return;
+            Object.entries( themeVars ).forEach( ( [ p, v ] ) => dokumento.documentElement.style.setProperty( p, v ) );
         };
-        applyTo( document );
-        document.querySelectorAll( "iframe" ).forEach( ( f: HTMLIFrameElement ) => { try { applyTo( f.contentDocument ); } catch ( e ) { /* ignore */ } } );
+        aplikiAl( document );
+        document.querySelectorAll( "iframe" ).forEach( ( f: HTMLIFrameElement ) => { try { aplikiAl( f.contentDocument ); } catch ( e ) { /* ignore */ } } );
     }
 
     // ⟪ Tapeta Administrado ⟫
@@ -881,33 +889,33 @@ class FenestraAdministranto {
     // ⟪ Inicado ⟫
 
     static inicii(): void {
-        const savedTheme = localStorage.getItem( "os-theme" ) || "detect";
-        this.agordiTemon( savedTheme );
+        const konservitaTemo = localStorage.getItem( "os-theme" ) || "detect";
+        this.agordiTemon( konservitaTemo );
 
-        // Load wallpaper (image or gradient)
-        const savedWallpaper = localStorage.getItem( "os-wallpaper" );
-        if ( savedWallpaper ) {
-            this.agordiTapeton( savedWallpaper );
+        // Ŝargi tapeton ( bildo aŭ gradiento )
+        const konservitaTapeto = localStorage.getItem( "os-wallpaper" );
+        if ( konservitaTapeto ) {
+            this.agordiTapeton( konservitaTapeto );
         } else {
-            const savedGradient = JSON.parse( localStorage.getItem( "os-wallpaper-gradient" ) || "null" );
-            if ( savedGradient ) {
+            const konservitaGradiento = JSON.parse( localStorage.getItem( "os-wallpaper-gradient" ) || "null" );
+            if ( konservitaGradiento ) {
                 // Restarigi gradienton kun ĉiuj konservitaj ecoj (haltpunktoj, angulo, tipo, tavoloj)
             this.agordiGradientanTapeton(
-                savedGradient.start,
-                savedGradient.end,
-                savedGradient.angulo ?? 135,
-                savedGradient.koloroj,
-                savedGradient.tipo ?? "linear",
-                savedGradient.tavoloj
+                konservitaGradiento.start,
+                konservitaGradiento.end,
+                konservitaGradiento.angulo ?? 135,
+                konservitaGradiento.koloroj,
+                konservitaGradiento.tipo ?? "linear",
+                konservitaGradiento.tavoloj
             );
             }
         }
 
-        // Initialize taskbar size from localStorage
-        const savedTaskbarSize = localStorage.getItem( "os-taskbar-size" ) || "48";
-        this.gxisdatigiTaskobretajnAgordojn( savedTaskbarSize );
+        // Iniciati taskobretan grandecon el localStorage
+        const konservitaTaskobretaGrando = localStorage.getItem( "os-taskbar-size" ) || "48";
+        this.gxisdatigiTaskobretajnAgordojn( konservitaTaskobretaGrando );
 
-        // Initialize taskbar with saved position and insets
+        // Iniciati taskobreton kun konservita pozicio kaj enŝovoj
         this.iniciiTaskobreton();
     }
 
@@ -933,7 +941,7 @@ class FenestraAdministranto {
                 dim.startMenu.inicii();
             }
 
-            // Re-add icons to both grids
+            // Re-aldoni piktogramojn al ambaŭ kradoj
             APPS.forEach( ( app: any, i: number ) => {
                 dim.desktop?.aldoniPiktogramon( app, i );
                 dim.startMenu?.aldoniPiktogramon( app, i );
@@ -945,126 +953,126 @@ class FenestraAdministranto {
     // ⟪ Agordi Taskobretan Pozicion ⟫
 
     static agordiTaskobretanPozicion( pos: string ): void {
-        const taskbar = getTaskbar();
-        if ( taskbar ) taskbar.dataset.position = pos;
+        const taskobar = getTaskbar();
+        if ( taskobar ) taskobar.dataset.position = pos;
 
-        const root = document.documentElement;
-        const sizeWithGap = "calc(var(--taskbar-width) + var(--អារេងព៏) + var(--អារេងព៏) + var(--inset-gap))";
-        const margin = "var(--អារេងព៏)";
+        const radiko = document.documentElement;
+        const grandoKunInterspaco = "calc(var(--taskbar-width) + var(--អារេងព៏) + var(--អារេងព៏) + var(--inset-gap))";
+        const marĝeno = "var(--អារេងព៏)";
 
-        const panelInsets: { [ key: string ]: { [ key: string ]: string } } = {
-            left: { "left": sizeWithGap, "right": margin, "top": margin, "bottom": margin },
-            right: { "right": sizeWithGap, "left": margin, "top": margin, "bottom": margin },
-            top: { "top": sizeWithGap, "bottom": margin, "left": margin, "right": margin },
-            bottom: { "bottom": sizeWithGap, "top": margin, "left": margin, "right": margin }
+        const panelajEnŝovoj: { [ key: string ]: { [ key: string ]: string } } = {
+            left: { "left": grandoKunInterspaco, "right": marĝeno, "top": marĝeno, "bottom": marĝeno },
+            right: { "right": grandoKunInterspaco, "left": marĝeno, "top": marĝeno, "bottom": marĝeno },
+            top: { "top": grandoKunInterspaco, "bottom": marĝeno, "left": marĝeno, "right": marĝeno },
+            bottom: { "bottom": grandoKunInterspaco, "top": marĝeno, "left": marĝeno, "right": marĝeno }
         };
 
-        // Reset all panel insets
+        // Restarigi ĉiujn panelajn enŝovojn
         [ "top", "bottom", "left", "right" ].forEach( p => {
-            root.style.setProperty( `--panel-inset-${p}`, "0px" );
+            radiko.style.setProperty( `--panel-inset-${p}`, "0px" );
         } );
 
-        const panelValues = panelInsets[ pos ] || panelInsets.left;
+        const panelajValoroj = panelajEnŝovoj[ pos ] || panelajEnŝovoj.left;
 
-        Object.entries( panelValues ).forEach( ( [ prop, val ] ) => {
-            root.style.setProperty( `--panel-inset-${prop}`, val );
+        Object.entries( panelajValoroj ).forEach( ( [ prop, val ] ) => {
+            radiko.style.setProperty( `--panel-inset-${prop}`, val );
         } );
 
-        // Update title bar orientation for windows
+        // Ĝisdatigi titolbreto-orientiĝon por fenestroj
         document.querySelectorAll( ".window" ).forEach( ( el: any ) => {
-            const titleBar = el.querySelector( ".title-bar" );
-            if ( titleBar ) {
-                titleBar.dataset.position = pos;
+            const titolBreto = el.querySelector( ".title-bar" );
+            if ( titolBreto ) {
+                titolBreto.dataset.position = pos;
             }
             el.dataset.position = pos;
         } );
 
-        // Update tile orientations via managers
+        // Ĝisdatigi kahelajn orientiĝojn per administrantoj
         if ( ( window as any ).LabortablaPiktogramoAdministranto ) {
-            [ ( window as any ).LabortablaPiktogramoAdministranto.desktop, ( window as any ).LabortablaPiktogramoAdministranto.startMenu ].forEach( ( grid: any ) => {
-                grid?.container?.querySelectorAll( ".app-tile" ).forEach( ( tile: HTMLElement ) => grid.gxisdatigiAdaptanOrientigon( tile ) );
+            [ ( window as any ).LabortablaPiktogramoAdministranto.desktop, ( window as any ).LabortablaPiktogramoAdministranto.startMenu ].forEach( ( krado: any ) => {
+                krado?.container?.querySelectorAll( ".app-tile" ).forEach( ( kahelo: HTMLElement ) => krado.gxisdatigiAdaptanOrientigon( kahelo ) );
             } );
         }
 
         if ( ( window as any ).LabortablaPiktogramoAdministranto?.desktop ) {
             setTimeout( () => {
-                document.querySelectorAll( "#desktop .app-tile" ).forEach( ( tile: any ) =>
-                    ( window as any ).LabortablaPiktogramoAdministranto.desktop.aplikiPozicion( tile, parseInt( tile.dataset.col ), parseInt( tile.dataset.row ) )
+                document.querySelectorAll( "#desktop .app-tile" ).forEach( ( kahelo: any ) =>
+                    ( window as any ).LabortablaPiktogramoAdministranto.desktop.aplikiPozicion( kahelo, parseInt( kahelo.dataset.col ), parseInt( kahelo.dataset.row ) )
                 );
             }, CONSTANTS.WM.TASKBAR_REPOSITION_DELAY );
         }
 
-        // Save to localStorage
+        // Konservi al localStorage
         localStorage.setItem( "os-taskbar-position", pos );
     }
 
     // ⟪ Inicii Taskobreton ⟫
 
     static iniciiTaskobreton(): void {
-        const taskbar = getTaskbar();
-        if ( !taskbar ) return;
+        const taskobar = getTaskbar();
+        if ( !taskobar ) return;
 
-        taskbar.dataset.position = "left";
-        taskbar.dataset.flow = "default";
-        taskbar.dataset.large = "false";
+        taskobar.dataset.position = "left";
+        taskobar.dataset.flow = "default";
+        taskobar.dataset.large = "false";
 
-        // Check if mobile device ( small screen )
-        const isMobile = window.innerWidth < CONSTANTS.BREAKPOINTS.MOBILE || window.innerHeight < CONSTANTS.BREAKPOINTS.MOBILE;
+        // Kontroli ĉu portebla aparato ( malgranda ekrano )
+        const estasPortebla = window.innerWidth < CONSTANTS.BREAKPOINTS.MOBILE || window.innerHeight < CONSTANTS.BREAKPOINTS.MOBILE;
 
-        // Auto-position taskbar based on screen size and orientation
-        const autoPositionTaskbar = () => {
-            const newIsMobile = window.innerWidth < CONSTANTS.BREAKPOINTS.MOBILE || window.innerHeight < CONSTANTS.BREAKPOINTS.MOBILE;
-            const newIsPortrait = window.innerHeight > window.innerWidth;
-            const currentPos = taskbar.dataset.position;
+        // Aŭtomate pozicii taskobreton bazite sur ekrana grando kaj orientiĝo
+        const aŭtomatePoziciiTaskobreton = () => {
+            const novaEstasPortebla = window.innerWidth < CONSTANTS.BREAKPOINTS.MOBILE || window.innerHeight < CONSTANTS.BREAKPOINTS.MOBILE;
+            const novaEstasPortreta = window.innerHeight > window.innerWidth;
+            const nunaPozicio = taskobar.dataset.position;
 
-            if ( newIsMobile ) {
-                const isValidForPortrait = currentPos === "bottom";
-                const isValidForLandscape = currentPos === "left" || currentPos === "right";
-                const needsUpdate = newIsPortrait ? !isValidForPortrait : !isValidForLandscape;
+            if ( novaEstasPortebla ) {
+                const validasPorPortreto = nunaPozicio === "bottom";
+                const validasPorPejzaĝo = nunaPozicio === "left" || nunaPozicio === "right";
+                const bezonasĜisdatigon = novaEstasPortreta ? !validasPorPortreto : !validasPorPejzaĝo;
 
-                if ( needsUpdate ) {
-                    this.agordiTaskobretanPozicion( newIsPortrait ? "bottom" : "left" );
+                if ( bezonasĜisdatigon ) {
+                    this.agordiTaskobretanPozicion( novaEstasPortreta ? "bottom" : "left" );
                 }
             }
         };
 
-        if ( isMobile ) {
-            // Mobile auto-detect orientation and set position
-            const isPortrait = window.innerHeight > window.innerWidth;
-            const savedPos = localStorage.getItem( "os-taskbar-position" );
+        if ( estasPortebla ) {
+            // Portebla: aŭtomate detekti orientiĝon kaj agordi pozicion
+            const estasPortreta = window.innerHeight > window.innerWidth;
+            const konservitaPozicio = localStorage.getItem( "os-taskbar-position" );
 
-            if ( savedPos ) {
-                // Use saved position if it matches orientation
-                const validForPortrait = savedPos === "bottom";
-                const validForLandscape = savedPos === "left" || savedPos === "right";
+            if ( konservitaPozicio ) {
+                // Uzi konservitan pozicion se ĝi kongruas kun orientiĝo
+                const validasPorPortreto = konservitaPozicio === "bottom";
+                const validasPorPejzaĝo = konservitaPozicio === "left" || konservitaPozicio === "right";
 
-                if ( ( isPortrait && validForPortrait ) || ( !isPortrait && validForLandscape ) ) {
-                    this.agordiTaskobretanPozicion( savedPos );
+                if ( ( estasPortreta && validasPorPortreto ) || ( !estasPortreta && validasPorPejzaĝo ) ) {
+                    this.agordiTaskobretanPozicion( konservitaPozicio );
                 } else {
-                    // Auto-set based on orientation
-                    this.agordiTaskobretanPozicion( isPortrait ? "bottom" : "left" );
+                    // Aŭtomate agordi bazite sur orientiĝo
+                    this.agordiTaskobretanPozicion( estasPortreta ? "bottom" : "left" );
                 }
             } else {
-                // No saved position - auto-set based on orientation
-                this.agordiTaskobretanPozicion( isPortrait ? "bottom" : "left" );
+                // Neniu konservita pozicio - aŭtomate agordi bazite sur orientiĝo
+                this.agordiTaskobretanPozicion( estasPortreta ? "bottom" : "left" );
             }
 
-            // Listen for orientation changes and resize
-            window.addEventListener( "orientationchange", autoPositionTaskbar );
-            window.addEventListener( "resize", autoPositionTaskbar );
+            // Aŭskulti orientiĝajn ŝanĝojn kaj regrandigojn
+            window.addEventListener( "orientationchange", aŭtomatePoziciiTaskobreton );
+            window.addEventListener( "resize", aŭtomatePoziciiTaskobreton );
         } else {
-            const savedPos = localStorage.getItem( "os-taskbar-position" ) || "left";
-            this.agordiTaskobretanPozicion( savedPos );
+            const konservitaPozicio = localStorage.getItem( "os-taskbar-position" ) || "left";
+            this.agordiTaskobretanPozicion( konservitaPozicio );
         }
     }
 }
 
-// ⟨ Listen For postMessage From Settings Iframe ⟩
+// ⟨ Aŭskulti postMessage De Agorda Iframo ⟩
 window.addEventListener( "message", ( e ) => {
     if ( e.data?.source !== "settings" ) return;
     const { action, value } = e.data;
     
-    // Handle gradient wallpaper actions
+    // Pritrakti gradientajn tapetajn agojn
     if ( action === "setGradientWallpaper" && value?.start && value?.end ) {
         (window as any).FenestraAdministranto.agordiGradientanTapeton( value.start, value.end );
         return;
@@ -1083,7 +1091,7 @@ window.addEventListener( "message", ( e ) => {
     }
 } );
 
-// Initialize Window Manager settings (theme, wallpaper, etc.)
+// Iniciati Fenestran Administranton ( temo, tapeto, ktp. )
 document.addEventListener( "DOMContentLoaded", () => (window as any).FenestraAdministranto.inicii() );
 
 ( window as any ).FenestraAdministranto = FenestraAdministranto;

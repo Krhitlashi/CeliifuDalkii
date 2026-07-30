@@ -1,8 +1,11 @@
 // ≺⧼ Komunaj Helpiloj ⧽≻ - Komunaj montradaj okazaĵoj kaj eksterklakaj traktiloj
 
-// ⟪ Akiri Punkton de Montra Evento ⟫
+// ⟪ Akiri Punkton de Montra Evento ⟫ — delegas al EnigaAdministranto por unuecigita traktado
 
 export function akiriMontranPunkton( ev: any ): { x: number; y: number } {
+    const Eniga = ( window as any ).EnigaAdministranto;
+    if ( Eniga ) return Eniga.getPointerPos( ev );
+    // Rezervo se EnigaAdministranto ankoraŭ ne disponeblas
     if ( ev && ev.touches && ev.touches.length > 0 ) {
         return { x: ev.touches[0].clientX, y: ev.touches[0].clientY };
     }
@@ -34,8 +37,8 @@ export function setupMontrajnEventojn( onMove: ( ev: any ) => void, onEnd: () =>
 export function klikoEkstereTraktilo( rootSelectors: string[], onEkstere: ( e: MouseEvent ) => void, cxuRuli?: () => boolean ): () => void {
     const traktilo = ( e: MouseEvent ) => {
         if ( cxuRuli && !cxuRuli() ) return;
-        const target: HTMLElement = e.target as HTMLElement;
-        if ( rootSelectors.some( sel => target.closest( sel ) ) ) return;
+        const celo: HTMLElement = e.target as HTMLElement;
+        if ( rootSelectors.some( sel => celo.closest( sel ) ) ) return;
         onEkstere( e );
     };
     document.addEventListener( "mousedown", traktilo );

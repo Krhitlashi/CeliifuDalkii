@@ -68,7 +68,7 @@ const copyStaticFilesPlugin = {
       copiedCount++;
     });
 
-    console.log(`Copied ${copiedCount} static files to dist`);
+    console.log( "<( Static-Files-Copied-al-dist )>", copiedCount );
   }
 };
 

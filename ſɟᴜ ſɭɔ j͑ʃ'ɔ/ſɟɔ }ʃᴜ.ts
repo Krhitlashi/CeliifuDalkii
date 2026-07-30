@@ -10,8 +10,8 @@ declare const setElementDragging: any;
 import { CustomHTMLElement } from "./ꞁȷ̀ɜ ı],ɔ ŋᷠᴜ }ʃꞇ.js";
 import { setupMontrajnEventojn, akiriMontranPunkton } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ŋᷠᴜ ſȷɔ ſɭ,ꞇ.js";
 
-// Forward reference to avoid circular dependency
-interface IconGridLike {
+// Antaŭen referenco por eviti cirklan dependecon
+interface PiktogramaKradaInterfaco {
     containerId: string;
     container: HTMLElement | null;
     rows: number;
@@ -20,188 +20,188 @@ interface IconGridLike {
     fiksaAlto: number | null;
     estasPortebla: boolean;
     alakrogiPostTrenado( el: HTMLElement ): void;
-    cxuAreoOkupita( c: number, r: number, colSpan: number, rowSpan: number, excludeEl: HTMLElement | null ): boolean;
+    cxuAreoOkupita( c: number, r: number, kolSpan: number, vicSpan: number, ekskludiEl: HTMLElement | null ): boolean;
     aplikiPozicion( el: HTMLElement, c: number, r: number, xOffset?: number ): void;
     gxisdatigiAdaptanOrientigon( el: HTMLElement ): void;
 }
 
 /**
- * Setup unified drag handling for tile
- * @param {IconGridLike} grid - The grid instance
- * @param {HTMLElement} el - Element being dragged
- * @param {number} startX - Start X position
- * @param {number} startY - Start Y position
- * @param {Function} onDragEnd - Callback when drag ends
+ * Agordi unuecigitan tren-traktadon por kahelo
+ * @param {PiktogramaKradaInterfaco} krado - La krada instanco
+ * @param {HTMLElement} el - Elemento trenata
+ * @param {number} komencoX - Komenca X-pozicio
+ * @param {number} komencoY - Komenca Y-pozicio
+ * @param {Function} postTrenFino - Revoko kiam trenado finiĝas
  */
-export function agordiKaheloTreni( grid: IconGridLike, el: HTMLElement, startX: number, startY: number, onDragEnd: (() => void) | null ): void {
-    const startLeft = el.offsetLeft;
-    const startTop = el.offsetTop;
-    let startMenuClosed = false;
-    const startMenu = grid.containerId === "start-menu-content" ? getStartMenu() : null;
-    const originalParent = el.parentElement;
-    const originalNextSibling = el.nextSibling;
-    let hasDragged = false;
+export function agordiKaheloTreni( krado: PiktogramaKradaInterfaco, el: HTMLElement, komencoX: number, komencoY: number, postTrenFino: (() => void) | null ): void {
+    const komencaMaldekstro = el.offsetLeft;
+    const komencaSupro = el.offsetTop;
+    let komencaMenuoFermita = false;
+    const komencaMenuo = krado.containerId === "start-menu-content" ? getStartMenu() : null;
+    const originalaPatro = el.parentElement;
+    const originalaSekvaGefrato = el.nextSibling;
+    let estisTrenita = false;
 
     setElementDragging( el, true );
     el.style.zIndex = ( CONSTANTS.WM.BASE_Z_INDEX + 0o100 ).toString();
 
-    if ( grid.containerId === "start-menu-content" ) {
+    if ( krado.containerId === "start-menu-content" ) {
         document.body.appendChild( el );
         el.style.position = "fixed";
     }
 
-    const move = ( clientX: number, clientY: number ) => {
-        const deltaX = clientX - startX;
-        const deltaY = clientY - startY;
-        const dragDistance = Math.abs( deltaX ) + Math.abs( deltaY );
+    const movi = ( klientoX: number, klientoY: number ) => {
+        const deltoX = klientoX - komencoX;
+        const deltoY = klientoY - komencoY;
+        const trenDistanco = Math.abs( deltoX ) + Math.abs( deltoY );
 
         // Agordi estasTrenanta nur post movado preter sojlo
-        if ( !hasDragged && dragDistance > CONSTANTS.DIM.DRAG_THRESHOLD ) {
-            hasDragged = true;
+        if ( !estisTrenita && trenDistanco > CONSTANTS.DIM.DRAG_THRESHOLD ) {
+            estisTrenita = true;
         }
 
         // Fermi komencan menuon se treno sufiĉe malproksima
-        if ( !startMenuClosed && startMenu && grid.containerId === "start-menu-content" && dragDistance > CONSTANTS.DIM.DRAG_THRESHOLD ) {
-            startMenu.classList.remove( "open" );
+        if ( !komencaMenuoFermita && komencaMenuo && krado.containerId === "start-menu-content" && trenDistanco > CONSTANTS.DIM.DRAG_THRESHOLD ) {
+            komencaMenuo.classList.remove( "open" );
             document.body.classList.remove( "start-menu-open" );
             if ( ( window as any ).PanelaAdministranto ) ( window as any ).PanelaAdministranto.fermiCxiujnPanelojn();
-            startMenuClosed = true;
+            komencaMenuoFermita = true;
         }
 
         if ( el.style.position === "fixed" ) {
-            el.style.left = clientX - el.offsetWidth / 2 + "px";
-            el.style.top = clientY - el.offsetHeight / 2 + "px";
+            el.style.left = klientoX - el.offsetWidth / 2 + "px";
+            el.style.top = klientoY - el.offsetHeight / 2 + "px";
         } else {
-            const { width: containerW, height: containerH } = getContainerDimensions( grid.fiksaLarĝo, grid.fiksaAlto, grid.container );
-            const gap = CONSTANTS.DIM.GAP_SIZE;
-            const cellW = ( containerW - ( grid.cols - 1 ) * gap ) / grid.cols;
-            const cellH = ( containerH - ( grid.rows - 1 ) * gap ) / grid.rows;
+            const { width: ujoL, height: ujoA } = getContainerDimensions( krado.fiksaLarĝo, krado.fiksaAlto, krado.container );
+            const interspaco = CONSTANTS.DIM.GAP_SIZE;
+            const cxeL = ( ujoL - ( krado.cols - 1 ) * interspaco ) / krado.cols;
+            const cxeA = ( ujoA - ( krado.rows - 1 ) * interspaco ) / krado.rows;
 
-            const rawLeft = startLeft + deltaX;
-            const rawTop = startTop + deltaY;
+            const krudaMaldekstro = komencaMaldekstro + deltoX;
+            const krudaSupro = komencaSupro + deltoY;
 
-            const snapX = Math.round( rawLeft / ( cellW + gap ) ) * ( cellW + gap );
-            const snapY = Math.round( rawTop / ( cellH + gap ) ) * ( cellH + gap );
+            const alkX = Math.round( krudaMaldekstro / ( cxeL + interspaco ) ) * ( cxeL + interspaco );
+            const alkY = Math.round( krudaSupro / ( cxeA + interspaco ) ) * ( cxeA + interspaco );
 
-            el.style.left = snapX + "px";
-            el.style.top = snapY + "px";
+            el.style.left = alkX + "px";
+            el.style.top = alkY + "px";
         }
     };
 
-    const up = () => {
+    const supren = () => {
         setElementDragging( el, false );
         el.style.zIndex = "";
 
         // Trakti transigon de komenca menuo al labortablo
-        if ( grid.containerId === "start-menu-content" && ( window as any ).LabortablaPiktogramoAdministranto?.labortablo ) {
-            const desktop = ( window as any ).LabortablaPiktogramoAdministranto.labortablo.container;
-            const desktopRect = desktop.getBoundingClientRect();
-            const elRect = el.getBoundingClientRect();
-            const elCenterX = elRect.left + elRect.width / 2;
-            const elCenterY = elRect.top + elRect.height / 2;
+        if ( krado.containerId === "start-menu-content" && ( window as any ).LabortablaPiktogramoAdministranto?.labortablo ) {
+            const labortablo = ( window as any ).LabortablaPiktogramoAdministranto.labortablo.container;
+            const labortablaRekt = labortablo.getBoundingClientRect();
+            const elRekt = el.getBoundingClientRect();
+            const elCentroX = elRekt.left + elRekt.width / 2;
+            const elCentroY = elRekt.top + elRekt.height / 2;
 
-            if ( isWithinBounds( elCenterX, elCenterY, desktopRect ) ) {
+            if ( isWithinBounds( elCentroX, elCentroY, labortablaRekt ) ) {
                 el.style.position = "";
-                if ( onDragEnd ) onDragEnd();
-                ( grid as any ).transigiPiktogramonDeKomencaMenuo( el );
+                if ( postTrenFino ) postTrenFino();
+                ( krado as any ).transigiPiktogramonDeKomencaMenuo( el );
                 return;
             }
         }
 
         // Restarigi pozicion aŭ alklaki
-        if ( grid.containerId === "start-menu-content" && originalParent ) {
+        if ( krado.containerId === "start-menu-content" && originalaPatro ) {
             el.style.position = "";
-            if ( onDragEnd ) onDragEnd();
-            if ( originalNextSibling ) originalParent.insertBefore( el, originalNextSibling );
-            else originalParent.appendChild( el );
-            grid.alakrogiPostTrenado( el );
+            if ( postTrenFino ) postTrenFino();
+            if ( originalaSekvaGefrato ) originalaPatro.insertBefore( el, originalaSekvaGefrato );
+            else originalaPatro.appendChild( el );
+            krado.alakrogiPostTrenado( el );
         } else {
-            if ( onDragEnd ) onDragEnd();
-            grid.alakrogiPostTrenado( el );
+            if ( postTrenFino ) postTrenFino();
+            krado.alakrogiPostTrenado( el );
         }
     };
 
     // Agordi eventaŭskultilojn por kaj muso kaj tuŝo
-    const onMove = ( ev: any ) => {
+    const cxeMov = ( ev: any ) => {
         ev.preventDefault();
-        const pos = akiriMontranPunkton( ev );
-        move( pos.x, pos.y );
+        const poz = akiriMontranPunkton( ev );
+        movi( poz.x, poz.y );
     };
 
-    const forigiEventojn = setupMontrajnEventojn( onMove, () => {
+    const forigiEventojn = setupMontrajnEventojn( cxeMov, () => {
         forigiEventojn();
-        up();
+        supren();
     } );
 }
 
 /**
- * Setup unified resize handling for tile
- * @param {IconGridLike} grid - The grid instance
- * @param {HTMLElement} el - Element being resized
- * @param {number} startX - Start X position
- * @param {number} startY - Start Y position
+ * Agordi unuecigitan regrandigan traktadon por kahelo
+ * @param {PiktogramaKradaInterfaco} krado - La krada instanco
+ * @param {HTMLElement} el - Elemento regrandigata
+ * @param {number} komencoX - Komenca X-pozicio
+ * @param {number} komencoY - Komenca Y-pozicio
  */
-export function agordiKaheloGrandSxangxi( grid: IconGridLike, el: HTMLElement, startX: number, startY: number ): void {
-    const startW = el.offsetWidth;
-    const startH = el.offsetHeight;
-    const { width: containerW, height: containerH } = getContainerDimensions( grid.fiksaLarĝo, grid.fiksaAlto, grid.container );
-    const gap = CONSTANTS.DIM.GAP_SIZE;
-    const cellW = ( containerW - ( grid.cols - 1 ) * gap ) / grid.cols;
-    const cellH = ( containerH - ( grid.rows - 1 ) * gap ) / grid.rows;
+export function agordiKaheloGrandSxangxi( krado: PiktogramaKradaInterfaco, el: HTMLElement, komencoX: number, komencoY: number ): void {
+    const komencaL = el.offsetWidth;
+    const komencaA = el.offsetHeight;
+    const { width: ujoL, height: ujoA } = getContainerDimensions( krado.fiksaLarĝo, krado.fiksaAlto, krado.container );
+    const interspaco = CONSTANTS.DIM.GAP_SIZE;
+    const cxeL = ( ujoL - ( krado.cols - 1 ) * interspaco ) / krado.cols;
+    const cxeA = ( ujoA - ( krado.rows - 1 ) * interspaco ) / krado.rows;
 
     el.classList.add( "resizing" );
 
-    const move = ( clientX: number, clientY: number ) => {
-        const dx = clientX - startX;
-        const dy = clientY - startY;
+    const movi = ( klientoX: number, klientoY: number ) => {
+        const dx = klientoX - komencoX;
+        const dy = klientoY - komencoY;
 
-        let colSpan = Math.round( ( startW + dx ) / cellW );
-        let rowSpan = Math.round( ( startH + dy ) / cellH );
+        let kolSpan = Math.round( ( komencaL + dx ) / cxeL );
+        let vicSpan = Math.round( ( komencaA + dy ) / cxeA );
 
-        if ( colSpan < 1 ) colSpan = 1;
-        if ( rowSpan < 1 ) rowSpan = 1;
+        if ( kolSpan < 1 ) kolSpan = 1;
+        if ( vicSpan < 1 ) vicSpan = 1;
 
-        if ( grid.cxuAreoOkupita( parseInt( el.dataset.col || "0" ), parseInt( el.dataset.row || "0" ), colSpan, rowSpan, el ) ) return;
+        if ( krado.cxuAreoOkupita( parseInt( el.dataset.col || "0" ), parseInt( el.dataset.row || "0" ), kolSpan, vicSpan, el ) ) return;
 
-        el.style.width = `${cellW * colSpan + ( colSpan - 1 ) * gap}px`;
-        el.style.height = `${cellH * rowSpan + ( rowSpan - 1 ) * gap}px`;
+        el.style.width = `${cxeL * kolSpan + ( kolSpan - 1 ) * interspaco}px`;
+        el.style.height = `${cxeA * vicSpan + ( vicSpan - 1 ) * interspaco}px`;
 
-        el.dataset.pendingColSpan = colSpan.toString();
-        el.dataset.pendingRowSpan = rowSpan.toString();
+        el.dataset.pendingColSpan = kolSpan.toString();
+        el.dataset.pendingRowSpan = vicSpan.toString();
     };
 
-    const up = () => {
+    const supren = () => {
         el.classList.remove( "resizing" );
         el.classList.remove( "dragging" );
         ( el as CustomHTMLElement )._isResizing = false;
 
         if ( el.dataset.pendingColSpan ) {
-            const newColSpan = parseInt( el.dataset.pendingColSpan );
-            const newRowSpan = parseInt( el.dataset.pendingRowSpan || "1" );
-            if ( !grid.cxuAreoOkupita( parseInt( el.dataset.col || "0" ), parseInt( el.dataset.row || "0" ), newColSpan, newRowSpan, el ) ) {
-                el.dataset.colSpan = newColSpan.toString();
-                el.dataset.rowSpan = newRowSpan.toString();
+            const novaKolSpan = parseInt( el.dataset.pendingColSpan );
+            const novaVicSpan = parseInt( el.dataset.pendingRowSpan || "1" );
+            if ( !krado.cxuAreoOkupita( parseInt( el.dataset.col || "0" ), parseInt( el.dataset.row || "0" ), novaKolSpan, novaVicSpan, el ) ) {
+                el.dataset.colSpan = novaKolSpan.toString();
+                el.dataset.rowSpan = novaVicSpan.toString();
             }
             delete el.dataset.pendingColSpan;
             delete el.dataset.pendingRowSpan;
         }
 
         void el.offsetWidth;
-        grid.aplikiPozicion( el, parseInt( el.dataset.col || "0" ), parseInt( el.dataset.row || "0" ) );
-        grid.gxisdatigiAdaptanOrientigon( el );
+        krado.aplikiPozicion( el, parseInt( el.dataset.col || "0" ), parseInt( el.dataset.row || "0" ) );
+        krado.gxisdatigiAdaptanOrientigon( el );
 
-        // Save tile layout to storage
-        if ( grid.containerId === "desktop" ) ( window as any ).LabortablaPiktogramoAdministranto?._konserviLabortablanArangxon();
+        // Konservi kahelan aranĝon al stokejo
+        if ( krado.containerId === "desktop" ) ( window as any ).LabortablaPiktogramoAdministranto?._konserviLabortablanArangxon();
     };
 
-    const onMove = ( ev: any ) => {
+    const cxeMov = ( ev: any ) => {
         ev.preventDefault();
-        const pos = akiriMontranPunkton( ev );
-        move( pos.x, pos.y );
+        const poz = akiriMontranPunkton( ev );
+        movi( poz.x, poz.y );
     };
 
-    const forigiEventojn = setupMontrajnEventojn( onMove, () => {
+    const forigiEventojn = setupMontrajnEventojn( cxeMov, () => {
         forigiEventojn();
-        up();
+        supren();
     } );
 }

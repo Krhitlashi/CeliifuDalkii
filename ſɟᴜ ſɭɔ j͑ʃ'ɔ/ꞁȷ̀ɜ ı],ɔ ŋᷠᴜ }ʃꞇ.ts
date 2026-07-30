@@ -1,8 +1,8 @@
-// ≺⧼ Type Definitions ⧽≻
+// ≺⧼ Tipaj Difinoj ⧽≻
 
-// ⟨ Globals loaded from external scripts at krhitlashi.github.io ⟩
-// These functions are set on window by the hosted script bundle from the original
-// project (ſɟᴜ ſɭɔ j͑ʃ'ɔ/), loaded at runtime via <script> tags in the HTML.
+// ⟨ Tutmondaĵoj ŝargitaj el eksteraj skriptoj ĉe krhitlashi.github.io ⟩
+// Ĉi tiuj funkcioj estas agorditaj sur fenestro per la gastigita skripta pakaĵo el la originala
+// projekto ( ſɟᴜ ſɭɔ j͑ʃ'ɔ/ ), ŝargita rultempe per <script> etikedoj en la HTML.
 declare global {
     interface Window {
         vab6caja: (n: number) => string;

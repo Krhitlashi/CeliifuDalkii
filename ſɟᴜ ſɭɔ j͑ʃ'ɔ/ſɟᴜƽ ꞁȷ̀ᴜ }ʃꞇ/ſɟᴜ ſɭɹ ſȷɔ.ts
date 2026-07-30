@@ -1,10 +1,10 @@
 // ≺⧼ Matematikaj Utilajoj ⧽≻
 
 /**
- * Clamp a value between min and max
- * @param {number} value
- * @param {number} min
- * @param {number} max
+ * Premlimigi valoron inter minimumo kaj maksimumo
+ * @param {number} valoro
+ * @param {number} minimumo
+ * @param {number} maksimumo
  * @returns {number}
  */
 function limigo( value: number, min: number, max: number ): number {
@@ -12,9 +12,9 @@ function limigo( value: number, min: number, max: number ): number {
 }
 
 /**
- * Debounce function
- * @param {Function} func
- * @param {number} wait
+ * Debounce-funkcio
+ * @param {Function} funkcio
+ * @param {number} atendu
  * @returns {Function}
  */
 function malakordigi<T extends ( ...args: any[] ) => void>( func: T, wait: number ): ( ...args: Parameters<T> ) => void {
@@ -30,9 +30,9 @@ function malakordigi<T extends ( ...args: any[] ) => void>( func: T, wait: numbe
 }
 
 /**
- * Throttle function
- * @param {Function} func
- * @param {number} limit
+ * Throttle-funkcio
+ * @param {Function} funkcio
+ * @param {number} limo
  * @returns {Function}
  */
 function limkurzo<T extends ( ...args: any[] ) => void>( func: T, limit: number ): ( ...args: Parameters<T> ) => void {
@@ -46,7 +46,7 @@ function limkurzo<T extends ( ...args: any[] ) => void>( func: T, limit: number 
     };
 }
 
-// Attach to window for global access
+// Alkroĉi al fenestro por tutmonda aliro
 ( window as any ).clamp = limigo;
 ( window as any ).debounce = malakordigi;
 ( window as any ).throttle = limkurzo;

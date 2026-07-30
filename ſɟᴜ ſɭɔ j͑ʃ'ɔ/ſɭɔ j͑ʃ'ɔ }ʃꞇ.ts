@@ -40,7 +40,7 @@ function startOS() {
         console.log( "<( Startanta OS-on per Sistemo )>" );
         Sistemo.init();
     } else {
-        console.error( "Sistemo ne trovita!" );
+        console.error( "( ſ̀ȷɜᴜ̩ ſɭɹ }ʃꞇ ) Sistemo ne trovita!" );
     }
 }
 
