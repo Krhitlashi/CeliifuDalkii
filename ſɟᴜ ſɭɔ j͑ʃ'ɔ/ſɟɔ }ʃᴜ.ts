@@ -2,13 +2,14 @@
 
 declare const CONSTANTS: any;
 declare const EnigaAdministranto: any;
-declare const getStartMenu: any;
-declare const getContainerDimensions: any;
-declare const isWithinBounds: any;
-declare const setElementDragging: any;
+declare const akiriKomencanMenuon: any;
+declare const akiriUjonGrandecojn: any;
+declare const cxuEnLimoj: any;
+declare const agordiElementanTrenadon: any;
 
 import { CustomHTMLElement } from "./ꞁȷ̀ɜ ı],ɔ ŋᷠᴜ }ʃꞇ.js";
 import { setupMontrajnEventojn, akiriMontranPunkton } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ŋᷠᴜ ſȷɔ ſɭ,ꞇ.js";
+import { kalkuliĈelanGrandecon } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ſɟᴜ ſɭɔƽ.js";
 
 // Antaŭen referenco por eviti cirklan dependecon
 interface PiktogramaKradaInterfaco {
@@ -37,12 +38,12 @@ export function agordiKaheloTreni( krado: PiktogramaKradaInterfaco, el: HTMLElem
     const komencaMaldekstro = el.offsetLeft;
     const komencaSupro = el.offsetTop;
     let komencaMenuoFermita = false;
-    const komencaMenuo = krado.containerId === "start-menu-content" ? getStartMenu() : null;
+    const komencaMenuo = krado.containerId === "start-menu-content" ? akiriKomencanMenuon() : null;
     const originalaPatro = el.parentElement;
     const originalaSekvaGefrato = el.nextSibling;
     let estisTrenita = false;
 
-    setElementDragging( el, true );
+    agordiElementanTrenadon( el, true );
     el.style.zIndex = ( CONSTANTS.WM.BASE_Z_INDEX + 0o100 ).toString();
 
     if ( krado.containerId === "start-menu-content" ) {
@@ -72,10 +73,10 @@ export function agordiKaheloTreni( krado: PiktogramaKradaInterfaco, el: HTMLElem
             el.style.left = klientoX - el.offsetWidth / 2 + "px";
             el.style.top = klientoY - el.offsetHeight / 2 + "px";
         } else {
-            const { width: ujoL, height: ujoA } = getContainerDimensions( krado.fiksaLarĝo, krado.fiksaAlto, krado.container );
+            const { width: ujoL, height: ujoA } = akiriUjonGrandecojn( krado.fiksaLarĝo, krado.fiksaAlto, krado.container );
             const interspaco = CONSTANTS.DIM.GAP_SIZE;
-            const cxeL = ( ujoL - ( krado.cols - 1 ) * interspaco ) / krado.cols;
-            const cxeA = ( ujoA - ( krado.rows - 1 ) * interspaco ) / krado.rows;
+            const cxeL = kalkuliĈelanGrandecon( ujoL, krado.cols, interspaco );
+            const cxeA = kalkuliĈelanGrandecon( ujoA, krado.rows, interspaco );
 
             const krudaMaldekstro = komencaMaldekstro + deltoX;
             const krudaSupro = komencaSupro + deltoY;
@@ -89,7 +90,7 @@ export function agordiKaheloTreni( krado: PiktogramaKradaInterfaco, el: HTMLElem
     };
 
     const supren = () => {
-        setElementDragging( el, false );
+        agordiElementanTrenadon( el, false );
         el.style.zIndex = "";
 
         // Trakti transigon de komenca menuo al labortablo
@@ -100,7 +101,7 @@ export function agordiKaheloTreni( krado: PiktogramaKradaInterfaco, el: HTMLElem
             const elCentroX = elRekt.left + elRekt.width / 2;
             const elCentroY = elRekt.top + elRekt.height / 2;
 
-            if ( isWithinBounds( elCentroX, elCentroY, labortablaRekt ) ) {
+            if ( cxuEnLimoj( elCentroX, elCentroY, labortablaRekt ) ) {
                 el.style.position = "";
                 if ( postTrenFino ) postTrenFino();
                 ( krado as any ).transigiPiktogramonDeKomencaMenuo( el );
@@ -144,10 +145,10 @@ export function agordiKaheloTreni( krado: PiktogramaKradaInterfaco, el: HTMLElem
 export function agordiKaheloGrandSxangxi( krado: PiktogramaKradaInterfaco, el: HTMLElement, komencoX: number, komencoY: number ): void {
     const komencaL = el.offsetWidth;
     const komencaA = el.offsetHeight;
-    const { width: ujoL, height: ujoA } = getContainerDimensions( krado.fiksaLarĝo, krado.fiksaAlto, krado.container );
+    const { width: ujoL, height: ujoA } = akiriUjonGrandecojn( krado.fiksaLarĝo, krado.fiksaAlto, krado.container );
     const interspaco = CONSTANTS.DIM.GAP_SIZE;
-    const cxeL = ( ujoL - ( krado.cols - 1 ) * interspaco ) / krado.cols;
-    const cxeA = ( ujoA - ( krado.rows - 1 ) * interspaco ) / krado.rows;
+    const cxeL = kalkuliĈelanGrandecon( ujoL, krado.cols, interspaco );
+    const cxeA = kalkuliĈelanGrandecon( ujoA, krado.rows, interspaco );
 
     el.classList.add( "resizing" );
 
@@ -173,7 +174,7 @@ export function agordiKaheloGrandSxangxi( krado: PiktogramaKradaInterfaco, el: H
     const supren = () => {
         el.classList.remove( "resizing" );
         el.classList.remove( "dragging" );
-        ( el as CustomHTMLElement )._isResizing = false;
+        ( el as CustomHTMLElement )._estasRegrandiganta = false;
 
         if ( el.dataset.pendingColSpan ) {
             const novaKolSpan = parseInt( el.dataset.pendingColSpan );

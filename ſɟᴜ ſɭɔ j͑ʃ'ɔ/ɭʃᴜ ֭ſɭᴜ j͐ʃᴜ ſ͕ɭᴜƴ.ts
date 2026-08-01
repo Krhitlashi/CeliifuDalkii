@@ -1,12 +1,21 @@
 // ≺⧼ Animacia Administranto ⧽≻ - Taskobret-direktaj animacioj kun okumaj frakcioj
 
 declare const CONSTANTS: any;
-declare const getTaskbar: any;
+declare const akiriTaskobreton: any;
+declare const akiriTaskobretanGrandecon: any;
 
 const AnimacioAdministranto: {
     apriorajxoj: { duration: number; easing: string };
     mildigoj: any;
     _positionConfigCache: { [key: string]: any };
+    _animacii: (
+        element: HTMLElement,
+        from: Keyframe,
+        to: Keyframe,
+        options: any,
+        setup?: ( el: HTMLElement ) => void,
+        teardown?: ( el: HTMLElement ) => void
+    ) => Promise<void>;
     [key: string]: any;
 } = {
     // ⟪ Aprioraj Animaciaj Agordoj ⟫
@@ -21,11 +30,34 @@ const AnimacioAdministranto: {
     // ⟪ Pozicia Agorda Kaŝmemoro ⟫
     _positionConfigCache: {},
 
+    // ⟪ Unuigita Animacia Kerno ⟫
+
+    _animacii(
+        element: HTMLElement,
+        from: Keyframe,
+        to: Keyframe,
+        options: any = {},
+        setup?: ( el: HTMLElement ) => void,
+        teardown?: ( el: HTMLElement ) => void
+    ): Promise<void> {
+        if ( !element ) return Promise.resolve();
+
+        const duration: number = options.duration ?? this.apriorajxoj.duration;
+        const easing: string = options.easing ?? this.apriorajxoj.easing;
+
+        if ( setup ) setup( element );
+        void element.offsetWidth;
+
+        return element.animate( [ from, to ], { duration, easing } ).finished.then( () => {
+            if ( teardown ) teardown( element );
+        } );
+    },
+
     // ⟪ Poziciaj Utilajoj ⟫
 
     // Akiri kompletan pozician agordon por taskobreta pozicio
     akiriPozicianAgordon(pos: any = null): any {
-        const taskbar: HTMLElement | null = getTaskbar();
+        const taskbar: HTMLElement | null = akiriTaskobreton();
         const position: string = pos || taskbar?.dataset.position || "left";
 
         // Redoni kaŝmemorigitan agordon se disponebla
@@ -81,7 +113,7 @@ const AnimacioAdministranto: {
 
     akiriTaskobretanOfseton(fraction: number = 1): { transform: string; inset: { [key: string]: string } } {
         const { position, offsetTransform, insetProp } = this.akiriPozicianAgordon();
-        const tbSize: number = parseInt(getComputedStyle(document.documentElement).getPropertyValue(CONSTANTS.CSS_VARS.taskbarSize)) || CONSTANTS.SYS.TASKBAR_SIZE;
+        const tbSize: number = akiriTaskobretanGrandecon();
         const offset: number = tbSize * fraction;
 
         return {
@@ -94,7 +126,7 @@ const AnimacioAdministranto: {
 
     akiriTaskobretanGrandonPorPozicio(pos: any = null, fraction: number = 1): { position: string; size: number; offset: number } {
         const { position } = this.akiriPozicianAgordon(pos);
-        const tbSize: number = parseInt(getComputedStyle(document.documentElement).getPropertyValue(CONSTANTS.CSS_VARS.taskbarSize)) || CONSTANTS.SYS.TASKBAR_SIZE;
+        const tbSize: number = akiriTaskobretanGrandecon();
         return {
             position,
             size: tbSize,
@@ -105,50 +137,38 @@ const AnimacioAdministranto: {
     // ⟪ Malaperi En ⟫
 
     malaperiEn(element: HTMLElement, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-
-        const duration: number = options.duration ?? this.apriorajxoj.duration;
-        const easing: string = options.easing ?? this.apriorajxoj.easing;
-
-        element.style.opacity = "0";
-        element.style.display = options.display || "flex";
-        element.style.pointerEvents = "none";
-
-        void element.offsetWidth;
-
-        return element.animate(
-            [
-                { opacity: 0 },
-                { opacity: 1 }
-            ],
-            { duration, easing }
-        ).finished.then(() => {
-            element.style.opacity = "";
-            element.style.pointerEvents = "";
-        });
+        return this._animacii(
+            element,
+            { opacity: 0 },
+            { opacity: 1 },
+            options,
+            ( el ) => {
+                el.style.opacity = "0";
+                el.style.display = options.display || "flex";
+                el.style.pointerEvents = "none";
+            },
+            ( el ) => {
+                el.style.opacity = "";
+                el.style.pointerEvents = "";
+            }
+        );
     },
 
     // ⟪ Malaperi El ⟫
 
     malaperiEl(element: HTMLElement, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-
-        const duration: number = options.duration ?? this.apriorajxoj.duration;
-        const easing: string = options.easing ?? this.apriorajxoj.easing;
-
-        element.style.pointerEvents = "none";
-
-        return element.animate(
-            [
-                { opacity: 1 },
-                { opacity: 0 }
-            ],
-            { duration, easing }
-        ).finished.then(() => {
-            element.style.display = "none";
-            element.style.opacity = "";
-            element.style.pointerEvents = "";
-        });
+        return this._animacii(
+            element,
+            { opacity: 1 },
+            { opacity: 0 },
+            options,
+            ( el ) => { el.style.pointerEvents = "none"; },
+            ( el ) => {
+                el.style.display = "none";
+                el.style.opacity = "";
+                el.style.pointerEvents = "";
+            }
+        );
     },
 
     // ⟪ Gliti Panelon ( Unuigita Interna Metodo ) ⟫
@@ -161,7 +181,7 @@ const AnimacioAdministranto: {
     ): Promise<void> {
         if (!element) return Promise.resolve();
 
-        const { duration, easing, fraction = 1 } = options;
+        const fraction: number = options.fraction ?? 1;
         const direction = this.akiriPanelanDirekton(panelId);
         const edge = isEntering ? direction.from : direction.to;
 
@@ -171,25 +191,24 @@ const AnimacioAdministranto: {
         const startTransform: string = isEntering ? `${baseTransform} ${slideTransform}`.trim() : (baseTransform || "translate(0, 0)");
         const endTransform: string = isEntering ? (baseTransform || "translate(0, 0)") : `${baseTransform} ${slideTransform}`.trim();
 
-        element.style.display = options.display || "flex";
-        element.style.transform = startTransform;
-        element.style.opacity = isEntering ? "0" : "1";
-        element.style.pointerEvents = "none";
-
-        void element.offsetWidth;
-
-        return element.animate(
-            [
-                { transform: startTransform, opacity: isEntering ? 0 : 1 },
-                { transform: endTransform, opacity: isEntering ? 1 : 0 }
-            ],
-            { duration, easing }
-        ).finished.then(() => {
-            element.style.transform = baseTransform;
-            element.style.opacity = "";
-            element.style.pointerEvents = "";
-            if (!isEntering) element.style.display = "none";
-        });
+        return this._animacii(
+            element,
+            { transform: startTransform, opacity: isEntering ? 0 : 1 },
+            { transform: endTransform, opacity: isEntering ? 1 : 0 },
+            options,
+            ( el ) => {
+                el.style.display = options.display || "flex";
+                el.style.transform = startTransform;
+                el.style.opacity = isEntering ? "0" : "1";
+                el.style.pointerEvents = "none";
+            },
+            ( el ) => {
+                el.style.transform = baseTransform;
+                el.style.opacity = "";
+                el.style.pointerEvents = "";
+                if (!isEntering) el.style.display = "none";
+            }
+        );
     },
 
     // ⟪ Gliti En el Taskobreta Rando ⟫
@@ -219,124 +238,96 @@ const AnimacioAdministranto: {
     // ⟪ Gliti En ( el rando ) ⟫
 
     glitiEn(element: HTMLElement, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-
-        const duration: number = options.duration ?? this.apriorajxoj.duration;
-        const easing: string = options.easing ?? this.mildigoj.easeOut;
         const fromEdge: string = options.fromEdge || "bottom";
-        const distance: string = options.distance || "100%";
-
         const startTransform: string = this.akiriDirektanTransformon(fromEdge.replace("%", ""), 1);
 
-        element.style.display = options.display || "flex";
-        element.style.transform = startTransform;
-        element.style.opacity = "0";
-        element.style.pointerEvents = "none";
-
-        void element.offsetWidth;
-
-        return element.animate(
-            [
-                { transform: startTransform, opacity: 0 },
-                { transform: "translate(0, 0)", opacity: 1 }
-            ],
-            { duration, easing }
-        ).finished.then(() => {
-            element.style.transform = "";
-            element.style.opacity = "";
-            element.style.pointerEvents = "";
-        });
+        return this._animacii(
+            element,
+            { transform: startTransform, opacity: 0 },
+            { transform: "translate(0, 0)", opacity: 1 },
+            { ...options, easing: options.easing ?? this.mildigoj.easeOut },
+            ( el ) => {
+                el.style.display = options.display || "flex";
+                el.style.transform = startTransform;
+                el.style.opacity = "0";
+                el.style.pointerEvents = "none";
+            },
+            ( el ) => {
+                el.style.transform = "";
+                el.style.opacity = "";
+                el.style.pointerEvents = "";
+            }
+        );
     },
 
     // ⟪ Gliti El ( al rando ) ⟫
 
     glitiEl(element: HTMLElement, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-
-        const duration: number = options.duration ?? this.apriorajxoj.duration;
-        const easing: string = options.easing ?? this.mildigoj.easeIn;
         const toEdge: string = options.toEdge || "bottom";
-        const distance: string = options.distance || "100%";
-
         const endTransform: string = this.akiriDirektanTransformon(toEdge.replace("%", ""), 1);
 
-        element.style.pointerEvents = "none";
-
-        return element.animate(
-            [
-                { transform: "translate(0, 0)", opacity: 1 },
-                { transform: endTransform, opacity: 0 }
-            ],
-            { duration, easing }
-        ).finished.then(() => {
-            element.style.display = "none";
-            element.style.transform = "";
-            element.style.opacity = "";
-            element.style.pointerEvents = "";
-        });
+        return this._animacii(
+            element,
+            { transform: "translate(0, 0)", opacity: 1 },
+            { transform: endTransform, opacity: 0 },
+            { ...options, easing: options.easing ?? this.mildigoj.easeIn },
+            ( el ) => { el.style.pointerEvents = "none"; },
+            ( el ) => {
+                el.style.display = "none";
+                el.style.transform = "";
+                el.style.opacity = "";
+                el.style.pointerEvents = "";
+            }
+        );
     },
 
     // ⟪ Skali En ( ŝprucefiko ) ⟫
 
     skaliEn(element: HTMLElement, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-
-        const duration: number = options.duration ?? this.apriorajxoj.duration;
-        const easing: string = options.easing ?? this.mildigoj.spring;
         const fromScale: number = options.fromScale ?? CONSTANTS.ANIM.FRACTIONS.sevenEighths;
 
-        element.style.display = options.display || "flex";
-        element.style.transform = `scale(${fromScale})`;
-        element.style.opacity = "0";
-        element.style.pointerEvents = "none";
-
-        void element.offsetWidth;
-
-        return element.animate(
-            [
-                { transform: `scale(${fromScale})`, opacity: 0 },
-                { transform: "scale(1)", opacity: 1 }
-            ],
-            { duration, easing }
-        ).finished.then(() => {
-            element.style.transform = "";
-            element.style.opacity = "";
-            element.style.pointerEvents = "";
-        });
+        return this._animacii(
+            element,
+            { transform: `scale(${fromScale})`, opacity: 0 },
+            { transform: "scale(1)", opacity: 1 },
+            { ...options, easing: options.easing ?? this.mildigoj.spring },
+            ( el ) => {
+                el.style.display = options.display || "flex";
+                el.style.transform = `scale(${fromScale})`;
+                el.style.opacity = "0";
+                el.style.pointerEvents = "none";
+            },
+            ( el ) => {
+                el.style.transform = "";
+                el.style.opacity = "";
+                el.style.pointerEvents = "";
+            }
+        );
     },
 
     // ⟪ Skali El ( ŝrumpa efiko ) ⟫
 
     skaliEl(element: HTMLElement, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-
-        const duration: number = options.duration ?? this.apriorajxoj.duration;
-        const easing: string = options.easing ?? this.mildigoj.easeIn;
         const toScale: number = options.toScale ?? CONSTANTS.ANIM.FRACTIONS.sevenEighths;
 
-        element.style.pointerEvents = "none";
-
-        return element.animate(
-            [
-                { transform: "scale(1)", opacity: 1 },
-                { transform: `scale(${toScale})`, opacity: 0 }
-            ],
-            { duration, easing }
-        ).finished.then(() => {
-            element.style.display = "none";
-            element.style.transform = "";
-            element.style.opacity = "";
-            element.style.pointerEvents = "";
-        });
+        return this._animacii(
+            element,
+            { transform: "scale(1)", opacity: 1 },
+            { transform: `scale(${toScale})`, opacity: 0 },
+            { ...options, easing: options.easing ?? this.mildigoj.easeIn },
+            ( el ) => { el.style.pointerEvents = "none"; },
+            ( el ) => {
+                el.style.display = "none";
+                el.style.transform = "";
+                el.style.opacity = "";
+                el.style.pointerEvents = "";
+            }
+        );
     },
 
     // ⟪ Fenestro Malferma Animacio ( gliti + malaperi el taskobreto ) ⟫
 
     fenestroMalfermi(element: HTMLElement, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-
-        const duration: number = options.duration ?? CONSTANTS.ANIM.DURATION_LONG;
-        const easing: string = options.easing ?? this.mildigoj.easeOut;
         const fraction: number = options.fraction ?? CONSTANTS.ANIM.FRACTIONS.oneEighth;
         const scale: number = options.scale ?? CONSTANTS.ANIM.FRACTIONS.sevenEighths;
 
@@ -353,31 +344,26 @@ const AnimacioAdministranto: {
 
         const startTransform: string = offsets[position] || offsets.bottom;
 
-        element.style.display = "block";
-        element.style.transform = startTransform + ` scale(${scale})`;
-        element.style.opacity = "0";
-
-        void element.offsetWidth;
-
-        return element.animate(
-            [
-                { transform: startTransform + ` scale(${scale})`, opacity: 0 },
-                { transform: "scale(1)", opacity: 1 }
-            ],
-            { duration, easing }
-        ).finished.then(() => {
-            element.style.transform = "";
-            element.style.opacity = "";
-        });
+        return this._animacii(
+            element,
+            { transform: startTransform + ` scale(${scale})`, opacity: 0 },
+            { transform: "scale(1)", opacity: 1 },
+            { ...options, duration: options.duration ?? CONSTANTS.ANIM.DURATION_LONG, easing: options.easing ?? this.mildigoj.easeOut },
+            ( el ) => {
+                el.style.display = "block";
+                el.style.transform = startTransform + ` scale(${scale})`;
+                el.style.opacity = "0";
+            },
+            ( el ) => {
+                el.style.transform = "";
+                el.style.opacity = "";
+            }
+        );
     },
 
     // ⟪ Fenestro Ferma Animacio ( skali malsupren + malaperi al taskobreto ) ⟫
 
     fenestroFermi(element: HTMLElement, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-
-        const duration: number = options.duration ?? CONSTANTS.ANIM.DURATION_SHORT;
-        const easing: string = options.easing ?? this.mildigoj.easeIn;
         const fraction: number = options.fraction ?? CONSTANTS.ANIM.FRACTIONS.oneEighth;
         const scale: number = options.scale ?? CONSTANTS.ANIM.FRACTIONS.sevenEighths;
 
@@ -394,34 +380,29 @@ const AnimacioAdministranto: {
 
         const endTransform: string = offsets[position] || offsets.bottom;
 
-        element.style.pointerEvents = "none";
-
-        return element.animate(
-            [
-                { transform: "scale(1)", opacity: 1 },
-                { transform: endTransform + ` scale(${scale})`, opacity: 0 }
-            ],
-            { duration, easing }
-        ).finished.then(() => {
-            element.style.display = "none";
-            element.style.transform = "";
-            element.style.opacity = "";
-            element.style.pointerEvents = "";
-        });
+        return this._animacii(
+            element,
+            { transform: "scale(1)", opacity: 1 },
+            { transform: endTransform + ` scale(${scale})`, opacity: 0 },
+            { ...options, duration: options.duration ?? CONSTANTS.ANIM.DURATION_SHORT, easing: options.easing ?? this.mildigoj.easeIn },
+            ( el ) => { el.style.pointerEvents = "none"; },
+            ( el ) => {
+                el.style.display = "none";
+                el.style.transform = "";
+                el.style.opacity = "";
+                el.style.pointerEvents = "";
+            }
+        );
     },
 
     // ⟪ Minimumigi Fenestran Animacion ( skali en taskobreton ) ⟫
 
     minimumigiFenestron(element: HTMLElement, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-
-        const duration: number = options.duration ?? CONSTANTS.ANIM_SETTINGS.windowMinimize.duration;
-        const easing: string = options.easing ?? CONSTANTS.ANIM_SETTINGS.windowMinimize.easing;
         const scale: number = options.scale ?? CONSTANTS.ANIM_SETTINGS.windowMinimize.scale;
 
         // Akiri taskobretan pozicion kaj grandecon
         const { position } = this.akiriPozicianAgordon();
-        const taskbar: HTMLElement | null = getTaskbar();
+        const taskbar: HTMLElement | null = akiriTaskobreton();
         const tbRect: DOMRect = taskbar?.getBoundingClientRect() || { left: 0, top: window.innerHeight, right: window.innerWidth, bottom: window.innerHeight, width: window.innerWidth, height: 0, x: 0, y: window.innerHeight, toJSON() { return {}; } };
         const winRect: DOMRect = element.getBoundingClientRect();
 
@@ -455,88 +436,76 @@ const AnimacioAdministranto: {
         const translateX: number = targetX - winCenterX;
         const translateY: number = targetY - winCenterY;
 
-        element.style.pointerEvents = "none";
-
-        return element.animate(
-            [
-                { transform: "scale(1)", opacity: 1 },
-                { transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`, opacity: 0 }
-            ],
-            { duration, easing }
-        ).finished.then(() => {
-            element.style.transform = "";
-            element.style.opacity = "";
-            element.style.pointerEvents = "";
-        });
+        return this._animacii(
+            element,
+            { transform: "scale(1)", opacity: 1 },
+            { transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`, opacity: 0 },
+            { ...options, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.windowMinimize.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.windowMinimize.easing },
+            ( el ) => { el.style.pointerEvents = "none"; },
+            ( el ) => {
+                el.style.transform = "";
+                el.style.opacity = "";
+                el.style.pointerEvents = "";
+            }
+        );
     },
 
     // ⟪ Maksimumigi Fenestran Animacion ⟫
 
     maksimumigiFenestron(element: HTMLElement, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-
-        const duration: number = options.duration ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.duration;
-        const easing: string = options.easing ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.easing;
         const fromScale: number = options.fromScale ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.scale;
 
-        return element.animate(
-            [
-                { transform: `scale(${fromScale})`, opacity: CONSTANTS.ANIM.FRACTIONS.sixEighths },
-                { transform: "scale(1)", opacity: 1 }
-            ],
-            { duration, easing }
-        ).finished.then(() => {
-            element.style.transform = "";
-            element.style.opacity = "";
-        });
+        return this._animacii(
+            element,
+            { transform: `scale(${fromScale})`, opacity: CONSTANTS.ANIM.FRACTIONS.sixEighths },
+            { transform: "scale(1)", opacity: 1 },
+            { ...options, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.easing },
+            undefined,
+            ( el ) => {
+                el.style.transform = "";
+                el.style.opacity = "";
+            }
+        );
     },
 
     // ⟪ Restarigi el Maksimumiga Animacio ⟫
 
     malmaksimumigiFenestron(element: HTMLElement, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-
-        const duration: number = options.duration ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.duration;
-        const easing: string = options.easing ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.easing;
         const toScale: number = options.toScale ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.scale;
 
-        return element.animate(
-            [
-                { transform: "scale(1)", opacity: 1 },
-                { transform: `scale(${toScale})`, opacity: CONSTANTS.ANIM.FRACTIONS.sixEighths }
-            ],
-            { duration, easing }
-        ).finished.then(() => {
-            element.style.transform = "";
-            element.style.opacity = "";
-        });
+        return this._animacii(
+            element,
+            { transform: "scale(1)", opacity: 1 },
+            { transform: `scale(${toScale})`, opacity: CONSTANTS.ANIM.FRACTIONS.sixEighths },
+            { ...options, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.easing },
+            undefined,
+            ( el ) => {
+                el.style.transform = "";
+                el.style.opacity = "";
+            }
+        );
     },
 
     // ⟪ Restarigi Fenestran Animacion ( el minimumigita ) ⟫
 
     restaŭriFenestron(element: HTMLElement, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-
-        const duration: number = options.duration ?? CONSTANTS.ANIM.DURATION_DEFAULT;
-        const easing: string = options.easing ?? this.mildigoj.spring;
         const fraction: number = options.fraction ?? CONSTANTS.ANIM.FRACTIONS.oneEighth;
 
-        element.style.display = "block";
-        element.style.transform = `scale(${fraction})`;
-        element.style.opacity = "0";
-
-        void element.offsetWidth;
-
-        return element.animate(
-            [
-                { transform: `scale(${fraction})`, opacity: 0 },
-                { transform: "scale(1)", opacity: 1 }
-            ],
-            { duration, easing }
-        ).finished.then(() => {
-            element.style.transform = "";
-            element.style.opacity = "";
-        });
+        return this._animacii(
+            element,
+            { transform: `scale(${fraction})`, opacity: 0 },
+            { transform: "scale(1)", opacity: 1 },
+            { ...options, duration: options.duration ?? CONSTANTS.ANIM.DURATION_DEFAULT, easing: options.easing ?? this.mildigoj.spring },
+            ( el ) => {
+                el.style.display = "block";
+                el.style.transform = `scale(${fraction})`;
+                el.style.opacity = "0";
+            },
+            ( el ) => {
+                el.style.transform = "";
+                el.style.opacity = "";
+            }
+        );
     },
 
     // ⟪ Ondeta Efiko ( por butonoj ) ⟫
@@ -622,43 +591,42 @@ const AnimacioAdministranto: {
     // ⟪ Ŝpruca Animacio ( por kunteksta menuo ) ⟫
 
     sxprucEn(element: HTMLElement, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-        const duration: number = options.duration ?? CONSTANTS.ANIM_SETTINGS.popup.duration;
-        const easing: string = options.easing ?? CONSTANTS.ANIM_SETTINGS.popup.easing;
         const scale: number = options.scale ?? CONSTANTS.ANIM_SETTINGS.popup.scale;
 
-        element.style.transform = `scale(${scale})`;
-        element.style.opacity = "0";
-        void element.offsetWidth;
-
-        return element.animate([
+        return this._animacii(
+            element,
             { transform: `scale(${scale})`, opacity: 0 },
-            { transform: "scale(1)", opacity: 1 }
-        ], { duration, easing }).finished.then(() => {
-            element.style.transform = "";
-            element.style.opacity = "";
-        });
+            { transform: "scale(1)", opacity: 1 },
+            { ...options, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.popup.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.popup.easing },
+            ( el ) => {
+                el.style.transform = `scale(${scale})`;
+                el.style.opacity = "0";
+            },
+            ( el ) => {
+                el.style.transform = "";
+                el.style.opacity = "";
+            }
+        );
     },
 
     // ⟪ Ŝpruca Ferma Animacio ( malaperi el ) ⟫
 
     sxprucEl(element: HTMLElement, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-        const duration: number = options.duration ?? CONSTANTS.ANIM_SETTINGS.popup.duration;
-        const easing: string = options.easing ?? CONSTANTS.ANIM_SETTINGS.popup.easing;
         const scale: number = options.scale ?? CONSTANTS.ANIM_SETTINGS.popup.scale;
 
-        element.style.pointerEvents = "none";
-
-        return element.animate([
+        return this._animacii(
+            element,
             { transform: "scale(1)", opacity: 1 },
-            { transform: `scale(${scale})`, opacity: 0 }
-        ], { duration, easing }).finished.then(() => {
-            element.style.display = "none";
-            element.style.transform = "";
-            element.style.opacity = "";
-            element.style.pointerEvents = "";
-        });
+            { transform: `scale(${scale})`, opacity: 0 },
+            { ...options, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.popup.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.popup.easing },
+            ( el ) => { el.style.pointerEvents = "none"; },
+            ( el ) => {
+                el.style.display = "none";
+                el.style.transform = "";
+                el.style.opacity = "";
+                el.style.pointerEvents = "";
+            }
+        );
     },
 
     // ⟪ Ŝpruca Animacio ( por kunteksta menuo ) - Heredaĵa Aliajnimo ⟫

@@ -2,14 +2,11 @@
 
 declare const CONSTANTS: any;
 declare const AnimacioAdministranto: any;
-declare const getStrings: any;
-declare const getWindowManager: any;
+declare const akiriTextojn: any;
+declare const akiriFenestranAdministranton: any;
 
-import { AppData } from "./ꞁȷ̀ɜ ı],ɔ ŋᷠᴜ }ʃꞇ.js";
 import { akiriMaksimumanPaĝon } from "./ſ͕ɭɜᶗ‹ ꞁȷ̀ɹ }ʃɹƽ.js";
 import { klikoEkstereTraktilo } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ŋᷠᴜ ſȷɔ ſɭ,ꞇ.js";
-
-let APPS: AppData[] = [];
 
 // ⟪ Kunteksta Menuo Administranto ⟫
 
@@ -56,16 +53,16 @@ export const KuntekstaMenuoAdministranto = {
         ], x, y );
     },
 
-    montriPorKahelo( x: number, y: number, tileEl: HTMLElement ) {
-        this.nunaKahelo = tileEl;
+    montriPorKahelo( x: number, y: number, kahelEl: HTMLElement ) {
+        this.nunaKahelo = kahelEl;
 
     // Konstrui movpaĝajn agojn por portebla reĝimo
-        const movePageActions = [];
-        const maxPage = akiriMaksimumanPaĝon( APPS );
+        const movPaĝajAgoj = [];
+        const maksPaĝo = akiriMaksimumanPaĝon();
 
-        if ( maxPage > 0 ) {
-            for ( let i = 0; i <= maxPage; i++ ) {
-                movePageActions.push( {
+        if ( maksPaĝo > 0 ) {
+            for ( let i = 0; i <= maksPaĝo; i++ ) {
+                movPaĝajAgoj.push( {
                     action: `move-page-${i}`,
                     label: `Page ${i + 1}`,
                     icon: `${i + 1}`,
@@ -77,39 +74,39 @@ export const KuntekstaMenuoAdministranto = {
         this.bildigiMenuon( [
             { action: "edit-mode", label: "Redakta Reĝimo", icon: "✏️", i18n: "ctx_edit_mode" }
         ], [
-            ...movePageActions,
+            ...movPaĝajAgoj,
             { action: "toggle-widget", label: "Fenestraĵa Reĝimo", icon: "🖼️", i18n: "ctx_widget_mode" },
             { action: "toggle-live-tile", label: "Vivanta Kahela Reĝimo", icon: "✨", i18n: "ctx_live_tile_mode" }
         ], x, y );
     },
 
     bildigiMenuon( primaryActions: any[], secondaryActions: any[], x: number, y: number ) {
-        const allActions = [ ...primaryActions, ...secondaryActions ];
-        const strings = typeof getStrings === "function" ? getStrings() : {};
+        const ĉiujAgoj = [ ...primaryActions, ...secondaryActions ];
+        const tekstoj = typeof akiriTextojn === "function" ? akiriTextojn() : {};
 
-        const renderButton = ( btn: any ) => {
-            let label = btn.label || "";
-            let i18nLabel = "";
+        const bildigiButonon = ( btn: any ) => {
+            let etikedo = btn.label || "";
+            let i18nEtikedo = "";
             
     // Trakti i18n kun lokaĵa anstataŭigo por ctx_move_page
-            if ( btn.i18n && strings[ btn.i18n ] ) {
-                i18nLabel = strings[ btn.i18n ];
+            if ( btn.i18n && tekstoj[ btn.i18n ] ) {
+                i18nEtikedo = tekstoj[ btn.i18n ];
                 if ( btn.i18n === "ctx_move_page" && btn.label ) {
-                    const pageNum = btn.label.replace( "Page ", "" );
-                    label = i18nLabel.replace( "{ɿ}", pageNum );
+                    const paĝNumero = btn.label.replace( "Page ", "" );
+                    etikedo = i18nEtikedo.replace( "{ɿ}", paĝNumero );
                 } else {
-                    label = i18nLabel;
+                    etikedo = i18nEtikedo;
                 }
             }
 
-            const i18nAttr = btn.i18n ? ` data-oskakefani="${btn.i18n}"` : "";
-            const labelHtml = label ? `<span>${label}</span>` : "";
+            const i18nAtributo = btn.i18n ? ` data-oskakefani="${btn.i18n}"` : "";
+            const etikedaHtml = etikedo ? `<span>${etikedo}</span>` : "";
             
-            return `<button data-action="${btn.action}"${i18nAttr} title="${label}">${labelHtml}<span>${btn.icon}</span></button>`;
+            return `<button data-action="${btn.action}"${i18nAtributo} title="${etikedo}">${etikedaHtml}<span>${btn.icon}</span></button>`;
         };
 
         if ( this.menuo ) {
-            this.menuo.innerHTML = allActions.map( renderButton ).join( "" );
+            this.menuo.innerHTML = ĉiujAgoj.map( bildigiButonon ).join( "" );
             this.ligiMenuajnEventojn();
              this.montri( x, y );
         }
@@ -163,13 +160,13 @@ export const KuntekstaMenuoAdministranto = {
 
     pritraktiAgadon( action: string | undefined ) {
         if ( !action ) return;
-        const wm = getWindowManager();
+        const wm = akiriFenestranAdministranton();
 
     // Trakti movpaĝajn agojn por portebla reĝimo
         if ( action.startsWith( "move-page-" ) ) {
-            const targetPage = parseInt( action.replace( "move-page-", "" ) );
+            const celPaĝo = parseInt( action.replace( "move-page-", "" ) );
             if ( this.nunaKahelo && ( window as any ).LabortablaPiktogramoAdministranto?.desktop ) {
-                ( window as any ).LabortablaPiktogramoAdministranto.movigiKahelonAlPagxo( this.nunaKahelo, targetPage );
+                ( window as any ).LabortablaPiktogramoAdministranto.movigiKahelonAlPagxo( this.nunaKahelo, celPaĝo );
             }
             return;
         }

@@ -35,6 +35,6 @@ function cxuEnhavasIun( str: string, terms: string[] ): boolean {
 }
 
 // Alkroĉi al fenestro por tutmonda aliro
-( window as any ).escapeHtml = eskapiHtml;
-( window as any ).truncate = trancxi;
-( window as any ).containsAny = cxuEnhavasIun;
+( window as any ).eskapiHtml = eskapiHtml;
+( window as any ).trancxi = trancxi;
+( window as any ).cxuEnhavasIun = cxuEnhavasIun;

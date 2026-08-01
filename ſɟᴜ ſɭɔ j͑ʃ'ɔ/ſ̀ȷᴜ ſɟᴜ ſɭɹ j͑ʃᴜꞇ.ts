@@ -4,9 +4,9 @@ declare const APPS_DATA: any;
 declare const QS_TOGGLES: any;
 declare const RapidaAgordoAdministranto: any;
 declare const SciigoAdministranto: any;
-declare const throttle: any;
-declare const StorageUtil: any;
-declare const toggleQsButton: any;
+declare const limkurzo: any;
+declare const KonservejaUtilo: any;
+declare const baskuligiQsButonon: any;
 
 import { PiktogramaKrado, MOBILE_GRID_ROWS, MOBILE_GRID_COLS } from "./ſ͕ɭɜᶗ‹ ꞁȷ̀ɹ }ʃɹƽ.js";
 import { AppData } from "./ꞁȷ̀ɜ ı],ɔ ŋᷠᴜ }ʃꞇ.js";
@@ -36,36 +36,36 @@ export const LabortablaPiktogramoAdministranto = {
     },
 
     _konserviLabortablanArangxon() {
-        if ( StorageUtil && this.labortablo?.container ) {
+        if ( KonservejaUtilo && this.labortablo?.container ) {
             const tiles = Array.from( this.labortablo.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[];
-            StorageUtil.saveTileLayout( tiles, "desktopTileLayout" );
+            KonservejaUtilo.konserviKahelanAranĝon( tiles, "desktopTileLayout" );
         }
     },
 
     // Movigi kahelon al specifa paĝo (nur portebla)
-    movigiKahelonAlPagxo( tile: HTMLElement, targetPage: number ) {
-        if ( !tile || !this.labortablo ) return;
+    movigiKahelonAlPagxo( kahelo: HTMLElement, celPaĝo: number ) {
+        if ( !kahelo || !this.labortablo ) return;
 
-        const appPath = tile.dataset.app;
-        const appIndex = APPS.findIndex( ( app: any ) => app.app === appPath );
+        const aplikaVojo = kahelo.dataset.app;
+        const aplikaIndekso = APPS.findIndex( ( app: any ) => app.app === aplikaVojo );
 
-        if ( appIndex === -1 ) return;
+        if ( aplikaIndekso === -1 ) return;
 
         // Forigi kahelon el nuna pozicio
-        tile.remove();
+        kahelo.remove();
 
         // Re-aldoni ĉe nova paĝpozicio
-        const itemsPerPage = MOBILE_GRID_ROWS * MOBILE_GRID_COLS;
-        const newIndex = ( targetPage * itemsPerPage ) + ( appIndex % itemsPerPage );
+        const erojPoPaĝo = MOBILE_GRID_ROWS * MOBILE_GRID_COLS;
+        const novaIndekso = ( celPaĝo * erojPoPaĝo ) + ( aplikaIndekso % erojPoPaĝo );
 
-        const newEl = this.labortablo.aldoniPiktogramon( APPS[ appIndex ], newIndex );
-        this.labortablo.alakrogiAlKrado( newEl, newIndex );
+        const novaEl = this.labortablo.aldoniPiktogramon( APPS[ aplikaIndekso ], novaIndekso );
+        this.labortablo.alakrogiAlKrado( novaEl, novaIndekso );
 
         // Ĝisdatigi paĝajn indikilojn
         this._gxisdatigiPaĝajnIndikilojn();
 
         // Refreŝigi por montri kahelon sur nova paĝo
-        this.labortablo.nunaPaĝo = targetPage;
+        this.labortablo.nunaPaĝo = celPaĝo;
         this.labortablo.refreŝigi();
     },
 
@@ -98,7 +98,7 @@ export const LabortablaPiktogramoAdministranto = {
     },
 
     async inicii() {
-        // IconGrid aŭtomate detektas porteblan vs labortablan nun
+        // IconGrid aŭtomate detektas porteblan aŭ labortablan nun
         this.labortablo = new PiktogramaKrado( "desktop", { centered: false, bottomUp: true, labelMode: "external" } );
         this.komencaMenuo = new PiktogramaKrado( "start-menu-content", { centered: false, bottomUp: true, labelMode: "external" } );
 
@@ -114,6 +114,9 @@ export const LabortablaPiktogramoAdministranto = {
             app: app.path
         } ) );
 
+        // Ĝisdatigi la tutmondan referencon, ĉar ĝi estis fiksita ĉe ŝarĝo kun malplena tabelo
+        ( window as any ).APPS = APPS;
+
         APPS.forEach( ( app: any, i: number ) => {
             this.labortablo?.aldoniPiktogramon( app, i );
             this.komencaMenuo?.aldoniPiktogramon( app, i );
@@ -123,10 +126,10 @@ export const LabortablaPiktogramoAdministranto = {
         this._sxargiTitolojnDeLokalajPaĝoj();
 
         // Apliki konservitan kahelan aranĝon el stokejo
-        if ( StorageUtil && this.labortablo?.container ) {
+        if ( KonservejaUtilo && this.labortablo?.container ) {
             const tiles = Array.from( this.labortablo.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[];
             const desktop = this.labortablo;
-            StorageUtil.applyTileLayout( tiles, "desktopTileLayout", ( tile: HTMLElement, col: number, row: number ) => {
+            KonservejaUtilo.aplikiKahelanAranĝon( tiles, "desktopTileLayout", ( tile: HTMLElement, col: number, row: number ) => {
                 desktop.aplikiPozicion( tile, col, row );
             } );
         }
@@ -136,7 +139,7 @@ export const LabortablaPiktogramoAdministranto = {
         this._kreiPaĝajnIndikilojn();
         setTimeout( () => this.labortablo?.rearanĝi(), 0o140 );
 
-        window.addEventListener( "resize", throttle( () => {
+        window.addEventListener( "resize", limkurzo( () => {
             this._pritraktiGrandSxangxon();
             setTimeout( () => this._alakrogiCxiujnKradojn(), 0o200 );
         }, 0o312 ) );
@@ -196,37 +199,37 @@ export const LabortablaPiktogramoAdministranto = {
         if ( ekzistanta ) ekzistanta.remove();
 
         // Krei paĝajn indikilojn por portebla reĝimo
-        const itemsPerPage = MOBILE_GRID_ROWS * MOBILE_GRID_COLS;
-        const totalPages = Math.ceil( APPS.length / itemsPerPage );
+        const erojPoPaĝo = MOBILE_GRID_ROWS * MOBILE_GRID_COLS;
+        const tutajPaĝoj = Math.ceil( APPS.length / erojPoPaĝo );
 
-        if ( totalPages <= 1 ) return;
+        if ( tutajPaĝoj <= 1 ) return;
 
-        const container = document.createElement( "div" );
-        container.className = "page-indicators";
+        const ujo = document.createElement( "div" );
+        ujo.className = "page-indicators";
 
-        for ( let i = 0; i < totalPages; i++ ) {
-            const dot = document.createElement( "div" );
-            dot.className = "page-indicator" + ( i === 0 ? " active" : "" );
-            dot.onclick = () => {
+        for ( let i = 0; i < tutajPaĝoj; i++ ) {
+            const punkto = document.createElement( "div" );
+            punkto.className = "page-indicator" + ( i === 0 ? " active" : "" );
+            punkto.onclick = () => {
                 if ( this.labortablo ) {
                     this.labortablo.nunaPaĝo = i;
                     this.labortablo.refreŝigi();
                     this._gxisdatigiPaĝajnIndikilojn();
                 }
             };
-            container.appendChild( dot );
+            ujo.appendChild( punkto );
         }
 
-        document.body.appendChild( container );
+        document.body.appendChild( ujo );
     },
 
     _gxisdatigiPaĝajnIndikilojn() {
-        const container = document.querySelector( ".page-indicators" );
-        if ( !container || !this.labortablo ) return;
+        const ujo = document.querySelector( ".page-indicators" );
+        if ( !ujo || !this.labortablo ) return;
 
-        const dots = container.querySelectorAll( ".page-indicator" );
-        dots.forEach( ( dot, i ) => {
-            dot.classList.toggle( "active", i === ( this.labortablo as any )?.currentPage );
+        const punktoj = ujo.querySelectorAll( ".page-indicator" );
+        punktoj.forEach( ( punkto, i ) => {
+            punkto.classList.toggle( "active", i === ( this.labortablo as any )?.nunaPaĝo );
         } );
     },
 
@@ -238,10 +241,10 @@ export const LabortablaPiktogramoAdministranto = {
 
         if ( !qsContainer || !qsGrid || !slidersContainer || !editActions ) return;
 
-        const stokejo = StorageUtil;
-        const savedToggleOrder = stokejo.get( "xeku1okek-order", null );
-        const savedSliderOrder = stokejo.get( "qs-slider-order", null );
-        const savedContainerOrder = stokejo.get( "qs-container-order", [ "quick-settings-sliders", "quick-settings-buttons" ] );
+        const stokejo = KonservejaUtilo;
+        const savedToggleOrder = stokejo.akiri( "xeku1okek-order", null );
+        const savedSliderOrder = stokejo.akiri( "qs-slider-order", null );
+        const savedContainerOrder = stokejo.akiri( "qs-container-order", [ "quick-settings-sliders", "quick-settings-buttons" ] );
 
         const currentContainers: { [ key: string ]: HTMLElement | null } = { "quick-settings-buttons": qsGrid, "quick-settings-sliders": slidersContainer };
         savedContainerOrder.forEach( ( id: string ) => {
@@ -257,7 +260,7 @@ export const LabortablaPiktogramoAdministranto = {
         }
         qsGrid.innerHTML = toggles.map( ( t: any ) => `
             <div class="xeku1okek" data-qs-id="${t.id}" onclick="window.LabortablaPiktogramoAdministranto._pritraktiRAAKlako( event , this , 'xeku1okek-order' )">
-                <button class="caku1o" data-setting="${t.id}" aria-pressed="${t.default}" onclick="if ( window.toggleQsButton ) toggleQsButton( this )">
+                <button class="caku1o" data-setting="${t.id}" aria-pressed="${t.default}" onclick="if ( window.baskuligiQsButonon ) baskuligiQsButonon( this )">
                     <span class="icon">${t.icon}</span>
                     <span class="label" data-oskakefani="${t.string}">${t.label}</span>
                 </button>
@@ -279,7 +282,7 @@ export const LabortablaPiktogramoAdministranto = {
                 <ciihii class="">
                     <span class="label" data-oskakefani="${s.string}">${s.label}</span>
                     <span class="icon">${s.icon}</span>
-                    <input type="range" min="0" max="${s.max}" value="${s.value}" oninput="if ( window.updateSlider ) updateSlider( '${s.handler}' , this.value )">
+                    <input type="range" min="0" max="${s.max}" value="${s.value}" oninput="if ( window.aktualigiSxovilon ) aktualigiSxovilon( '${s.handler}' , this.value )">
                 </ciihii>
                 <button class="qs-remove-btn" onclick="event.stopPropagation(); window.LabortablaPiktogramoAdministranto._forigiRAAElementon( event , 'qs-slider-order' , '${s.id}' )">/</button>
             </div>
@@ -308,9 +311,9 @@ export const LabortablaPiktogramoAdministranto = {
                     ( window as any ).KuntekstaMenuoAdministranto.pritraktiAgadon = ( ago: string ) => {
                         if ( ago.startsWith( "add-qs-" ) ) {
                             const id = ago.replace( "add-qs-", "" ), estasSxovilo = ( id === "volume" || id === "brightness" );
-                            const stokejo = StorageUtil;
-                            const sxlosilo = estasSxovilo ? "qs-slider-order" : "xeku1okek-order", ord = stokejo.get( sxlosilo, [] );
-                            ord.push( id ); stokejo.set( sxlosilo, ord ); this._iniciiRapidaAgordojn();
+                            const stokejo = KonservejaUtilo;
+                            const sxlosilo = estasSxovilo ? "qs-slider-order" : "xeku1okek-order", ord = stokejo.akiri( sxlosilo, [] );
+                            ord.push( id ); stokejo.agordi( sxlosilo, ord ); this._iniciiRapidaAgordojn();
                         } else originalaH.call( ( window as any ).KuntekstaMenuoAdministranto, ago );
                         ( window as any ).KuntekstaMenuoAdministranto.pritraktiAgadon = originalaH;
                     };
@@ -330,19 +333,19 @@ export const LabortablaPiktogramoAdministranto = {
             if ( e.target.tagName === "INPUT" ) return;
             e.preventDefault(); e.stopPropagation();
         } else if ( el.classList.contains( "xeku1okek" ) ) {
-            if ( typeof toggleQsButton === "function" ) toggleQsButton( el );
+            if ( typeof baskuligiQsButonon === "function" ) baskuligiQsButonon( el );
         }
     },
 
     _forigiRAAElementon( storageKey: string, id: string ) {
-        const stokejo = StorageUtil;
-        const ord = stokejo.get( storageKey, [] ).filter( ( itemId: string ) => itemId !== id );
-        stokejo.set( storageKey, ord ); this._iniciiRapidaAgordojn();
+        const stokejo = KonservejaUtilo;
+        const ord = stokejo.akiri( storageKey, [] ).filter( ( itemId: string ) => itemId !== id );
+        stokejo.agordi( storageKey, ord ); this._iniciiRapidaAgordojn();
     },
 
     _agordiRAATeniLonTreni( container: HTMLElement | null ) {
         if ( !container ) return;
-        const stokejo = StorageUtil;
+        const stokejo = KonservejaUtilo;
         ( container as any ).onmousedown = ( e: MouseEvent ) => {
             if ( !container.classList.contains( "qs-editing" ) ) return;
             const celo = ( e.target as HTMLElement ).closest( "#quick-settings-buttons, #quick-settings-sliders" ) as HTMLElement | null;
@@ -352,20 +355,20 @@ export const LabortablaPiktogramoAdministranto = {
                 if ( svebanta && svebanta !== celo ) {
                     if ( Array.from( container.children ).indexOf( celo ) < Array.from( container.children ).indexOf( svebanta ) ) svebanta.after( celo );
                     else svebanta.before( celo );
-                    stokejo.set( "qs-container-order", Array.from( container.children ).filter( c => c.id === "quick-settings-buttons" || c.id === "quick-settings-sliders" ).map( c => c.id ) );
+                    stokejo.agordi( "qs-container-order", Array.from( container.children ).filter( c => c.id === "quick-settings-buttons" || c.id === "quick-settings-sliders" ).map( c => c.id ) );
                 }
             };
             // Uzi unuecigitan enigan traktilon
             const EnigaAdministranto = ( window as any ).EnigaAdministranto;
             if ( EnigaAdministranto ) {
-                EnigaAdministranto.setupDrag( celo, null, movi, () => {} );
+                EnigaAdministranto.agordiTrenadon( celo, null, movi, () => {} );
             }
         };
     },
 
     _agordiRAATreniReordigxon( container: HTMLElement | null ) {
         if ( !container ) return;
-        const stokejo = StorageUtil;
+        const stokejo = KonservejaUtilo;
         container.addEventListener( "mousedown", ( e: MouseEvent ) => {
             const qsContainer = document.getElementById( "quick-settings-container" );
             if ( !qsContainer?.classList.contains( "qs-editing" ) ) return;
@@ -382,12 +385,12 @@ export const LabortablaPiktogramoAdministranto = {
             const supren = () => {
                 ero.classList.remove( "qs-dragging" );
                 const sxlosilo = ( container.id === "quick-settings-buttons" ) ? "xeku1okek-order" : "qs-slider-order";
-                stokejo.set( sxlosilo, Array.from( container.querySelectorAll( "[data-qs-id]" ) ).map( el => ( el as HTMLElement ).dataset.qsId ) );
+                stokejo.agordi( sxlosilo, Array.from( container.querySelectorAll( "[data-qs-id]" ) ).map( el => ( el as HTMLElement ).dataset.qsId ) );
             };
             // Uzi unuecigitan enigan traktilon
             const EnigaAdministranto = ( window as any ).EnigaAdministranto;
             if ( EnigaAdministranto ) {
-                EnigaAdministranto.setupDrag( ero, null, movi, supren );
+                EnigaAdministranto.agordiTrenadon( ero, null, movi, supren );
             }
         } );
     },

@@ -28,11 +28,22 @@ export function cxuEnLimoj( x: number, y: number, limoj: DOMRect ): boolean {
 }
 
 /**
+ * Kalkuli ĉelan grandecon laŭ uja grando, kolumna nombro kaj interspaco
+ * @param {number} ujaGrando - Uja grando ( larĝo aŭ alto )
+ * @param {number} kolumnoj - Nombro da kolumnoj ( aŭ vicoj )
+ * @param {number} interspaco - Interspaco inter ĉeloj
+ * @returns {number}
+ */
+export function kalkuliĈelanGrandecon( ujaGrando: number, kolumnoj: number, interspaco: number ): number {
+    return ( ujaGrando - ( kolumnoj - 1 ) * interspaco ) / kolumnoj;
+}
+
+/**
  * Agordi aria-pressed staton sur butono
  * @param {string|HTMLElement} btn - Butona ID aŭ elemento
  * @param {boolean} premata
  */
-function setButtonPressed( btn: string | HTMLElement, premata: boolean ): void {
+function agordiButonPremita( btn: string | HTMLElement, premata: boolean ): void {
     const el = typeof btn === "string" ? document.getElementById( btn ) : btn;
     if ( el ) {
         if ( premata ) el.setAttribute( "aria-pressed", "true" );
@@ -45,7 +56,7 @@ function setButtonPressed( btn: string | HTMLElement, premata: boolean ): void {
  * @param {HTMLElement} el
  * @returns {{colSpan: number, rowSpan: number}}
  */
-function getElementSpans( el: HTMLElement ): { colSpan: number; rowSpan: number } {
+function akiriElementajnSpanojn( el: HTMLElement ): { colSpan: number; rowSpan: number } {
     return {
         colSpan: parseInt( el.dataset.colSpan as string ) || 1,
         rowSpan: parseInt( el.dataset.rowSpan as string ) || 1
@@ -57,7 +68,7 @@ function getElementSpans( el: HTMLElement ): { colSpan: number; rowSpan: number 
  * @param {HTMLElement} el
  * @param {boolean} trenanta
  */
-function setElementDragging( el: HTMLElement, trenanta: boolean ): void {
+function agordiElementanTrenadon( el: HTMLElement, trenanta: boolean ): void {
     el.classList.toggle( "dragging", trenanta );
 }
 
@@ -80,7 +91,7 @@ export function akiriElementanPozicion( el: HTMLElement ): { col: number; row: n
  * @param {HTMLElement} el
  * @param {string} klasaNomo
  */
-function addClass( el: HTMLElement | null | undefined, klasaNomo: string ): void {
+function aldoniKlason( el: HTMLElement | null | undefined, klasaNomo: string ): void {
     el?.classList.add( klasaNomo );
 }
 
@@ -89,7 +100,7 @@ function addClass( el: HTMLElement | null | undefined, klasaNomo: string ): void
  * @param {HTMLElement} el
  * @param {string} klasaNomo
  */
-function removeClass( el: HTMLElement | null | undefined, klasaNomo: string ): void {
+function forigiKlason( el: HTMLElement | null | undefined, klasaNomo: string ): void {
     el?.classList.remove( klasaNomo );
 }
 
@@ -99,19 +110,20 @@ function removeClass( el: HTMLElement | null | undefined, klasaNomo: string ): v
  * @param {string} klasaNomo
  * @returns {boolean}
  */
-function hasClass( el: HTMLElement | null | undefined, klasaNomo: string ): boolean {
+function cxuKlaso( el: HTMLElement | null | undefined, klasaNomo: string ): boolean {
     return el?.classList.contains( klasaNomo ) ?? false;
 }
 
 // ⟪ Konsoliditaj Fenestraj Eksportoj ⟫
 Object.assign( window as any, {
-    getContainerDimensions: akiriUjonGrandecojn,
-    isWithinBounds: cxuEnLimoj,
-    setButtonPressed,
-    getElementSpans,
-    setElementDragging,
-    getElementPosition: akiriElementanPozicion,
-    addClass,
-    removeClass,
-    hasClass,
+    akiriUjonGrandecojn,
+    cxuEnLimoj,
+    kalkuliĈelanGrandecon,
+    agordiButonPremita,
+    akiriElementajnSpanojn,
+    agordiElementanTrenadon,
+    akiriElementanPozicion,
+    aldoniKlason,
+    forigiKlason,
+    cxuKlaso,
 } );

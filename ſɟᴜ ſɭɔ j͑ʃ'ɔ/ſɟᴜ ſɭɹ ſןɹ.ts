@@ -1,7 +1,7 @@
-// ≺⧼ Sistemo ⧽≻ - Main OS Coordination
+// ≺⧼ Sistemo ⧽≻ - Ĉefa OS-Kunordigo
 
 const Sistemo = {
-    // ⟪ Utilities ⟫
+    // ⟪ Utiloj ⟫
 
     alOktalaCxeno( str: any ) {
         if ( !str || typeof window.vab6caja !== "function" ) return str;
@@ -23,7 +23,7 @@ const Sistemo = {
         // 1. ⟨ Esencaj Administrantoj ⟩
         if ( (window as any).FenestraAdministranto ) (window as any).FenestraAdministranto.inicii();
         if ( (window as any).KuntekstaMenuoAdministranto ) (window as any).KuntekstaMenuoAdministranto.inicii();
-        if ( (window as any).PanelaAdministranto ) (window as any).PanelaAdministranto.initClickOutsideHandler();
+        if ( (window as any).PanelaAdministranto ) (window as any).PanelaAdministranto.iniciiEksterklakanTraktilon();
         if ( (window as any).SciigoAdministranto ) (window as any).SciigoAdministranto.inicii();
         if ( (window as any).HorlogxoAdministranto ) (window as any).HorlogxoAdministranto.inicii();
 
@@ -59,14 +59,14 @@ const Sistemo = {
 
 // ⟪ Tutmondaj Aliajnimoj ⟫
 
-function toggleQsButton( btn: any ) { if ( (window as any).RapidaAgordoAdministranto ) (window as any).RapidaAgordoAdministranto.pritraktiBaskulon( btn ); }
-function updateSlider( type: any, val: any ) {
+function baskuligiQsButonon( btn: any ) { if ( (window as any).RapidaAgordoAdministranto ) (window as any).RapidaAgordoAdministranto.pritraktiBaskulon( btn ); }
+function aktualigiSxovilon( type: any, val: any ) {
     if ( !(window as any).RapidaAgordoAdministranto ) return;
     if ( type === "brightness" ) (window as any).RapidaAgordoAdministranto.agordiHelecon( parseInt( val ) );
     else if ( type === "volume" ) (window as any).RapidaAgordoAdministranto.agordiLaŭtecon( parseInt( val ) );
 }
 
 // Aldoni al fenestro por tutmonda aliro
-(window as any).toggleQsButton = toggleQsButton;
-(window as any).updateSlider = updateSlider;
+(window as any).baskuligiQsButonon = baskuligiQsButonon;
+(window as any).aktualigiSxovilon = aktualigiSxovilon;
 (window as any).Sistemo = Sistemo;

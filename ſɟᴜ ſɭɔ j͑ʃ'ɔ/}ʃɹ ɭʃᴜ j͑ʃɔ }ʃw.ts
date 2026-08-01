@@ -4,16 +4,17 @@ declare const CONSTANTS: any;
 declare const AnimacioAdministranto: any;
 declare const SciigoAdministranto: any;
 declare const DOMCache: any;
-declare const hasClass: any;
-declare const removeClass: any;
-declare const addClass: any;
-declare const setButtonPressed: any;
-declare const getStartMenu: any;
-declare const getTaskbar: any;
-declare const isTaskbarLarge: any;
-declare const renderRecents: any;
-declare const updateDock: any;
-declare const getOpenWindows: any;
+declare const cxuKlaso: any;
+declare const forigiKlason: any;
+declare const aldoniKlason: any;
+declare const agordiButonPremita: any;
+declare const akiriKomencanMenuon: any;
+declare const akiriTaskobreton: any;
+declare const akiriTaskobretanGrandecon: any;
+declare const cxuTaskbretoGranda: any;
+declare const bildigiLastatempajn: any;
+declare const aktualigiDokon: any;
+declare const akiriMalfermajnFenestrojn: any;
 
 import { klikoEkstereTraktilo } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ŋᷠᴜ ſȷɔ ſɭ,ꞇ.js";
 
@@ -31,17 +32,17 @@ class PanelaAdministranto {
 
     // ⟪ Akiri Panelon per ID ⟫
     static akiriPanelon(panelId: string): HTMLElement | null {
-        return DOMCache.get(panelId);
+        return DOMCache.akiri(panelId);
     }
 
     // ⟪ Kontroli Panelan Videblecon ⟫
     static cxuPaneloVidebla(panel: HTMLElement | null): boolean {
-        return panel != null && hasClass(panel, "visible");
+        return panel != null && cxuKlaso(panel, "visible");
     }
 
     // ⟪ Agordi Premitan Butonstaton ⟫
     static agordiButononPremita(btnId: string, pressed: boolean): void {
-        setButtonPressed(btnId, pressed);
+        agordiButonPremita(btnId, pressed);
     }
 
     // ⟪ Kaŝi Panelon kun Direkta Animacio ⟫
@@ -51,15 +52,15 @@ class PanelaAdministranto {
         return AnimacioAdministranto.fermiPanelon(panel, panelId, {
             duration: this.animationDuration
         }).then(() => {
-            removeClass(panel, "visible");
+            forigiKlason(panel, "visible");
         });
     }
 
     // ⟪ Montri Panelon kun Direkta Animacio ⟫
-    static montriPanelon(panel: HTMLElement, btnId: string, isSliders: boolean = false, panelId: string | null = null): Promise<void> {
+    static montriPanelon(panel: HTMLElement, btnId: string, estasSxoviloj: boolean = false, panelId: string | null = null): Promise<void> {
         if (!panel) return Promise.resolve();
 
-        this.poziciigiPanelon(panel, btnId, isSliders, panelId);
+        this.poziciigiPanelon(panel, btnId, estasSxoviloj, panelId);
 
         void panel.offsetWidth;
 
@@ -68,7 +69,7 @@ class PanelaAdministranto {
         return AnimacioAdministranto.malfermiPanelon(panel, panelId || btnId, {
             duration: this.animationDuration
         }).then(() => {
-            addClass(panel, "visible");
+            aldoniKlason(panel, "visible");
         });
     }
 
@@ -85,7 +86,7 @@ class PanelaAdministranto {
 
         const dock = this.akiriPanelon(this.panels.dock);
         if (dock && this.cxuPaneloVidebla(dock)) {
-            removeClass(dock, "visible");
+            forigiKlason(dock, "visible");
         }
 
         ["status-area", "notification-btn", "clock-area"].forEach(btnId => {
@@ -106,13 +107,13 @@ class PanelaAdministranto {
             }
         });
 
-        const startMenu: HTMLElement | null = getStartMenu();
-        if (startMenu && hasClass(startMenu, "open")) {
+        const startMenu: HTMLElement | null = akiriKomencanMenuon();
+        if (startMenu && cxuKlaso(startMenu, "open")) {
             animations.push(AnimacioAdministranto.fermiPanelon(startMenu, "startMenu", {
                 duration: this.animationDuration
             }).then(() => {
-                removeClass(startMenu, "open");
-                removeClass(document.body, "start-menu-open");
+                forigiKlason(startMenu, "open");
+                forigiKlason(document.body, "start-menu-open");
             }));
         }
 
@@ -125,7 +126,7 @@ class PanelaAdministranto {
             animations.push(AnimacioAdministranto.malaperiEl(dock, {
                 duration: CONSTANTS.ANIM.DURATION_SHORT
             }).then(() => {
-                removeClass(dock, "visible");
+                forigiKlason(dock, "visible");
             }));
         }
 
@@ -133,66 +134,66 @@ class PanelaAdministranto {
     }
 
     // ⟪ Poziciigi Panelon ⟫
-    static poziciigiPanelon(panel: HTMLElement, btnId: string, isSliders: boolean = false, panelId: string | null = null): void {
+    static poziciigiPanelon(panel: HTMLElement, btnId: string, estasSxoviloj: boolean = false, panelId: string | null = null): void {
         if (!panel) return;
-        const taskbar: HTMLElement | null = getTaskbar();
+        const taskbar: HTMLElement | null = akiriTaskobreton();
         const pos: string = taskbar ? (taskbar.dataset.position || "left") : "left";
-        const isVertical: boolean = pos === "left" || pos === "right";
+        const estasVertikala: boolean = pos === "left" || pos === "right";
 
-        const tbSize: number = parseInt(getComputedStyle(document.documentElement).getPropertyValue(CONSTANTS.CSS_VARS.taskbarSize)) || CONSTANTS.SYS.TASKBAR_SIZE;
+        const tbSize: number = akiriTaskobretanGrandecon();
         const tbBuffer: string = `${tbSize + CONSTANTS.SYS.MARGIN * 2}px`;
-        const edge: string = `${CONSTANTS.SYS.MARGIN}px`;
-        const gap: string = "8px";
+        const rando: string = `${CONSTANTS.SYS.MARGIN}px`;
+        const interspaco: string = "8px";
 
         ["left", "right", "top", "bottom"].forEach(p => { (panel.style as any)[p] = "auto"; });
         panel.style.transform = "none";
         panel.style.blockSize = "fit-content";
 
-        const positions: { [key: string]: string } = this.#getPanelPositions(tbBuffer, edge, gap, isSliders, isVertical, pos, btnId, panelId, taskbar);
+        const pozicioj: { [key: string]: string } = this.#akiriPanelajnPoziciojn(tbBuffer, rando, interspaco, estasSxoviloj, estasVertikala, pos, btnId, panelId, taskbar);
 
-        Object.entries(positions).forEach(([prop, val]) => {
+        Object.entries(pozicioj).forEach(([prop, val]) => {
             (panel.style as any)[prop] = val;
         });
     }
 
     // ⟪ Akiri Panelajn Poziciojn ⟫
-    static #getPanelPositions(tbBuffer: string, edge: string, gap: string, isSliders: boolean, isVertical: boolean, pos: string, btnId: string, panelId: string | null, taskbar: HTMLElement | null): { [key: string]: string } {
-        const sliderOffset: string = isSliders ? `calc(${tbBuffer} + 300px + ${gap})` : tbBuffer;
-        const isLeftAligned: boolean = btnId === "status-area" || btnId === "recents-btn";
-        const isRightAligned: boolean = btnId === "clock-area" || btnId === "notification-btn";
-        const isCenterAligned: boolean = !isLeftAligned && !isRightAligned;
+    static #akiriPanelajnPoziciojn(tbBuffer: string, rando: string, interspaco: string, estasSxoviloj: boolean, estasVertikala: boolean, pos: string, btnId: string, panelId: string | null, taskbar: HTMLElement | null): { [key: string]: string } {
+        const sxovilaOfseto: string = estasSxoviloj ? `calc(${tbBuffer} + 300px + ${interspaco})` : tbBuffer;
+        const estasMaldekstra: boolean = btnId === "status-area" || btnId === "recents-btn";
+        const estasDekstra: boolean = btnId === "clock-area" || btnId === "notification-btn";
+        const estasCentra: boolean = !estasMaldekstra && !estasDekstra;
 
         // Serĉtabelo de pozicia agordo
-        const configs: { [key: string]: { offset: string; align: string; opposite: string; secondary: string; transform: string } } = {
+        const agordoj: { [key: string]: { offset: string; align: string; opposite: string; secondary: string; transform: string } } = {
             bottom: { offset: "bottom", align: "left", opposite: "top", secondary: "right", transform: "translateX(-50%)" },
             top:    { offset: "top",    align: "left", opposite: "bottom", secondary: "right", transform: "translateX(-50%)" },
             left:   { offset: "left",   align: "top",  opposite: "right", secondary: "bottom", transform: "translateY(-50%)" },
             right:  { offset: "right",  align: "top",  opposite: "left", secondary: "bottom", transform: "translateY(-50%)" }
         };
 
-        const config = configs[pos] || configs.bottom;
-        const alignValue = isLeftAligned ? edge : isRightAligned ? "auto" : "50%";
+        const agordo = agordoj[pos] || agordoj.bottom;
+        const alignValoro = estasMaldekstra ? rando : estasDekstra ? "auto" : "50%";
 
         return {
-            [config.offset]: sliderOffset,
-            [config.align]: alignValue,
-            [config.secondary]: isRightAligned ? edge : "auto",
-            [config.opposite]: "auto",
-            transform: isCenterAligned ? config.transform : "none"
+            [agordo.offset]: sxovilaOfseto,
+            [agordo.align]: alignValoro,
+            [agordo.secondary]: estasDekstra ? rando : "auto",
+            [agordo.opposite]: "auto",
+            transform: estasCentra ? agordo.transform : "none"
         };
     }
 
     // ⟪ Baskuli Panelon ⟫
-    static togglePanel(panelId: string, btnId: string, isSliders: boolean = false): void {
+    static baskuligiPanelon(panelId: string, btnId: string, estasSxoviloj: boolean = false): void {
         const panel = this.akiriPanelon(panelId);
         if (!panel) return;
 
-        const isVisible = this.cxuPaneloVidebla(panel);
+        const estasVidebla = this.cxuPaneloVidebla(panel);
         this.fermiCxiujnPanelojn();
 
-        if (!isVisible) {
+        if (!estasVidebla) {
             setTimeout(() => {
-                this.montriPanelon(panel, btnId, isSliders, panelId);
+                this.montriPanelon(panel, btnId, estasSxoviloj, panelId);
             }, this.animationDuration);
         }
     }
@@ -204,10 +205,10 @@ class PanelaAdministranto {
         const panel = this.akiriPanelon( panelId );
         if ( !panel ) return;
 
-        const isVisible = this.cxuPaneloVidebla( panel );
+        const estasVidebla = this.cxuPaneloVidebla( panel );
         this.fermiCxiujnPanelojn();
 
-        if ( !isVisible ) {
+        if ( !estasVidebla ) {
             if ( opts?.onAboutToShow ) opts.onAboutToShow();
             setTimeout( () => {
                 if ( opts?.onShow ) opts.onShow();
@@ -231,7 +232,7 @@ class PanelaAdministranto {
                 if ( !container ) return;
                 this.poziciigiPanelon( container, "status-area", false, "quickSettings" );
                 void container.offsetWidth;
-                addClass( container, "visible" );
+                aldoniKlason( container, "visible" );
                 this.agordiButononPremita( "status-area", true );
                 AnimacioAdministranto.malfermiPanelon( container, "quickSettings", {
                     duration: this.animationDuration
@@ -260,16 +261,16 @@ class PanelaAdministranto {
 
     // ⟪ Baskuli Komencan Menuon ⟫
     static baskuligiKomencaMenuo(): void {
-        const startMenu: HTMLElement | null = getStartMenu();
+        const startMenu: HTMLElement | null = akiriKomencanMenuon();
         if (!startMenu) return;
 
-        const isOpen = hasClass(startMenu, "open");
-        if (isOpen) {
+        const estasMalferma = cxuKlaso(startMenu, "open");
+        if (estasMalferma) {
             AnimacioAdministranto.fermiPanelon(startMenu, "startMenu", {
                 duration: this.animationDuration
             }).then(() => {
-                removeClass(startMenu, "open");
-                removeClass(document.body, "start-menu-open");
+                forigiKlason(startMenu, "open");
+                forigiKlason(document.body, "start-menu-open");
             });
         } else {
             this.fermiSistemajnPanelojn();
@@ -281,8 +282,8 @@ class PanelaAdministranto {
                 AnimacioAdministranto.malfermiPanelon(startMenu, "startMenu", {
                     duration: this.animationDuration
                 }).then(() => {
-                    addClass(startMenu, "open");
-                    addClass(document.body, "start-menu-open");
+                    aldoniKlason(startMenu, "open");
+                    aldoniKlason(document.body, "start-menu-open");
                 });
             }, this.animationDuration);
         }
@@ -296,21 +297,21 @@ class PanelaAdministranto {
         if (!panel) return;
         const dock = this.akiriPanelon(this.panels.dock);
 
-        const isVisible = this.cxuPaneloVidebla(panel);
+        const estasVidebla = this.cxuPaneloVidebla(panel);
         this.fermiCxiujnPanelojn();
 
-        if (!isVisible) {
-            if (typeof renderRecents === "function") {
-                renderRecents();
+        if (!estasVidebla) {
+            if (typeof bildigiLastatempajn === "function") {
+                bildigiLastatempajn();
             }
 
-            if (!isTaskbarLarge() && dock) {
-                if (typeof updateDock === "function") {
-                    updateDock();
+            if (!cxuTaskbretoGranda() && dock) {
+                if (typeof aktualigiDokon === "function") {
+                    aktualigiDokon();
                 }
-                const windows: NodeListOf<HTMLElement> = getOpenWindows();
+                const windows: NodeListOf<HTMLElement> = akiriMalfermajnFenestrojn();
                 if (windows.length > 0) {
-                    addClass(dock, "visible");
+                    aldoniKlason(dock, "visible");
                     AnimacioAdministranto.malaperiEn(dock, { duration: CONSTANTS.ANIM.DURATION_SHORT });
                 }
             }
@@ -322,7 +323,7 @@ class PanelaAdministranto {
     }
 
     // ⟪ Iniciati Panelan Eksterklakan Traktilon ⟫
-    static initClickOutsideHandler(): void {
+    static iniciiEksterklakanTraktilon(): void {
         klikoEkstereTraktilo(
             [ ".system-panel", "#taskbar", "#taskbar-dock", "#start-menu", "#recents-panel", "#quick-settings-container" ],
             () => this.fermiCxiujnPanelojn()

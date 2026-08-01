@@ -62,6 +62,14 @@ function akiriTaskbretonInfo(): TaskobretaInformo {
 }
 
 /**
+ * Akiri taskobretan grandecon el CSS-variablo ( kun rezervo el konstantoj )
+ * @returns {number}
+ */
+function akiriTaskobretanGrandecon(): number {
+    return parseInt( getComputedStyle( document.documentElement ).getPropertyValue( CONSTANTS.CSS_VARS.taskbarSize ) ) || CONSTANTS.SYS.TASKBAR_SIZE;
+}
+
+/**
  * Kontroli ĉu taskobreto estas en granda reĝimo
  * @returns {boolean}
  */
@@ -111,15 +119,16 @@ function akiriFenestranAdministranton(): any {
 
 // ⟪ Konsoliditaj Fenestraj Eksportoj ⟫
 Object.assign( window as any, {
-    getTaskbar: akiriTaskobreton,
-    getStartMenu: akiriKomencanMenuon,
-    getHomeArea: akiriHejmanAreon,
-    getWindowContainer: akiriFenestranUjon,
-    getOpenWindows: akiriMalfermajnFenestrojn,
-    getTaskbarInfo: akiriTaskbretonInfo,
-    isTaskbarLarge: cxuTaskbretoGranda,
-    getWindowTitle: akiriFenestranTitolon,
-    getAppIcon: akiriAplikoPiktogramon,
-    getStrings: akiriTextojn,
-    getWindowManager: akiriFenestranAdministranton,
+    akiriTaskobreton,
+    akiriKomencanMenuon,
+    akiriHejmanAreon,
+    akiriFenestranUjon,
+    akiriMalfermajnFenestrojn,
+    akiriTaskbretonInfo,
+    akiriTaskobretanGrandecon,
+    cxuTaskbretoGranda,
+    akiriFenestranTitolon,
+    akiriAplikoPiktogramon,
+    akiriTextojn,
+    akiriFenestranAdministranton,
 } );

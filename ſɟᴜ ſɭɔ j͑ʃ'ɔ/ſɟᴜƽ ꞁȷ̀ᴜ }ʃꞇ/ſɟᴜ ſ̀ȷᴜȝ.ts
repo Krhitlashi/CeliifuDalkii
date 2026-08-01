@@ -7,12 +7,12 @@ const KonservejaUtilo = {
      * @param {any} defaŭltaValoro
      * @returns {any}
      */
-    get( key: string, defaultValue: any = null ): any {
+    akiri( ŝlosilo: string, defaŭltaValoro: any = null ): any {
         try {
-            const item = localStorage.getItem( key );
-            return item ? JSON.parse( item ) : defaultValue;
+            const ero = localStorage.getItem( ŝlosilo );
+            return ero ? JSON.parse( ero ) : defaŭltaValoro;
         } catch {
-            return defaultValue;
+            return defaŭltaValoro;
         }
     },
 
@@ -21,11 +21,11 @@ const KonservejaUtilo = {
      * @param {string} ŝlosilo
      * @param {any} valoro
      */
-    set( key: string, value: any ): void {
+    agordi( ŝlosilo: string, valoro: any ): void {
         try {
-            localStorage.setItem( key, JSON.stringify( value ) );
+            localStorage.setItem( ŝlosilo, JSON.stringify( valoro ) );
         } catch ( e ) {
-            console.error( "( ſ̀ȷɜᴜ̩ ſɭɹ }ʃꞇ ) Storage set failed", e );
+            console.error( "( ſ̀ȷɜᴜ̩ ſɭɹ }ʃꞇ ) Malsukcesis agordi stokejon", e );
         }
     },
 
@@ -33,8 +33,8 @@ const KonservejaUtilo = {
      * Forigi eron el localStorage
      * @param {string} ŝlosilo
      */
-    remove( key: string ): void {
-        localStorage.removeItem( key );
+    forigi( ŝlosilo: string ): void {
+        localStorage.removeItem( ŝlosilo );
     },
 
     /**
@@ -43,14 +43,14 @@ const KonservejaUtilo = {
      * @param {object} defaŭltoj
      * @returns {object}
      */
-    loadWithDefaults( key: string, defaults: object ): object {
+    sxargiKunDefaŭltoj( ŝlosilo: string, defaŭltoj: object ): object {
         try {
-            const item = localStorage.getItem( key );
-            if ( !item ) return { ...defaults };
-            const parsed = JSON.parse( item );
-            return { ...defaults, ...parsed };
+            const ero = localStorage.getItem( ŝlosilo );
+            if ( !ero ) return { ...defaŭltoj };
+            const analizita = JSON.parse( ero );
+            return { ...defaŭltoj, ...analizita };
         } catch {
-            return { ...defaults };
+            return { ...defaŭltoj };
         }
     },
 
@@ -59,19 +59,19 @@ const KonservejaUtilo = {
      * @param {HTMLElement[]} kaheloj - Tabelo de kahelaj elementoj
      * @param {string} stokejaŝlosilo - Ŝlosilo por localStorage ( defaŭlte: "desktopTileLayout" )
      */
-    saveTileLayout( tiles: HTMLElement[], storageKey: string = "desktopTileLayout" ): void {
+    konserviKahelanAranĝon( kaheloj: HTMLElement[], stokejaŜlosilo: string = "desktopTileLayout" ): void {
         try {
-            const layout = tiles.map( tile => ( {
-                id: tile.id || tile.dataset.app || tile.dataset.id,
-                col: parseInt( tile.dataset.col as string ) || 0,
-                row: parseInt( tile.dataset.row as string ) || 0,
-                colSpan: parseInt( tile.dataset.colSpan as string ) || 1,
-                rowSpan: parseInt( tile.dataset.rowSpan as string ) || 1
-            } ) ).filter( item => item.id );
+            const aranĝo = kaheloj.map( kahelo => ( {
+                id: kahelo.id || kahelo.dataset.app || kahelo.dataset.id,
+                col: parseInt( kahelo.dataset.col as string ) || 0,
+                row: parseInt( kahelo.dataset.row as string ) || 0,
+                colSpan: parseInt( kahelo.dataset.colSpan as string ) || 1,
+                rowSpan: parseInt( kahelo.dataset.rowSpan as string ) || 1
+            } ) ).filter( ero => ero.id );
             
-            localStorage.setItem( storageKey, JSON.stringify( layout ) );
+            localStorage.setItem( stokejaŜlosilo, JSON.stringify( aranĝo ) );
         } catch ( e ) {
-            console.error( "( ſ̀ȷɜᴜ̩ ſɭɹ }ʃꞇ ) Failed to save tile layout", e );
+            console.error( "( ſ̀ȷɜᴜ̩ ſɭɹ }ʃꞇ ) Malsukcesis konservi kahelan aranĝon", e );
         }
     },
 
@@ -80,10 +80,10 @@ const KonservejaUtilo = {
      * @param {string} stokejaŝlosilo - Ŝlosilo por localStorage ( defaŭlte: "desktopTileLayout" )
      * @returns {Array<{id: string, col: number, row: number, colSpan: number, rowSpan: number}>}
      */
-    loadTileLayout( storageKey: string = "desktopTileLayout" ): Array<{id: string, col: number, row: number, colSpan: number, rowSpan: number}> {
+    sxargiKahelanAranĝon( stokejaŜlosilo: string = "desktopTileLayout" ): Array<{id: string, col: number, row: number, colSpan: number, rowSpan: number}> {
         try {
-            const item = localStorage.getItem( storageKey );
-            return item ? JSON.parse( item ) : [];
+            const ero = localStorage.getItem( stokejaŜlosilo );
+            return ero ? JSON.parse( ero ) : [];
         } catch {
             return [];
         }
@@ -95,20 +95,20 @@ const KonservejaUtilo = {
      * @param {string} stokejaŝlosilo - Ŝlosilo por localStorage ( defaŭlte: "desktopTileLayout" )
      * @param {(tile: HTMLElement, col: number, row: number, colSpan: number, rowSpan: number) => void} aplikiPozicionFn - Laŭvola funkcio por apliki poziciojn
      */
-    applyTileLayout( tiles: HTMLElement[], storageKey: string = "desktopTileLayout", applyPositionFn?: ( tile: HTMLElement, col: number, row: number, colSpan: number, rowSpan: number ) => void ): void {
-        const savedLayout = this.loadTileLayout( storageKey );
-        if ( !savedLayout.length ) return;
+    aplikiKahelanAranĝon( kaheloj: HTMLElement[], stokejaŜlosilo: string = "desktopTileLayout", aplikiPozicionFn?: ( kahelo: HTMLElement, col: number, row: number, colSpan: number, rowSpan: number ) => void ): void {
+        const konservitaAranĝo = this.sxargiKahelanAranĝon( stokejaŜlosilo );
+        if ( !konservitaAranĝo.length ) return;
 
-        tiles.forEach( tile => {
-            const tileId = tile.id || tile.dataset.app || tile.dataset.id;
-            const saved = savedLayout.find( item => item.id === tileId );
-            if ( saved ) {
-                tile.dataset.col = saved.col.toString();
-                tile.dataset.row = saved.row.toString();
-                tile.dataset.colSpan = saved.colSpan.toString();
-                tile.dataset.rowSpan = saved.rowSpan.toString();
-                if ( applyPositionFn ) {
-                    applyPositionFn( tile, saved.col, saved.row, saved.colSpan, saved.rowSpan );
+        kaheloj.forEach( kahelo => {
+            const kahelId = kahelo.id || kahelo.dataset.app || kahelo.dataset.id;
+            const konservita = konservitaAranĝo.find( ero => ero.id === kahelId );
+            if ( konservita ) {
+                kahelo.dataset.col = konservita.col.toString();
+                kahelo.dataset.row = konservita.row.toString();
+                kahelo.dataset.colSpan = konservita.colSpan.toString();
+                kahelo.dataset.rowSpan = konservita.rowSpan.toString();
+                if ( aplikiPozicionFn ) {
+                    aplikiPozicionFn( kahelo, konservita.col, konservita.row, konservita.colSpan, konservita.rowSpan );
                 }
             }
         } );
@@ -118,10 +118,10 @@ const KonservejaUtilo = {
      * Forviŝi konservitan kahelan aranĝon el localStorage
      * @param {string} stokejaŝlosilo - Ŝlosilo por localStorage ( defaŭlte: "desktopTileLayout" )
      */
-    clearTileLayout( storageKey: string = "desktopTileLayout" ): void {
-        this.remove( storageKey );
+    forviŝiKahelanAranĝon( stokejaŜlosilo: string = "desktopTileLayout" ): void {
+        this.forigi( stokejaŜlosilo );
     }
 };
 
-// Alkroĉi al fenestro por tutmonda aliro - uzu StorageUtil por eviti konflikton kun indiĝena Storage
-( window as any ).StorageUtil = KonservejaUtilo;
+// Alkroĉi al fenestro por tutmonda aliro - uzu KonservejaUtilo por eviti konflikton kun indiĝena Storage
+( window as any ).KonservejaUtilo = KonservejaUtilo;

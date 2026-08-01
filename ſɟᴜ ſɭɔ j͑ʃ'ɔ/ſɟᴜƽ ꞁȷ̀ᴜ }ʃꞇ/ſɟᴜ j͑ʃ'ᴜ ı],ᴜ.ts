@@ -23,5 +23,5 @@ function forigiEventajnAuskultantojn(
 }
 
 // Alkroĉi al fenestro por tutmonda aliro
-( window as any ).addEventListeners = aldoniEventajnAuskultantojn;
-( window as any ).removeEventListeners = forigiEventajnAuskultantojn;
+( window as any ).aldoniEventajnAuskultantojn = aldoniEventajnAuskultantojn;
+( window as any ).forigiEventajnAuskultantojn = forigiEventajnAuskultantojn;

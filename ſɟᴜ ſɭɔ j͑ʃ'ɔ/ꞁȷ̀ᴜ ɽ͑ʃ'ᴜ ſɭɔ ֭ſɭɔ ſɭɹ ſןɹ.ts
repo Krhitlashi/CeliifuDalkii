@@ -1,16 +1,15 @@
 // ≺⧼ Fenestra Administranto ⧽≻
 
 declare const CONSTANTS: any;
-declare const getWindowContainer: any;
-declare const getWindowTitle: any;
-declare const getHomeArea: any;
-declare const getTaskbar: any;
-declare const setDraggingState: any;
+declare const akiriFenestranUjon: any;
+declare const akiriHejmanAreon: any;
+declare const akiriTaskobreton: any;
+declare const agordiTrenanStaton: any;
 declare const EnigaAdministranto: any;
 declare const AnimacioAdministranto: any;
-declare const getStrings: any;
+declare const akiriTextojn: any;
 declare const APPS: any;
-declare const updateDock: any;
+declare const aktualigiDokon: any;
 
 import { setupMontrajnEventojn, akiriMontranPunkton } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ŋᷠᴜ ſȷɔ ſɭ,ꞇ.js";
 
@@ -19,24 +18,24 @@ import { setupMontrajnEventojn, akiriMontranPunkton } from "./ſɟᴜƽ ꞁȷ̀�
 
 function _akiriHSLHex( h: number, s: number, l: number ): string {
     const c: number = ( 1 - Math.abs( 2 * l - 1 ) ) * s;
-    const x: number = c * ( 1 - Math.abs( ( ( h / 60 ) % 2 ) - 1 ) );
+    const x: number = c * ( 1 - Math.abs( ( ( h / 0o74 ) % 2 ) - 1 ) );
     const m: number = l - c / 2;
 
     let r = 0, g = 0, b = 0;
-    if ( h < 60 ) { r = c; g = x; }
-    else if ( h < 120 ) { r = x; g = c; }
-    else if ( h < 180 ) { g = c; b = x; }
-    else if ( h < 240 ) { g = x; b = c; }
-    else if ( h < 300 ) { r = x; b = c; }
+    if ( h < 0o74 ) { r = c; g = x; }
+    else if ( h < 0o170 ) { r = x; g = c; }
+    else if ( h < 0o264 ) { g = c; b = x; }
+    else if ( h < 0o360 ) { g = x; b = c; }
+    else if ( h < 0o454 ) { r = x; b = c; }
     else { r = c; b = x; }
 
     const alHex = ( raw: number ): string => {
         // Per konstrukcio raw ( = r + m aŭ g + m aŭ b + m ) ≤ 1, do 0o377 estas la
         // ĝusta maksimuma multiplikato sen bezonata klampo
         const v = Math.round( raw * 0o377 );
-        return v.toString( 16 ).padStart( 2, '0' );
+        return v.toString( 16 ).padStart( 2, "0" );
     };
-    return '#' + alHex( r + m ) + alHex( g + m ) + alHex( b + m );
+    return "#" + alHex( r + m ) + alHex( g + m ) + alHex( b + m );
 }
 
 
@@ -54,7 +53,7 @@ const _randEntjer = ( min: number, max: number ): number =>
     Math.floor( min + Math.random() * ( max - min + 1 ) );
 
 const _randPozicio = (): string =>
-    `${_randEntjer( 15, 85 )}% ${_randEntjer( 15, 85 )}%`;
+    `${_randEntjer( 0o17, 0o125 )}% ${_randEntjer( 0o17, 0o125 )}%`;
 
 // Magiaj ne\u016daj akcentoj por 20% de brilaj akcentoj - donas surprizan diversecon
 const _MAGIAJ_NEUTRALOJ: string[] = [
@@ -97,7 +96,7 @@ function _lavTavolo( hex: string, opako: number, angulo: number ): string {
 
 // Konusa prisma radio (mallar\u011da, klare difinita)
 function _konusTavolo( hex: string, opako: number ): string {
-    const angulo: number = _randEntjer( 0, 360 );
+    const angulo: number = _randEntjer( 0, 0o550 );
     return `conic-gradient(from ${angulo}deg at ${_randPozicio()}, ${_hexToRgba( hex, 0 )} 0deg, ${_hexToRgba( hex, opako )} 18deg, ${_hexToRgba( hex, 0 )} 36deg)`;
 }
 
@@ -123,20 +122,20 @@ function _konstruiTavolojn(
         // A\u016broro: 2 lar\u011daj molaj briloj + eventuala lavumo
         const ak1: string = _akiriAkcentanKoloron( h1, s1 );
         const ak2: string = _akiriAkcentanKoloron( h1, s1 );
-        tavoloj.push( _briloTavolo( ak1, 0.55, 60 ) );
-        tavoloj.push( _briloTavolo( ak2, 0.45, 70 ) );
+        tavoloj.push( _briloTavolo( ak1, 0.55, 0o74 ) );
+        tavoloj.push( _briloTavolo( ak2, 0.45, 0o106 ) );
         if ( Math.random() < 0.50 ) {
-            tavoloj.push( _lavTavolo( "#ffffff", 0.06, _randEntjer( 80, 180 ) ) );
+            tavoloj.push( _lavTavolo( "#ffffff", 0.06, _randEntjer( 0o120, 0o264 ) ) );
         }
     } else if ( regimo === "kosmo" ) {
         // Kosmo: 3 akraj densaj briloj + malhela vualo
         const ak1: string = _akiriAkcentanKoloron( h1, s1 );
         const ak2: string = _akiriAkcentanKoloron( h1, s1 );
         const ak3: string = _akiriAkcentanKoloron( h1, s1 );
-        tavoloj.push( _briloTavolo( ak1, 0.85, 35 ) );
-        tavoloj.push( _briloTavolo( ak2, 0.75, 30 ) );
-        tavoloj.push( _briloTavolo( ak3, 0.65, 45 ) );
-        tavoloj.push( _lavTavolo( "#000000", 0.25, 180 ) );
+        tavoloj.push( _briloTavolo( ak1, 0.85, 0o43 ) );
+        tavoloj.push( _briloTavolo( ak2, 0.75, 0o36 ) );
+        tavoloj.push( _briloTavolo( ak3, 0.65, 0o55 ) );
+        tavoloj.push( _lavTavolo( "#000000", 0.25, 0o264 ) );
     } else if ( regimo === "frost" ) {
         // Frosto: 2-3 frostitaj vitroj + ak\u0109enta brilo
         const lav: string = "#ffffff";
@@ -146,7 +145,7 @@ function _konstruiTavolojn(
         if ( Math.random() < 0.60 ) {
             tavoloj.push( _frostTavolo( ak, 0.18 ) );
         }
-        tavoloj.push( _briloTavolo( ak, 0.40, 50 ) );
+        tavoloj.push( _briloTavolo( ak, 0.40, 0o62 ) );
     } else if ( regimo === "prismo" ) {
         // Prismo: konusaj radioj de baza koloroj + 1 magia
         koloroj.forEach( hex => {
@@ -202,9 +201,9 @@ class FenestraAdministranto {
         return fenestro;
     }
 
-    static _agordiFenestrajnInteragojn( fenestro: HTMLElement, id: string, titolo: string ): void {
+    static _agordiFenestrajnInteragojn( fenestro: HTMLElement ): void {
         fenestro.addEventListener( "mousedown", () => { fenestro.style.zIndex = ( ++this.statikaZIndekso ).toString(); } );
-        this.agordiAplikonAktiva( titolo, true );
+        this.agordiAplikonAktiva();
     }
 
     static _injektiStilojnEnIframon( iframeId: string ): void {
@@ -282,16 +281,10 @@ class FenestraAdministranto {
     }
 
     static _konstruiGrandSxangxilojn( id: string ): string {
-        return `
-            <div class="resize-handle resize-handle-n" onmousedown="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', 'n')" ontouchstart="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', 'n')"></div>
-            <div class="resize-handle resize-handle-s" onmousedown="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', 's')" ontouchstart="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', 's')"></div>
-            <div class="resize-handle resize-handle-e" onmousedown="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', 'e')" ontouchstart="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', 'e')"></div>
-            <div class="resize-handle resize-handle-w" onmousedown="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', 'w')" ontouchstart="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', 'w')"></div>
-            <div class="resize-handle resize-handle-ne" onmousedown="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', 'ne')" ontouchstart="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', 'ne')"></div>
-            <div class="resize-handle resize-handle-nw" onmousedown="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', 'nw')" ontouchstart="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', 'nw')"></div>
-            <div class="resize-handle resize-handle-se" onmousedown="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', 'se')" ontouchstart="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', 'se')"></div>
-            <div class="resize-handle resize-handle-sw" onmousedown="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', 'sw')" ontouchstart="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', 'sw')"></div>
-        `;
+        const direktoj: string[] = [ "n", "s", "e", "w", "ne", "nw", "se", "sw" ];
+        return direktoj.map( direkto => `
+            <div class="resize-handle resize-handle-${direkto}" onmousedown="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', '${direkto}')" ontouchstart="FenestraAdministranto.alenportiAlFrunto('${id}'); FenestraAdministranto.komenciGrandSxangxon(event, '${id}', '${direkto}')"></div>
+        ` ).join( "" );
     }
 
     // ⟪ Alenporti Fenestron al Frunto ⟫
@@ -306,7 +299,7 @@ class FenestraAdministranto {
     // ⟪ Ŝargi Aplikon el Vojo ⟫
 
     static sxargiAplikonDeVojo( path: string, titolo: string ): void {
-        const ujo = getWindowContainer();
+        const ujo = akiriFenestranUjon();
 
         // Kontroli ĉu aplikaĵo jam estas malfermita
         const ekzistantaFenestro = Array.from( document.querySelectorAll( ".window" ) ).find( ( f: any ) => {
@@ -340,7 +333,7 @@ class FenestraAdministranto {
         ` + this._konstruiGrandSxangxilojn( id );
 
         ujo.appendChild( fenestro );
-        this._agordiFenestrajnInteragojn( fenestro, id, titolo );
+        this._agordiFenestrajnInteragojn( fenestro );
         this.gxisdatigiTaskobretajnAplikojn();
         this._injektiStilojnEnIframon( iframeId );
 
@@ -356,7 +349,7 @@ class FenestraAdministranto {
     static kreiFenestron( path: string, enhavo: string = "" ): void {
         const id = "win-" + Date.now();
         const titolo = path.split( "/" ).pop()?.replace( ".html", "" ) || "App";
-        const ujo = getWindowContainer();
+        const ujo = akiriFenestranUjon();
         const fenestro = this._kreiFenestranElementon( id, titolo );
         const app = ( typeof CONSTANTS.APPS_DATA !== "undefined" ) ? CONSTANTS.APPS_DATA.find( ( a: any ) => a.path === path ) : null;
         fenestro.dataset.emoji = app?.emoji || "🖥️";
@@ -374,7 +367,7 @@ class FenestraAdministranto {
         fenestro.innerHTML = this._konstruiTitolaBreton( id, titolo ) + internaEnhavo +
             this._konstruiGrandSxangxilojn( id );
 
-        this._agordiFenestrajnInteragojn( fenestro, id, titolo );
+        this._agordiFenestrajnInteragojn( fenestro );
         ujo.appendChild( fenestro );
         this.gxisdatigiTaskobretajnAplikojn();
 
@@ -396,8 +389,8 @@ class FenestraAdministranto {
         if ( !fenestro || fenestro.classList.contains( "maximized" ) || fenestro.classList.contains( "fullscreen" ) ) return;
 
         // Agordi regrandigan flagon
-        ( fenestro as any )._isResizing = true;
-        setDraggingState( true );
+        ( fenestro as any )._estasRegrandiganta = true;
+        agordiTrenanStaton( true );
 
         const rekt = fenestro.getBoundingClientRect();
         const komencaMaldekstro = fenestro.offsetLeft;
@@ -455,8 +448,8 @@ class FenestraAdministranto {
 
         // Agordi komunajn montradajn eventojn (forigiEventojn estas vokata en la onEnd-fino)
         const forigiEventojn = setupMontrajnEventojn( cxeMov, () => {
-            setDraggingState( false );
-            ( fenestro as any )._isResizing = false;
+            agordiTrenanStaton( false );
+            ( fenestro as any )._estasRegrandiganta = false;
             forigiEventojn();
         } );
     }
@@ -466,11 +459,9 @@ class FenestraAdministranto {
     static fermiFenestron( id: string ): void {
         const fenestro = document.getElementById( id );
         if ( fenestro ) {
-            const titolo = getWindowTitle( fenestro );
-
             // Animacii fenestran fermon kun frakcioj
             AnimacioAdministranto.fenestroFermi( fenestro, { ...CONSTANTS.ANIM_SETTINGS.windowClose } ).then( () => {
-                this.agordiAplikonAktiva( titolo, false );
+                this.agordiAplikonAktiva();
                 fenestro.remove();
                 this.gxisdatigiTaskobretajnAplikojn();
                 this.renderiLastatempajn();
@@ -486,9 +477,9 @@ class FenestraAdministranto {
         e.preventDefault();
 
         const fenestro = document.getElementById( id );
-        if ( !fenestro || ( fenestro as any )._isResizing ) return;
+        if ( !fenestro || ( fenestro as any )._estasRegrandiganta ) return;
 
-        setDraggingState( true );
+        agordiTrenanStaton( true );
         const rekt = fenestro.getBoundingClientRect();
 
         // Akiri montrilan pozicion per unuecigita traktilo
@@ -504,7 +495,7 @@ class FenestraAdministranto {
         };
 
         const haltiTrenon = () => {
-            setDraggingState( false );
+            agordiTrenanStaton( false );
         };
 
         // Uzi unuecigitan enigan traktilon por ambaŭ muso kaj tuŝo
@@ -516,7 +507,7 @@ class FenestraAdministranto {
             haltiTrenon();
         };
 
-        EnigaAdministranto.setupDrag( fenestro, null, cxeMov, cxeFin );
+        EnigaAdministranto.agordiTrenadon( fenestro, null, cxeMov, cxeFin );
     }
 
     // ⟪ Baskuli Maksimumigon ⟫
@@ -577,7 +568,7 @@ class FenestraAdministranto {
                 fenestro.classList.add( "minimized" );
                 this.gxisdatigiTaskobretajnAplikojn();
                 this.renderiLastatempajn();
-                if ( typeof updateDock === "function" ) updateDock();
+                if ( typeof aktualigiDokon === "function" ) aktualigiDokon();
             } );
         }
     }
@@ -603,7 +594,7 @@ class FenestraAdministranto {
         if ( !listo ) return;
 
         const fenestroj = document.querySelectorAll( ".window" );
-        const tekstoj = typeof getStrings === "function" ? getStrings() : {};
+        const tekstoj = typeof akiriTextojn === "function" ? akiriTextojn() : {};
 
         if ( fenestroj.length === 0 ) {
             listo.innerHTML = `<div style="padding: 24px; text-align: center; opacity: 0.5;">${tekstoj.recents_no_apps || "No open apps"}</div>`;
@@ -654,7 +645,7 @@ class FenestraAdministranto {
 
     // ⟪ Agordi Aplikon Aktiva ⟫
 
-    static agordiAplikonAktiva( appName: string | null, active: boolean | null ): void {
+    static agordiAplikonAktiva(): void {
         const nombraSpan = document.querySelector( ".active-apps-count" ) as HTMLElement | null;
         if ( nombraSpan ) {
             const nombro = document.querySelectorAll( ".window" ).length;
@@ -665,14 +656,14 @@ class FenestraAdministranto {
     // ⟪ Ĝisdatigi Taskobretajn Aplikojn ⟫
 
     static gxisdatigiTaskobretajnAplikojn(): void {
-        const centro = getHomeArea();
-        const taskobar = getTaskbar();
+        const centro = akiriHejmanAreon();
+        const taskobar = akiriTaskobreton();
         if ( !centro || !taskobar ) return;
 
         centro.querySelectorAll( ".taskbar-app-btn" ).forEach( ( b: HTMLElement ) => b.remove() );
 
         // Lastatempaj aplikaĵoj nur montrataj en lastatempa panelo kaj komenca menuo, ne en taskobreto
-        this.agordiAplikonAktiva( null, null );
+        this.agordiAplikonAktiva();
     }
 
     // ⟪ Agordaj Traktiloj ⟫
@@ -680,7 +671,7 @@ class FenestraAdministranto {
     static gxisdatigiTaskobretajnAgordojn( val: string ): void {
         document.documentElement.style.setProperty( "--taskbar-width", val + "px" );
 
-        const taskobar = getTaskbar();
+        const taskobar = akiriTaskobreton();
         if ( taskobar ) {
             taskobar.dataset.large = ( parseInt( val ) >= CONSTANTS.WM.TASKBAR_LARGE_THRESHOLD ) ? "true" : "false";
         }
@@ -747,7 +738,7 @@ class FenestraAdministranto {
     static agordiGradientanTapeton(
         start: string,
         end: string,
-        angulo: number = 135,
+        angulo: number = 0o207,
         koloroj?: string[],
         tipo: "linear" | "radial" = "linear",
         tavoloj?: string[]
@@ -903,7 +894,7 @@ class FenestraAdministranto {
             this.agordiGradientanTapeton(
                 konservitaGradiento.start,
                 konservitaGradiento.end,
-                konservitaGradiento.angulo ?? 135,
+                konservitaGradiento.angulo ?? 0o207,
                 konservitaGradiento.koloroj,
                 konservitaGradiento.tipo ?? "linear",
                 konservitaGradiento.tavoloj
@@ -953,7 +944,7 @@ class FenestraAdministranto {
     // ⟪ Agordi Taskobretan Pozicion ⟫
 
     static agordiTaskobretanPozicion( pos: string ): void {
-        const taskobar = getTaskbar();
+        const taskobar = akiriTaskobreton();
         if ( taskobar ) taskobar.dataset.position = pos;
 
         const radiko = document.documentElement;
@@ -1009,7 +1000,7 @@ class FenestraAdministranto {
     // ⟪ Inicii Taskobreton ⟫
 
     static iniciiTaskobreton(): void {
-        const taskobar = getTaskbar();
+        const taskobar = akiriTaskobreton();
         if ( !taskobar ) return;
 
         taskobar.dataset.position = "left";
@@ -1095,5 +1086,5 @@ window.addEventListener( "message", ( e ) => {
 document.addEventListener( "DOMContentLoaded", () => (window as any).FenestraAdministranto.inicii() );
 
 ( window as any ).FenestraAdministranto = FenestraAdministranto;
-( window as any ).renderRecents = () => (window as any).FenestraAdministranto.renderiLastatempajn();
-( window as any ).updateDock = () => (window as any).FenestraAdministranto.gxisdatigiDokon();
+( window as any ).bildigiLastatempajn = () => (window as any).FenestraAdministranto.renderiLastatempajn();
+( window as any ).aktualigiDokon = () => (window as any).FenestraAdministranto.gxisdatigiDokon();

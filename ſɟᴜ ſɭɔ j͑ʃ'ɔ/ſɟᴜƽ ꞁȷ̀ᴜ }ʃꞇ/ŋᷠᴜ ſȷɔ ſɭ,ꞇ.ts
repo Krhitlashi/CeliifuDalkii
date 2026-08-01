@@ -4,7 +4,7 @@
 
 export function akiriMontranPunkton( ev: any ): { x: number; y: number } {
     const Eniga = ( window as any ).EnigaAdministranto;
-    if ( Eniga ) return Eniga.getPointerPos( ev );
+    if ( Eniga ) return Eniga.akiriMontranPozicion( ev );
     // Rezervo se EnigaAdministranto ankoraŭ ne disponeblas
     if ( ev && ev.touches && ev.touches.length > 0 ) {
         return { x: ev.touches[0].clientX, y: ev.touches[0].clientY };

@@ -13,7 +13,7 @@ declare global {
 }
 
 export interface CustomHTMLElement extends HTMLElement {
-    _isResizing?: boolean;
+    _estasRegrandiganta?: boolean;
 }
 
 export interface AppData {

@@ -2,8 +2,8 @@
 
 declare const CONSTANTS: any;
 declare const DOMCache: any;
-declare const getStrings: any;
-declare const StorageUtil: any;
+declare const akiriTextojn: any;
+declare const KonservejaUtilo: any;
 
 class SciigoAdministranto {
     static #dismissed: Set<any> = new Set();
@@ -11,13 +11,13 @@ class SciigoAdministranto {
 
     // ⟨ Ŝargi Forŝutitajn el Stokejo ⟩
     static sxargiElStokejo(): void {
-        const stored: number[] = StorageUtil.get(CONSTANTS.STORAGE_KEYS.dismissedNotifs, []);
+        const stored: number[] = KonservejaUtilo.akiri(CONSTANTS.STORAGE_KEYS.dismissedNotifs, []);
         stored.forEach((id: number) => this.#dismissed.add(id));
     }
 
     // ⟨ Konservi al Stokejo ⟩
     static konserviAlStokejo(): void {
-        StorageUtil.set(CONSTANTS.STORAGE_KEYS.dismissedNotifs, Array.from(this.#dismissed));
+        KonservejaUtilo.agordi(CONSTANTS.STORAGE_KEYS.dismissedNotifs, Array.from(this.#dismissed));
     }
 
     // ⟨ Aldoni Sciigon ⟩
@@ -58,15 +58,15 @@ class SciigoAdministranto {
 
     // ⟨ Bildigi Sciigojn ⟩
     static renderi(): void {
-        const list = DOMCache.get("notif-list");
+        const list = DOMCache.akiri("notif-list");
         if (!list) return;
 
-        const strings = getStrings();
+        const tekstoj = akiriTextojn();
         const active = this.akiriAktivajn();
         const countSpan: any = document.querySelector(".notification-count");
 
         if (active.length === 0) {
-            const noNotifText = strings.notif_none;
+            const noNotifText = tekstoj.notif_none;
             list.innerHTML = `<div>${noNotifText}</div>`;
             const system = (window as any).Sistemo;
             if (countSpan && system) countSpan.innerText = system.alOktalaCxeno("0");
@@ -75,8 +75,8 @@ class SciigoAdministranto {
 
         list.innerHTML = active.map((n: any) => {
             const origIdx = this.#notifications.indexOf(n);
-            const title = strings[n.title];
-            const desc = strings[n.desc];
+            const title = tekstoj[n.title];
+            const desc = tekstoj[n.desc];
             return `<ciihii class="notif-card">
                 <div class="notif-content">
                     <div class="notif-title">${title}</div>

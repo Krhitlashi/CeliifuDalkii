@@ -1,8 +1,8 @@
-// ≺⧼ Constants ⧽≻
+// ≺⧼ Konstantoj ⧽≻
 
-// Attach CONSTANTS to window for global access
+// Alkroĉi CONSTANTS al fenestro por tutmonda aliro
 (window as any).CONSTANTS = {
-    // ⟨ Window Manager ⟩
+    // ⟨ Fenestra Administranto ⟩
     WM: {
         BASE_Z_INDEX: 0o200,
         WINDOW_RANDOM_RANGE: 0o30,
@@ -15,7 +15,7 @@
         TASKBAR_REPOSITION_DELAY: 0o4
     },
 
-    // ⟨ System ⟩
+    // ⟨ Sistemo ⟩
     SYS: {
         SWIPE_THRESHOLD: 0o200,
         PANEL_ANIMATION_DURATION: 0o300,
@@ -26,22 +26,22 @@
         BRIGHTNESS_BUFFER: 0o300
     },
 
-    // ⟨ Desktop Icon Manager ⟩
+    // ⟨ Labortabla Piktograma Administranto ⟩
     DIM: {
         DEFAULT_ROWS: 0o10,
         DEFAULT_COLS: 0o20,
         MARGIN_COMPENSATION: 0o20,
         INTERACTIVE_TAGS: ["INPUT", "BUTTON", "LABEL"],
-        // Grid layout constants
-        GAP_SIZE: 0o10,           // 8px - gap between icons
-        CELL_MIN_WIDTH: 0o100,    // 64px minimum cell width
-        CELL_MIN_HEIGHT: 0o100,   // 64px minimum cell height
-        // Mobile grid dimensions
-        MOBILE_ROWS: 0o6,         // 6 rows on mobile
-        MOBILE_COLS: 0o4,         // 4 columns on mobile
-        // Drag thresholds
-        DRAG_THRESHOLD: 0o10,     // 8px - minimum movement for drag
-        // Label modes
+        // Krad-aranĝaj konstantoj
+        GAP_SIZE: 0o10,           // 8px - interspaco inter piktogramoj
+        CELL_MIN_WIDTH: 0o100,    // 64px minimuma ĉel-larĝo
+        CELL_MIN_HEIGHT: 0o100,   // 64px minimuma ĉel-alto
+        // Porteblaj krad-dimensioj
+        MOBILE_ROWS: 0o6,         // 6 vicoj en portebla reĝimo
+        MOBILE_COLS: 0o4,         // 4 kolumnoj en portebla reĝimo
+        // Trenaj sojloj
+        DRAG_THRESHOLD: 0o10,     // 8px - minimuma movo por trenado
+        // Etikedaj reĝimoj
         LABEL_MODES: {
             EXTERNAL: "external",
             INSIDE: "inside",
@@ -50,24 +50,24 @@
         }
     },
 
-    // ⟨ Input Handler ⟩
+    // ⟨ Eniga Traktilo ⟩
     INPUT: {
-        DRAG_THRESHOLD: 0o10,     // 8px - minimum distance for drag
-        LONG_PRESS_DURATION: 0o400, // ms for long press
-        SWIPE_THRESHOLD: 0o40,      // Minimum swipe distance
-        DOUBLE_TAP_DELAY: 0o300,    // ms between taps
-        RESIZE_MIN_WIDTH: 0o460,    // 304px minimum resize width
-        RESIZE_MIN_HEIGHT: 0o310    // 200px minimum resize height
+        DRAG_THRESHOLD: 0o10,     // 8px - minimuma distanco por trenado
+        LONG_PRESS_DURATION: 0o400, // ms por longa premo
+        SWIPE_THRESHOLD: 0o40,      // Minimuma glita distanco
+        DOUBLE_TAP_DELAY: 0o300,    // ms inter frapetoj
+        RESIZE_MIN_WIDTH: 0o460,    // 304px minimuma regrandiga larĝo
+        RESIZE_MIN_HEIGHT: 0o310    // 200px minimuma regrandiga alto
     },
 
-    // ⟨ Breakpoints ⟩
+    // ⟨ Paŭzpunktoj ⟩
     BREAKPOINTS: {
-        MOBILE: 768,              // px - mobile/desktop threshold
-        TASKBAR_LARGE: 0o100,     // 64px - large taskbar threshold
-        SMALL_SCREEN: 0o300       // 192px - very small screens
+        MOBILE: 0o1400,           // px - portebla/labortabla sojlo
+        TASKBAR_LARGE: 0o100,     // 64px - granda taskobreto sojlo
+        SMALL_SCREEN: 0o300       // 192px - tre malgrandaj ekranoj
     },
 
-    // ⟨ Animation Durations ⟩
+    // ⟨ Animaciaj Daŭroj ⟩
     ANIM: {
         DURATION_SHORT: 0o200,
         DURATION_DEFAULT: 0o300,
@@ -75,7 +75,7 @@
         DURATION_SLOW: 0o500,
         NEXT_FRAME_DELAY: 0,
 
-        // ⟨ Animation Fractions ( 1/8 based ) ⟩
+        // ⟨ Animaciaj Frakcioj ( bazitaj sur 1/8 ) ⟩
         FRACTIONS: {
             oneEighth: 1/8,      // 0.125
             twoEighths: 2/8,     // 0.25
@@ -87,7 +87,7 @@
             full: 8/8            // 1
         },
 
-        // ⟨ Easing Functions ⟩
+        // ⟨ Mildaĵaj Funkcioj ⟩
         EASINGS: {
             ease: "cubic-bezier(0.5, 0, 0.25, 1)",
             easeIn: "cubic-bezier(0.5, 0, 1, 1)",
@@ -98,7 +98,7 @@
         }
     },
 
-    // ⟨ Animation Settings ⟩
+    // ⟨ Animaciaj Agordoj ⟩
     ANIM_SETTINGS: {
         panelSlide: {
             duration: 0o300,
@@ -141,7 +141,7 @@
         }
     },
 
-    // ⟨ App Configuration ⟩
+    // ⟨ Aplikaĵa Agordo ⟩
     APPS_DATA: [
         { path: "ſɟᴜ ſɭɹ/ſןwʞ ꞁȷ̀ᴜ ſɟɔ j͐ʃɹʞ.html", emoji: "🌐", title: "ſןwʞ ꞁȷ̀ᴜ ſɟɔ j͐ʃɹʞ" },
         { path: "ſɟᴜ ſɭɹ/ſɟᴜ ſᶘᴜ j͐ʃɹ.html", emoji: "📝", title: "ſɟᴜ ſᶘᴜ j͐ʃɹ" },
@@ -156,7 +156,7 @@
         { path: "https://krhitlashi.github.io/%C5%BF%CD%94%C9%AD%E1%B4%9C%20%E1%B6%85%C5%BF%C9%94/%C5%BF%C8%B7%E1%B4%9C%CD%B7%CC%97%20%C5%BF%C9%AD%C9%94%CA%9E%20%EA%9E%81%C8%B7%CC%80%E1%B4%9C%EA%9E%87/%C5%BF%C8%B7%C5%BF%C9%AD%20%EA%9E%81%C8%B7%CC%80%C9%B9%20%C5%BF%C9%AD%CB%AC%EA%9E%87%E1%B4%9C.html", emoji: "📖", title: "Libro" }
     ],
 
-    // ⟨ Quick Settings ⟩
+    // ⟨ Rapidaj Agordoj ⟩
     QS: {
         TOGGLES: [
             { id: "wifi", icon: "📶", label: "Wi-Fi", string: "qs_wifi", default: true },
@@ -174,20 +174,20 @@
         }
     },
 
-    // ⟨ Notifications ⟩
+    // ⟨ Sciigoj ⟩
     NOTIFICATION_DEFAULTS: [
         { icon: "✉️", title: "notif_messages", desc: "notif_messages_desc" },
         { icon: "📅", title: "notif_calendar", desc: "notif_calendar_desc" }
     ],
 
-    // ⟨ CSS Variable Names ⟩
+    // ⟨ CSS Variablaj Nomoj ⟩
     CSS_VARS: {
         taskbarSize: "--taskbar-inline-size",
         panelInset: "--panel-inset",
         brightness: "--os-brightness"
     },
 
-    // ⟨ Storage Keys ⟩
+    // ⟨ Stokejaj Ŝlosiloj ⟩
     STORAGE_KEYS: {
         settings: "os-settings",
         qsState: "os-qs-state",
@@ -196,7 +196,7 @@
         language: "os-language"
     },
 
-    // ⟨ Event Names ⟩
+    // ⟨ Eventaj Nomoj ⟩
     EVENT_NAMES: {
         settingsChange: "os-settings-change",
         themeChange: "os-theme-change",
@@ -206,41 +206,41 @@
     }
 };
 
-// ⟪ Flat Exports for Common Usage ⟫
+// ⟪ Plataj Eksportoj por Komuna Uzo ⟫
 
 (window as any).APPS_DATA = (window as any).CONSTANTS.APPS_DATA;
 (window as any).QS_TOGGLES = (window as any).CONSTANTS.QS.TOGGLES;
 (window as any).CSS_VARS = (window as any).CONSTANTS.CSS_VARS;
 (window as any).SYS_TASKBAR_SIZE = (window as any).CONSTANTS.SYS.TASKBAR_SIZE;
 
-// ⟪ DOM Cache Utility ⟫
+// ⟪ DOM Kaŝmemora Utilo ⟫
 
 const DOMCache: any = {
-    _cache: {},
-    get(id: string): HTMLElement | null {
-        if (!(this as any)._cache[id]) {
-            (this as any)._cache[id] = document.getElementById(id);
+    _kaŝmemoro: {},
+    akiri(id: string): HTMLElement | null {
+        if (!(this as any)._kaŝmemoro[id]) {
+            (this as any)._kaŝmemoro[id] = document.getElementById(id);
         }
-        return (this as any)._cache[id];
+        return (this as any)._kaŝmemoro[id];
     },
-    clear(): void {
-        (this as any)._cache = {};
+    malplenigi(): void {
+        (this as any)._kaŝmemoro = {};
     },
-    remove(id: string): void {
-        delete (this as any)._cache[id];
+    forigi(id: string): void {
+        delete (this as any)._kaŝmemoro[id];
     }
 };
 
-// Attach to window for global access
+// Alkroĉi al fenestro por tutmonda aliro
 (window as any).DOMCache = DOMCache;
 
-// ⟪ Notification Helper ⟫
+// ⟪ Sciiga Helpilo ⟫
 
-function clearNotifications(): void {
+function malplenigiSciigojn(): void {
     if ((window as any).NotificationManager) {
         (window as any).NotificationManager.clear();
     }
 }
 
-// Attach to window for global access
-(window as any).clearNotifications = clearNotifications;
+// Alkroĉi al fenestro por tutmonda aliro
+(window as any).malplenigiSciigojn = malplenigiSciigojn;

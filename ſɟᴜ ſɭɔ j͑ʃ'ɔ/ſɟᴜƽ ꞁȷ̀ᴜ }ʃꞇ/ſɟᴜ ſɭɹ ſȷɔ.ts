@@ -47,6 +47,6 @@ function limkurzo<T extends ( ...args: any[] ) => void>( func: T, limit: number 
 }
 
 // Alkroĉi al fenestro por tutmonda aliro
-( window as any ).clamp = limigo;
-( window as any ).debounce = malakordigi;
-( window as any ).throttle = limkurzo;
+( window as any ).limigo = limigo;
+( window as any ).malakordigi = malakordigi;
+( window as any ).limkurzo = limkurzo;

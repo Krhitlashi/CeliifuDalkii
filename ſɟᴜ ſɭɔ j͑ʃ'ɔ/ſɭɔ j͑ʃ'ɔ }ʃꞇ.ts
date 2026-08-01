@@ -34,7 +34,7 @@ console.log( "<( Ĉiuj OS-Moduloj Ŝargitaj )>" );
 // ⟨ Inicado ⟩
 // Sistemo-modulo en ſɟᴜ ſɭɹ ſןɹ.ts pritraktas la ĉefan startigadon
 
-function startOS() {
+function komenciOSon() {
     const Sistemo = ( window as any ).Sistemo;
     if ( Sistemo ) {
         console.log( "<( Startanta OS-on per Sistemo )>" );
@@ -46,9 +46,9 @@ function startOS() {
 
 // Kunordigi kun la interna startigado de Sistemo
 if ( document.readyState === "loading" ) {
-    window.addEventListener( "DOMContentLoaded", startOS );
+    window.addEventListener( "DOMContentLoaded", komenciOSon );
 } else {
-    startOS();
+    komenciOSon();
 }
 
 console.log( "<( OS-Enirpunkto Preta )>" );

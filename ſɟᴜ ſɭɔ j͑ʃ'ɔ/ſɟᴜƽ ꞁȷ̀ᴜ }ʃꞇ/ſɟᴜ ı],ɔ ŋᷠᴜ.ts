@@ -11,26 +11,26 @@ interface MontrilajDatumoj {
     tenilo?: string;
 }
 
-const InputHandler = {
+const EnigaAdministranto = {
     // ⟪ Ŝtato ⟫
-    isDragging: false,
-    isResizing: false,
-    isTouch: false,
-    activeElement: null as HTMLElement | null,
-    startX: 0,
-    startY: 0,
-    startLeft: 0,
-    startTop: 0,
-    startWidth: 0,
-    startHeight: 0,
-    offsetX: 0,
-    offsetY: 0,
-    dragThreshold: CONSTANTS.INPUT.DRAG_THRESHOLD,
-    longPressTimer: null as number | null,
-    longPressDuration: CONSTANTS.INPUT.LONG_PRESS_DURATION,
+    estasTrenanta: false,
+    estasRegrandiganta: false,
+    estasTuŝa: false,
+    aktivaElemento: null as HTMLElement | null,
+    komencaX: 0,
+    komencaY: 0,
+    komencaMaldekstro: 0,
+    komencaSupro: 0,
+    komencaLarĝo: 0,
+    komencaAlto: 0,
+    ofsetoX: 0,
+    ofsetoY: 0,
+    trenaSojlo: CONSTANTS.INPUT.DRAG_THRESHOLD,
+    longaPremoTempigilo: null as number | null,
+    longaPremoDaŭro: CONSTANTS.INPUT.LONG_PRESS_DURATION,
 
     // ⟪ Eventa Normigado ⟫
-    getPointerPos(e: Event): { x: number; y: number } {
+    akiriMontranPozicion(e: Event): { x: number; y: number } {
         if (e.type.startsWith("touch")) {
             const touch = (e as TouchEvent).touches?.[0] || (e as TouchEvent).changedTouches?.[0];
             return { x: touch?.clientX || 0, y: touch?.clientY || 0 };
@@ -38,14 +38,14 @@ const InputHandler = {
         return { x: (e as MouseEvent).clientX || 0, y: (e as MouseEvent).clientY || 0 };
     },
 
-    isTouchEvent(e: Event): boolean {
+    cxuTuŝaEvento(e: Event): boolean {
         return e.type.startsWith("touch");
     },
 
     // ⟪ Interna Montrila Traktila Agordo ⟫
-    setupPointerHandlers(
+    agordiMontrajnTraktilojn(
         element: HTMLElement,
-        isResize: boolean,
+        cxuRegrandigo: boolean,
         handlers: {
             onStart: (e: Event, pos: { x: number; y: number }) => void,
             onMove: (e: Event, pos: { x: number; y: number; deltaX: number; deltaY: number }) => void,
@@ -59,53 +59,53 @@ const InputHandler = {
         let target: EventTarget | null = null;
 
         const handleStart = (e: Event) => {
-            if (isResize) {
+            if (cxuRegrandigo) {
                 e.stopPropagation();
                 e.preventDefault();
             }
 
-            this.isTouch = this.isTouchEvent(e);
-            const pos = this.getPointerPos(e);
+            this.estasTuŝa = this.cxuTuŝaEvento(e);
+            const pos = this.akiriMontranPozicion(e);
 
-            this.startX = pos.x;
-            this.startY = pos.y;
-            this.activeElement = element;
-            if (isResize) this.isResizing = true;
+            this.komencaX = pos.x;
+            this.komencaY = pos.y;
+            this.aktivaElemento = element;
+            if (cxuRegrandigo) this.estasRegrandiganta = true;
 
             handlers.onStart(e, { x: pos.x, y: pos.y });
 
             // Determini eventajn celojn kaj tipojn
-            moveEvent = this.isTouch ? "touchmove" : "mousemove";
-            endEvent = this.isTouch ? "touchend" : "mouseup";
-            target = (isResize || this.isTouch) ? document : element;
+            moveEvent = this.estasTuŝa ? "touchmove" : "mousemove";
+            endEvent = this.estasTuŝa ? "touchend" : "mouseup";
+            target = (cxuRegrandigo || this.estasTuŝa) ? document : element;
 
             // Krei mov-traktilon
             moveHandler = (ev: Event) => {
-                if (!this.activeElement) return;
-                if (this.isTouch && !isResize) ev.preventDefault();
-                if (!isResize && !this.isDragging) {
-                    const movePos = this.getPointerPos(ev);
-                    const deltaX = movePos.x - this.startX;
-                    const deltaY = movePos.y - this.startY;
-                    if (Math.abs(deltaX) + Math.abs(deltaY) > this.dragThreshold) {
-                        this.isDragging = true;
+                if (!this.aktivaElemento) return;
+                if (this.estasTuŝa && !cxuRegrandigo) ev.preventDefault();
+                if (!cxuRegrandigo && !this.estasTrenanta) {
+                    const movePos = this.akiriMontranPozicion(ev);
+                    const deltaX = movePos.x - this.komencaX;
+                    const deltaY = movePos.y - this.komencaY;
+                    if (Math.abs(deltaX) + Math.abs(deltaY) > this.trenaSojlo) {
+                        this.estasTrenanta = true;
                     }
                 }
-                const movePos = this.getPointerPos(ev);
+                const movePos = this.akiriMontranPozicion(ev);
                 handlers.onMove(ev, {
                     x: movePos.x,
                     y: movePos.y,
-                    deltaX: movePos.x - this.startX,
-                    deltaY: movePos.y - this.startY
+                    deltaX: movePos.x - this.komencaX,
+                    deltaY: movePos.y - this.komencaY
                 });
             };
 
             // Krei fin-traktilon
             endHandler = (ev: Event) => {
-                if (!this.activeElement) return;
-                if (isResize) this.isResizing = false;
+                if (!this.aktivaElemento) return;
+                if (cxuRegrandigo) this.estasRegrandiganta = false;
                 handlers.onEnd(ev);
-                this.cleanup();
+                this.purigi();
 
                 // Forigi aŭskultilojn post fino
                 if (moveHandler) target!.removeEventListener(moveEvent, moveHandler);
@@ -122,7 +122,7 @@ const InputHandler = {
         element.addEventListener("touchstart", handleStart, { passive: true });
 
         return () => {
-            this.cleanup();
+            this.purigi();
             // Purigi iujn postrestantajn aŭskultilojn
             if ((moveHandler || endHandler) && target) {
                 if (moveHandler) target.removeEventListener(moveEvent, moveHandler);
@@ -132,7 +132,7 @@ const InputHandler = {
     },
 
     // ⟪ Agordaj Funkcioj ⟫
-    setupDrag(
+    agordiTrenadon(
         element: HTMLElement,
         onStart: ((e: Event, datumoj: MontrilajDatumoj) => void) | null,
         onMove: ((e: Event, datumoj: MontrilajDatumoj) => void) | null,
@@ -140,17 +140,17 @@ const InputHandler = {
     ): (() => void) | undefined {
         if (!element) return;
 
-        return this.setupPointerHandlers(element, false, {
+        return this.agordiMontrajnTraktilojn(element, false, {
             onStart: (e, pos) => onStart?.(e, { x: pos.x, y: pos.y }),
             onMove: (e, pos) => onMove?.(e, { x: pos.x, y: pos.y, deltaX: pos.deltaX, deltaY: pos.deltaY }),
             onEnd: (e) => {
-                const pos = this.getPointerPos(e);
-                onEnd?.(e, { x: pos.x, y: pos.y, deltaX: pos.x - this.startX, deltaY: pos.y - this.startY });
+                const pos = this.akiriMontranPozicion(e);
+                onEnd?.(e, { x: pos.x, y: pos.y, deltaX: pos.x - this.komencaX, deltaY: pos.y - this.komencaY });
             }
         });
     },
 
-    setupResize(
+    agordiRegrandigadon(
         element: HTMLElement,
         tenilo: string,
         onStart: ((e: Event, datumoj: MontrilajDatumoj) => void) | null,
@@ -159,14 +159,14 @@ const InputHandler = {
     ): (() => void) | undefined {
         if (!element) return;
 
-        return this.setupPointerHandlers(element, true, {
+        return this.agordiMontrajnTraktilojn(element, true, {
             onStart: (e, pos) => onStart?.(e, { x: pos.x, y: pos.y, tenilo }),
             onMove: (e, pos) => onMove?.(e, { x: pos.x, y: pos.y, deltaX: pos.deltaX, deltaY: pos.deltaY, tenilo }),
             onEnd: (e) => onEnd?.(e, { tenilo })
         });
     },
 
-    setupTap(
+    agordiFrapeton(
         element: HTMLElement,
         onTap: ((e: Event) => void) | null,
         onLongPress: ((e: Event) => void) | null
@@ -177,13 +177,13 @@ const InputHandler = {
         let estasTusxo = false;
 
         const pritraktiKomencon = (e: Event) => {
-            estasTusxo = this.isTouchEvent(e);
+            estasTusxo = this.cxuTuŝaEvento(e);
 
             if (estasTusxo && onLongPress) {
                 tempigilo = window.setTimeout(() => {
                     onLongPress(e);
                     tempigilo = null;
-                }, this.longPressDuration);
+                }, this.longaPremoDaŭro);
             }
         };
 
@@ -201,7 +201,7 @@ const InputHandler = {
         element.addEventListener("touchend", pritraktiFinon);
     },
 
-    setupSwipe(
+    agordiGliton(
         element: HTMLElement,
         onSwipe: ((direkto: string, datumoj: { difX: number; difY: number }) => void) | null,
         sojlo: number = CONSTANTS.INPUT.SWIPE_THRESHOLD
@@ -212,13 +212,13 @@ const InputHandler = {
         let komencoY = 0;
 
         const pritraktiKomencon = (e: Event) => {
-            const poz = this.getPointerPos(e);
+            const poz = this.akiriMontranPozicion(e);
             komencoX = poz.x;
             komencoY = poz.y;
         };
 
         const pritraktiFinon = (e: Event) => {
-            const poz = this.getPointerPos(e);
+            const poz = this.akiriMontranPozicion(e);
             const difX = poz.x - komencoX;
             const difY = poz.y - komencoY;
 
@@ -238,7 +238,7 @@ const InputHandler = {
         element.addEventListener("touchend", pritraktiFinon);
     },
 
-    setupPinch(
+    agordiPinton(
         element: HTMLElement,
         onPinch: ((skalo: number, datumoj: { komencaDistanco: number; nunaDistanco: number }) => void) | null
     ): void {
@@ -274,7 +274,7 @@ const InputHandler = {
         element.addEventListener("touchmove", pritraktiMovon, { passive: false });
     },
 
-    setupDoubleTap(
+    agordiDuoblanFrapeton(
         element: HTMLElement,
         onDoubleTap: ((e: Event) => void) | null,
         prokrasto: number = CONSTANTS.INPUT.DOUBLE_TAP_DELAY
@@ -296,69 +296,69 @@ const InputHandler = {
         element.addEventListener("touchend", pritraktiFrapeton);
     },
 
-    setupPan(
+    agordiPanon(
         element: HTMLElement,
         onPan: ((e: Event, datumoj: MontrilajDatumoj) => void) | null,
         onPanStart: ((e: Event) => void) | null,
         onPanEnd: ((e: Event) => void) | null
     ): (() => void) | undefined {
-        return this.setupDrag(element, onPanStart, (e, datumoj) => {
+        return this.agordiTrenadon(element, onPanStart, (e, datumoj) => {
             if (onPan) onPan(e, datumoj);
         }, onPanEnd);
     },
 
     // ⟪ Purigado ⟫
-    cleanup(): void {
-        this.isDragging = false;
-        this.isResizing = false;
-        this.activeElement = null;
-        if (this.longPressTimer) {
-            clearTimeout(this.longPressTimer);
-            this.longPressTimer = null;
+    purigi(): void {
+        this.estasTrenanta = false;
+        this.estasRegrandiganta = false;
+        this.aktivaElemento = null;
+        if (this.longaPremoTempigilo) {
+            clearTimeout(this.longaPremoTempigilo);
+            this.longaPremoTempigilo = null;
         }
     },
 
     // ⟪ Utilajoj ⟫
-    stopEvent(e: Event): void {
+    haltigiEventon(e: Event): void {
         e.preventDefault();
         e.stopPropagation();
     },
 
-    isPointerInElement(x: number, y: number, element: HTMLElement): boolean {
+    cxuMontriloEnElemento(x: number, y: number, element: HTMLElement): boolean {
         const rect = element.getBoundingClientRect();
         return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
     },
 
-    getRelativePointerPos(e: Event, element: HTMLElement): { x: number; y: number } {
-        const pos = this.getPointerPos(e);
+    akiriRelativanMontranPozicion(e: Event, element: HTMLElement): { x: number; y: number } {
+        const pos = this.akiriMontranPozicion(e);
         const rect = element.getBoundingClientRect();
         return { x: pos.x - rect.left, y: pos.y - rect.top };
     }
 };
 
 // ⟪ Tutmondaj Helpiloj ⟫
-function isDragging(): boolean {
-    return InputHandler.isDragging;
+function estasTrenanta(): boolean {
+    return EnigaAdministranto.estasTrenanta;
 }
 
-function isResizing(): boolean {
-    return InputHandler.isResizing;
+function estasRegrandiganta(): boolean {
+    return EnigaAdministranto.estasRegrandiganta;
 }
 
-function setDraggingState(stato: boolean): void {
-    InputHandler.isDragging = stato;
+function agordiTrenanStaton(stato: boolean): void {
+    EnigaAdministranto.estasTrenanta = stato;
     document.body.classList.toggle("is-dragging", stato);
 }
 
-function setResizingState(stato: boolean): void {
-    InputHandler.isResizing = stato;
+function agordiRegrandiganStaton(stato: boolean): void {
+    EnigaAdministranto.estasRegrandiganta = stato;
 }
 
 // ⟪ Konsoliditaj Fenestraj Eksportoj ⟫
 Object.assign( window as any, {
-    EnigaAdministranto: InputHandler,
-    isDragging,
-    isResizing,
-    setDraggingState,
-    setResizingState,
+    EnigaAdministranto,
+    estasTrenanta,
+    estasRegrandiganta,
+    agordiTrenanStaton,
+    agordiRegrandiganStaton,
 } );

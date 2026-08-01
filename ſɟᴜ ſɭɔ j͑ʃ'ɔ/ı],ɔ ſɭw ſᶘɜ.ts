@@ -1,7 +1,7 @@
 // ≺⧼ Rapida Agordo Administranto ⧽≻ - Centralizita ŝtata administrado de rapidaj agordoj
 
 declare const CONSTANTS: any;
-declare const StorageUtil: any;
+declare const KonservejaUtilo: any;
 
 interface QSState {
     [ key: string ]: any;
@@ -12,12 +12,12 @@ const RapidaAgordoAdministranto = ( function() {
 
     // ⟪ Ŝargi el Stokejo ⟫
     function sxargiElStokejo(): void {
-        state = StorageUtil.loadWithDefaults( CONSTANTS.STORAGE_KEYS.qsState, CONSTANTS.QS.DEFAULTS );
+        state = KonservejaUtilo.sxargiKunDefaŭltoj( CONSTANTS.STORAGE_KEYS.qsState, CONSTANTS.QS.DEFAULTS );
     }
 
     // ⟪ Konservi al Stokejo ⟫
     function konserviAlStokejo(): void {
-        StorageUtil.set( CONSTANTS.STORAGE_KEYS.qsState, state );
+        KonservejaUtilo.agordi( CONSTANTS.STORAGE_KEYS.qsState, state );
     }
 
     // ⟪ Sendi Ŝanĝan Eventon ⟫
