@@ -20,18 +20,6 @@ class SciigoAdministranto {
         KonservejaUtilo.agordi(CONSTANTS.STORAGE_KEYS.dismissedNotifs, Array.from(this.#dismissed));
     }
 
-    // ⟨ Aldoni Sciigon ⟩
-    static aldoni(notification: any): void {
-        this.#notifications.push(notification);
-        this.renderi();
-    }
-
-    // ⟨ Forigi Sciigon ⟩
-    static forigi(index: number): void {
-        this.#notifications.splice(index, 1);
-        this.renderi();
-    }
-
     // ⟨ Forŝuti Sciigon ⟩
     static forsxuti(index: number): void {
         this.#dismissed.add(index);

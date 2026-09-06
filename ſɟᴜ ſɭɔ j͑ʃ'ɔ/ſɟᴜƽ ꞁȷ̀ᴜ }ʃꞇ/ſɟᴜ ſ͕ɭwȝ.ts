@@ -84,18 +84,10 @@ function cxuTaskbretoGranda(): boolean {
  * @returns {string}
  */
 function akiriFenestranTitolon( fenestro: HTMLElement ): string {
-    return ( fenestro.querySelector( ".title-bar-title" ) as HTMLElement )?.innerText || "App";
-}
-
-/**
- * Akiri aplikaĵan piktogramon el APPS-datumaro
- * @param {string} titolo
- * @returns {string}
- */
-function akiriAplikoPiktogramon( titolo: string ): string {
-    if ( typeof APPS === "undefined" ) return "🖥️";
-    const app = ( APPS as any[] ).find( ( a: any ) => a.app === titolo );
-    return app?.icon || "🖥️";
+    const tabaTitolo = fenestro.querySelector( ".tab-btn[aria-pressed=true] .tab-title" ) as HTMLElement | null;
+    return tabaTitolo?.innerText
+        || ( fenestro.querySelector( ".title-bar-title" ) as HTMLElement | null )?.innerText
+        || "App";
 }
 
 /**
@@ -128,7 +120,6 @@ Object.assign( window as any, {
     akiriTaskobretanGrandecon,
     cxuTaskbretoGranda,
     akiriFenestranTitolon,
-    akiriAplikoPiktogramon,
     akiriTextojn,
     akiriFenestranAdministranton,
 } );

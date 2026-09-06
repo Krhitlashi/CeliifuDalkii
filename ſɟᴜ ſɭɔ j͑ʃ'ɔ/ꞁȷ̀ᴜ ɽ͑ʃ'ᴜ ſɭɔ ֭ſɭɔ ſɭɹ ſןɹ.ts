@@ -10,6 +10,7 @@ declare const AnimacioAdministranto: any;
 declare const akiriTextojn: any;
 declare const APPS: any;
 declare const aktualigiDokon: any;
+declare const akiriFenestranTitolon: any;
 
 import { setupMontrajnEventojn, akiriMontranPunkton } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ŋᷠᴜ ſȷɔ ſɭ,ꞇ.js";
 
@@ -172,17 +173,388 @@ class FenestraAdministranto {
     static statikaTemoVigladilo: any = null;
     static statikaNunaTemo: string = "detect";
 
-    // ⟪ Aplikaĵa URL-Mapo ⟫ - Konstruita el APPS_DATA ( vojo → vojo )
+    // Tab-trena stato ( aktiva nur dum tabo estas trenata )
+    static tabTrenaStato: { tabId: string; fantomo: HTMLElement | null; fontaFenestro: HTMLElement | null; foriganto: (() => void) | null } = { tabId: "", fantomo: null, fontaFenestro: null, foriganto: null };
 
-    static get aplikaĵajURLoj(): { [ key: string ]: string } {
-        if ( typeof CONSTANTS.APPS_DATA !== "undefined" ) {
-            const map: { [ key: string ]: string } = {};
-            CONSTANTS.APPS_DATA.forEach( ( app: any ) => {
-                map[ app.path ] = app.path;
+    // ⟪ Tabaj Stat-helperoj ⟫
+
+    static _akiriTabojn( fenestro: HTMLElement ): HTMLElement[] {
+        return Array.from( fenestro.querySelectorAll( ".tab-btn" ) ) as HTMLElement[];
+    }
+
+    static _akiriAktivanTabon( fenestro: HTMLElement ): HTMLElement | null {
+        const taboj = this._akiriTabojn( fenestro );
+        return taboj.find( t => t.getAttribute( "aria-pressed" ) === "true" ) || taboj[ taboj.length - 1 ] || null;
+    }
+
+    // ⟪ Akiri Grupan Fenestron ( fenestro kun tabstrio ) ⟫
+
+    static _akiriGrupanFenestron(): HTMLElement | null {
+        const fenestroj = Array.from( document.querySelectorAll( ".window" ) ) as HTMLElement[];
+        return fenestroj.find( f => f.querySelector( ".tab-strip .tab-btn" ) ) || null;
+    }
+
+    // ⟪ Aldoni Tabon al Fenestro ⟫
+
+    static aldoniTabonAl( fenestro: HTMLElement, path: string, titolo: string, enhavoHtml: string = "" ): string {
+        const fenestroId = fenestro.id;
+        const enhavujo = fenestro.querySelector( ".tab-enhavujo" ) as HTMLElement | null;
+        if ( !enhavujo ) return "";
+
+        const tabId = fenestroId + "-tab" + Date.now();
+        const iframeId = "iframe-" + tabId;
+
+        // Krei la enhavan ujon ( kaŝita ĝis aktivigo )
+        const senvolvaĵo = document.createElement( "div" );
+        senvolvaĵo.className = "tab-enhavo";
+        senvolvaĵo.dataset.tab = tabId;
+        senvolvaĵo.style.display = "none";
+        senvolvaĵo.innerHTML = path
+            ? this._konstruiIframanEnhavon( iframeId, path )
+            : ( enhavoHtml || `<div><p>${titolo}</p></div>` );
+        enhavujo.appendChild( senvolvaĵo );
+
+        // Krei la taban butonon en la tabstrio ( ĉe la fino )
+        const tabstrio = fenestro.querySelector( ".tab-strip" ) as HTMLElement | null;
+        if ( !tabstrio ) return "";
+        tabstrio.insertAdjacentHTML( "beforeend", this._konstruiTabon( tabId, titolo, false, path ) );
+
+        if ( path ) this._injektiStilojnEnIframon( iframeId );
+        this.aktivigiTabon( tabId );
+        return tabId;
+    }
+
+    // ⟪ Aldoni Novan Tabon de la Aplikaĵo ( x-butono ) ⟫
+
+    static aldoniTabon( fenestroId: string ): void {
+        const fenestro = document.getElementById( fenestroId );
+        if ( !fenestro ) return;
+        this.fokusigiFenestron( fenestroId );
+
+        const enhavujo = fenestro.querySelector( ".tab-enhavujo" ) as HTMLElement | null;
+        if ( !enhavujo || enhavujo.children.length === 0 ) return;
+
+        // Uzi la vojon de la lasta tabo kiel defaŭlta aplikaĵo
+        const lastaTabo = this._akiriTabojn( fenestro ).pop();
+        const vojo = lastaTabo?.dataset.src || "";
+        const app = ( typeof CONSTANTS.APPS_DATA !== "undefined" ) ? CONSTANTS.APPS_DATA.find( ( a: any ) => a.path === vojo ) : null;
+        const titolo = app?.title || vojo.split( "/" ).pop()?.replace( ".html", "" ) || "App";
+
+        this.aldoniTabonAl( fenestro, vojo, titolo );
+    }
+
+    // ⟪ Aktivigi Tabon ⟫
+
+    static aktivigiTabon( tabId: string ): void {
+        const tabo = document.querySelector( `.tab-btn[data-tab="${tabId}"]` ) as HTMLElement | null;
+        if ( !tabo ) return;
+        const fenestro = tabo.closest( ".window" ) as HTMLElement | null;
+        if ( !fenestro ) return;
+
+        // Malpremi ĉiujn tabojn de tiu ĉi fenestro kaj premi la celan
+        this._akiriTabojn( fenestro ).forEach( t => t.setAttribute( "aria-pressed", ( t === tabo ).toString() ) );
+        fenestro.dataset.activeTab = tabId;
+
+        // Montri nur la enhavon de la aktiva tabo
+        const enhavujo = fenestro.querySelector( ".tab-enhavujo" ) as HTMLElement | null;
+        if ( enhavujo ) {
+            enhavujo.querySelectorAll( ":scope > .tab-enhavo" ).forEach( el => {
+                ( el as HTMLElement ).style.display = ( ( el as HTMLElement ).dataset.tab === tabId ) ? "" : "none";
             } );
-            return map;
         }
-        return {};
+
+        // Rulumi la tabon en videblecon kaj fokusigi la fenestron
+        tabo.scrollIntoView( { block: "nearest", inline: "nearest", behavior: "smooth" } );
+        if ( fenestro.classList.contains( "minimized" ) ) this.fokusigiFenestron( fenestro.id );
+        else this.alenportiAlFrunto( fenestro.id );
+    }
+
+    // ⟪ Fermi Tabon ⟫
+
+    static fermiTabon( tabId: string ): void {
+        const tabo = document.querySelector( `.tab-btn[data-tab="${tabId}"]` ) as HTMLElement | null;
+        if ( !tabo ) return;
+        const fenestro = tabo.closest( ".window" ) as HTMLElement | null;
+        if ( !fenestro ) return;
+
+        const estisAktiva = tabo.getAttribute( "aria-pressed" ) === "true";
+        const taboj = this._akiriTabojn( fenestro );
+        const indekso = taboj.indexOf( tabo );
+
+        // Forigi enhavon kaj taban butonon
+        fenestro.querySelector( `.tab-enhavo[data-tab="${tabId}"]` )?.remove();
+        tabo.remove();
+
+        if ( fenestro.querySelector( ".tab-btn" ) ) {
+            // Restas taboj — aktivigi najbaran se la fermita estis aktiva
+            if ( estisAktiva ) {
+                const najbaro = taboj[ indekso + 1 ] || taboj[ indekso - 1 ] || null;
+                if ( najbaro ) this.aktivigiTabon( najbaro.dataset.tab as string );
+            }
+            return;
+        }
+
+        // Lasta tabo fermita — fermi la tutan fenestron
+        this.fermiFenestron( fenestro.id );
+    }
+    
+    // ⟪ Komenci Tab-Trenadon ( premado sur tabo ) ⟫
+
+    static komenciTabTrenadon( e: PointerEvent, tabId: string ): void {
+        // Nur maldekstra butono / unua tuŝo
+        if ( e.button !== undefined && e.button !== 0 ) return;
+
+        const tabo = document.querySelector( `.tab-btn[data-tab="${tabId}"]` ) as HTMLElement | null;
+        const fenestro = tabo?.closest( ".window" ) as HTMLElement | null;
+        if ( !tabo || !fenestro ) return;
+
+        const komencoX = e.clientX;
+        const komencoY = e.clientY;
+        let lastaX = e.clientX;
+        let lastaY = e.clientY;
+        const rekt = tabo.getBoundingClientRect();
+        const ofsetoX = komencoX - rekt.left;
+        const ofsetoY = komencoY - rekt.top;
+        let trenata = false;
+        let foriganto: (() => void) | null = null;
+
+        const cxeMov = ( ev: PointerEvent ) => {
+            lastaX = ev.clientX;
+            lastaY = ev.clientY;
+            if ( ev.buttons !== undefined && ev.buttons === 0 && ev.type === "mousemove" ) { fini(); return; }
+
+            if ( !trenata ) {
+                if ( Math.abs( ev.clientX - komencoX ) < CONSTANTS.INPUT.DRAG_THRESHOLD && Math.abs( ev.clientY - komencoY ) < CONSTANTS.INPUT.DRAG_THRESHOLD ) return;
+                // ( Ŝango ) Sojlo transirita — komenci la trenom
+                trenata = true;
+                agordiTrenanStaton( true );
+                this._akiriTabTrenanStaton( tabId, tabo, fenestro );
+            }
+            ev.preventDefault();
+            this.aktualigiTabTrenadon( ev.clientX, ev.clientY, ofsetoX, ofsetoY );
+        };
+
+        const fini = () => {
+            document.removeEventListener( "pointermove", cxeMov );
+            document.removeEventListener( "pointerup", fini );
+            document.removeEventListener( "pointercancel", fini );
+            if ( foriganto ) { foriganto(); foriganto = null; }
+            if ( trenata ) {
+                agordiTrenanStaton( false );
+                this.finiTabTrenadon( lastaX, lastaY );
+            }
+        };
+
+        document.addEventListener( "pointermove", cxeMov );
+        document.addEventListener( "pointerup", fini );
+        document.addEventListener( "pointercancel", fini );
+        foriganto = () => {
+            document.removeEventListener( "pointermove", cxeMov );
+            document.removeEventListener( "pointerup", fini );
+            document.removeEventListener( "pointercancel", fini );
+        };
+        this.tabTrenaStato.foriganto = foriganto;
+
+        // Ne ebligi la kutiman klakon treni la fenestron anstataŭ la tabon
+        e.stopPropagation();
+    }
+
+    // Ensalvi la trenatan tabon kaj krei la fantomon
+
+    static _akiriTabTrenanStaton( tabId: string, tabo: HTMLElement, fenestro: HTMLElement ): void {
+        this.forigiTabTrenanFantomon();
+        this.tabTrenaStato.tabId = tabId;
+        this.tabTrenaStato.fontaFenestro = fenestro;
+
+        // Fantomo — flosanta kopio de la tabo por vida retrosciigo
+        const fantomo = document.createElement( "div" );
+        fantomo.className = "tab-drag-ghost n2tase";
+        fantomo.textContent = ( tabo.querySelector( ".tab-title" ) as HTMLElement | null )?.innerText || "Tab";
+        document.body.appendChild( fantomo );
+        this.tabTrenaStato.fantomo = fantomo;
+        tabo.classList.add( "tab-dragging" );
+    }
+
+    static forigiTabTrenanFantomon(): void {
+        this.tabTrenaStato.fantomo?.remove();
+        this.tabTrenaStato.fantomo = null;
+        document.querySelectorAll( ".tab-btn.tab-dragging" ).forEach( el => el.classList.remove( "tab-dragging" ) );
+    }
+
+    // Ĝisdatigi la fantomon kaj substreki la celan tabstrion / fal regionon
+
+    static aktualigiTabTrenadon( x: number, y: number, ofsetoX: number, ofsetoY: number ): void {
+        if ( !this.tabTrenaStato.fantomo ) return;
+        this.tabTrenaStato.fantomo.style.left = ( x - ofsetoX ) + "px";
+        this.tabTrenaStato.fantomo.style.top = ( y - ofsetoY ) + "px";
+
+        // Ĉu la montrilo estas super alia fenestro?
+        const { celaStio, celaFenestro } = this._akiriTabTrenajnCelojn( x, y );
+
+        document.querySelectorAll( ".tab-strip.tab-drop-target" ).forEach( s => s.classList.remove( "tab-drop-target" ) );
+        if ( celaStio ) celaStio.classList.add( "tab-drop-target" );
+        else if ( celaFenestro ) celaFenestro.querySelector( ".tab-strip" )?.classList.add( "tab-drop-target" );
+    }
+
+    // Fari la tabon: demeti la fantomon, troviceligi kaj movigi / malfermi novan fenestron
+
+    static finiTabTrenadon( x: number, y: number ): void {
+        const { tabId, fontaFenestro } = this.tabTrenaStato;
+        this.forigiTabTrenanFantomon();
+        document.querySelectorAll( ".tab-strip.tab-drop-target" ).forEach( s => s.classList.remove( "tab-drop-target" ) );
+        if ( !tabId ) return;
+
+        const tabo = document.querySelector( `.tab-btn[data-tab="${tabId}"]` ) as HTMLElement | null;
+        if ( !tabo || !fontaFenestro || !fontaFenestro.isConnected ) return;
+
+        // Trovi celfenestron sub la montrilo ( alia fenestro kun tabstrio )
+        const { celaStio, celaFenestro } = this._akiriTabTrenajnCelojn( x, y );
+
+        // Ĉu la falpunkto estas ene de la fonta fenestro?
+        const fontaRekt = fontaFenestro.getBoundingClientRect();
+        const enFonta = x >= fontaRekt.left && x <= fontaRekt.right && y >= fontaRekt.top && y <= fontaRekt.bottom;
+
+        if ( celaFenestro && celaFenestro !== fontaFenestro ) {
+            // Movigi la tabon al la cela fenestro
+            this.movigiTabonInterFenestrojn( tabId, fontaFenestro, celaFenestro );
+        } else if ( !celaStio && !enFonta ) {
+            // Demetita ekster ĉiu tabstrio kaj ekster la fonta fenestro — malfermi en novan fenestron
+            this.malpendigiTabon( tabId, x, y );
+        }
+
+        this.tabTrenaStato = { tabId: "", fantomo: null, fontaFenestro: null, foriganto: null };
+    }
+
+    // ⟪ Movigi Tabon Inter Fenestroj ⟫
+
+    static movigiTabonInterFenestrojn( tabId: string, fontaFenestro: HTMLElement, celaFenestro: HTMLElement ): void {
+        const tabo = fontaFenestro.querySelector( `.tab-btn[data-tab="${tabId}"]` ) as HTMLElement | null;
+        const enhavo = fontaFenestro.querySelector( `.tab-enhavo[data-tab="${tabId}"]` ) as HTMLElement | null;
+        if ( !tabo || !enhavo ) return;
+
+        // Elpreni la tabon kaj ĝisdatigi la fontan fenestron
+        const { titolo, vojo, enhavoHtml } = this._eltiriTabon( fontaFenestro, tabo, enhavo );
+
+        // Enmeti la tabon en la celan fenestron
+        const novaTabId = this.aldoniTabonAl( celaFenestro, vojo, titolo, vojo ? "" : enhavoHtml );
+        this.fokusigiFenestron( celaFenestro.id );
+    }
+
+    // ⟪ Malpendigi Tabon en Novan Fenestron ⟫
+
+    static malpendigiTabon( tabId: string, x: number = 0o200, y: number = 0o40 ): void {
+        const tabo = document.querySelector( `.tab-btn[data-tab="${tabId}"]` ) as HTMLElement | null;
+        if ( !tabo ) return;
+        const fontaFenestro = tabo.closest( ".window" ) as HTMLElement | null;
+        if ( !fontaFenestro ) return;
+
+        // Elpreni la tabon kaj ĝisdatigi la fontan fenestron
+        const fontaEnhavo = fontaFenestro.querySelector( `.tab-enhavo[data-tab="${tabId}"]` ) as HTMLElement | null;
+        const { titolo, vojo, enhavoHtml } = this._eltiriTabon( fontaFenestro, tabo, fontaEnhavo );
+
+        // Krei novan fenestron ĉe la falpunkto ( limigita al la vidfenestro )
+        const limigitaX = Math.min( Math.max( x - 0o40, 0 ), Math.max( 0, window.innerWidth - CONSTANTS.INPUT.RESIZE_MIN_WIDTH ) );
+        const limigitaY = Math.min( Math.max( y - 0o20, 0 ), Math.max( 0, window.innerHeight - CONSTANTS.INPUT.RESIZE_MIN_HEIGHT ) );
+        this._kreiFenestronKunTabo(
+            ( iframeId ) => vojo ? this._konstruiIframanEnhavon( iframeId, vojo ) : enhavoHtml,
+            vojo,
+            { titolo, cepufal: true, injekti: !!vojo, x: limigitaX, y: limigitaY }
+        );
+        this.renderiLastatempajn();
+    }
+    
+    // ⟪ Eltiri Tabon el Fenestro ⟫ - demetas la tabon kaj ĝisdatigas la fontan fenestron ( najbara aktivigo aŭ fermo )
+
+    static _eltiriTabon( fontaFenestro: HTMLElement, tabo: HTMLElement, enhavo: HTMLElement | null ): { titolo: string; vojo: string; enhavoHtml: string } {
+        const estisAktiva = tabo.getAttribute( "aria-pressed" ) === "true";
+        const taboj = this._akiriTabojn( fontaFenestro );
+        const indekso = taboj.indexOf( tabo );
+
+        const titolo = ( tabo.querySelector( ".tab-title" ) as HTMLElement | null )?.innerText || "Tab";
+        const vojo = tabo.dataset.src || "";
+        const enhavoHtml = enhavo ? enhavo.innerHTML : "";
+
+        tabo.remove();
+        enhavo?.remove();
+
+        if ( fontaFenestro.querySelector( ".tab-btn" ) ) {
+            if ( estisAktiva ) {
+                const najbaro = taboj[ indekso + 1 ] || taboj[ indekso - 1 ] || null;
+                if ( najbaro ) this.aktivigiTabon( najbaro.dataset.tab as string );
+            }
+        } else {
+            // Fonta fenestro malpleniĝis — fermi ĝin sen animacio
+            fontaFenestro.remove();
+            this.agordiAplikonAktiva();
+            this.renderiLastatempajn();
+        }
+
+        return { titolo, vojo, enhavoHtml };
+    }
+
+    // ⟪ Trovi Tab-Trenajn Celojn sub la Montrilo ⟫ - kunhavata de la fantomo-ĝisdatigo kaj la taba falo
+
+    static _akiriTabTrenajnCelojn( x: number, y: number ): { celaStio: HTMLElement | null; celaFenestro: HTMLElement | null } {
+        const ebloj = document.elementsFromPoint( x, y );
+        const celaStio = ebloj.find( el => ( el as HTMLElement ).closest?.( ".tab-strip" ) ) as HTMLElement | null;
+        const celaFenestro = ( celaStio?.closest( ".window" ) || ebloj.map( el => ( el as HTMLElement ).closest?.( ".window" ) ).find( w => w && w !== this.tabTrenaStato.fontaFenestro && ( w as HTMLElement ).querySelector( ".tab-strip" ) ) ) as HTMLElement | null;
+        return { celaStio, celaFenestro };
+    }
+
+    // ⟪ Krei Fenestron kun Unua Tabo ⟫ - unuigita kreo por kreiFenestron, sxargiAplikonDeVojo kaj malpendigiTabon
+    // @param enhavoKonstruilo - redonas la internan HTML-on por la unua tabo ( ricevas la iframe-idon )
+    // @param vojo - la aplikaĵa vojo registrita sur la tabo ( malplena por statika enhavo )
+    // @param opts.titolo - fenestra kaj taba titolo
+    // @param opts.simpla - ĉu uzi la simplan titolbreton ( defaŭlte true )
+    // @param opts.cepufal - ĉu envolvi la enhavon en cepufal-ujon
+    // @param opts.injekti - ĉu injekti stilojn en la iframon
+    // @param opts.x / opts.y - fenestra pozicio ( defaŭlte hazarda )
+
+    static _kreiFenestronKunTabo(
+        enhavoKonstruilo: ( iframeId: string ) => string,
+        vojo: string,
+        opts?: { titolo?: string; simpla?: boolean; cepufal?: boolean; injekti?: boolean; x?: number; y?: number }
+    ): HTMLElement {
+        const id = "win-" + Date.now();
+        const titolo = opts?.titolo || "App";
+        const ujo = akiriFenestranUjon();
+        const fenestro = this._kreiFenestranElementon( id, titolo );
+        const app = ( typeof CONSTANTS.APPS_DATA !== "undefined" ) ? CONSTANTS.APPS_DATA.find( ( a: any ) => a.path === vojo ) : null;
+        fenestro.dataset.emoji = app?.emoji || "🖥️";
+
+        const hazardo = this._aleatoriaFenestraPozicio( CONSTANTS.WM.WINDOW_BASE_Y_CREATE );
+        fenestro.style.left = ( opts?.x ?? hazardo.x ) + "px";
+        fenestro.style.top = ( opts?.y ?? hazardo.y ) + "px";
+        fenestro.style.zIndex = ( ++this.statikaZIndekso ).toString();
+
+        const tabId = id + "-tab0";
+        const iframeId = "iframe-" + tabId;
+        const internaEnhavo = enhavoKonstruilo( iframeId );
+        const titolaBreto = this._konstruiTitolaBreton( id, titolo, opts?.simpla ?? true );
+        const enhavujo = `<div class="tab-enhavujo"><div class="tab-enhavo" data-tab="${tabId}">${internaEnhavo}</div></div>`;
+
+        fenestro.innerHTML = ( opts?.cepufal ? `<div class="cepufal" style="padding: 0; inline-size: 100%;">\n            ${titolaBreto}\n            ${enhavujo}\n        </div>\n        ` : titolaBreto + enhavujo ) +
+            this._konstruiGrandSxangxilojn( id );
+
+        // Krei la unuan tabon en la tabstrio
+        const tabstrio = fenestro.querySelector( ".tab-strip" ) as HTMLElement | null;
+        if ( tabstrio ) {
+            tabstrio.insertAdjacentHTML( "afterbegin", this._konstruiTabon( tabId, titolo, true, vojo ) );
+        }
+        fenestro.dataset.activeTab = tabId;
+
+        ujo.appendChild( fenestro );
+        this._agordiFenestrajnInteragojn( fenestro );
+        this.gxisdatigiTaskobretajnAplikojn();
+
+        if ( opts?.injekti ) {
+            this._injektiStilojnEnIframon( iframeId );
+        }
+
+        // Animacii fenestran malfermon kun frakcioj
+        AnimacioAdministranto.fenestroMalfermi( fenestro, { ...CONSTANTS.ANIM_SETTINGS.windowOpen } );
+
+        return fenestro;
     }
 
     // ⟪ Helpaj Funkcioj ⟫
@@ -244,13 +616,29 @@ class FenestraAdministranto {
                 // Cross-origin https paĝoj ĵetos Sekurec-Eroron ĉi tie — la ekzista try / catch englutos ĝin
                 if ( dokumento.title ) {
                     const fenestraId = iframeId.replace( /^iframe-/, "" );
-                    const titolaP = document.getElementById( fenestraId )?.querySelector( ".title-bar-title" );
-                    if ( titolaP ) titolaP.textContent = dokumento.title;
+                    // Aktualigi kaj la fenestran titolon kaj la taban butonan titolon
+                    const tabaTitolo = document.querySelector( `.tab-btn[data-tab="${fenestraId}"] .tab-title` );
+                    if ( tabaTitolo ) tabaTitolo.textContent = dokumento.title;
                 }
             } catch ( e ) {
                 // Cross-origin iframes ĵetos eraron; silente ignoru
             }
         };
+    }
+
+    // ⟪ Konstrui Tabon ⟫
+
+    static _konstruiTabon( id: string, title: string, estasAktiva: boolean, src: string ): string {
+        return `<button class="tab-btn" data-tab="${id}" data-src="${src}" aria-pressed="${estasAktiva}" onpointerdown="FenestraAdministranto.komenciTabTrenadon(event, '${id}')" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" onclick="FenestraAdministranto.aktivigiTabon('${id}')">`
+            + `<span class="tab-title">${title}</span>`
+            + `<span class="tab-close" onclick="event.stopPropagation(); FenestraAdministranto.fermiTabon('${id}')">/</span>`
+            + `</button>`;
+    }
+
+    // ⟪ Konstrui Tabstrion ⟫
+
+    static _konstruiTabstrion( fenestroId: string ): string {
+        return `<sabosuc2w2q class="tab-strip" data-fenestro="${fenestroId}"></sabosuc2w2q>`;
     }
 
     static _konstruiTitolaBreton( id: string, title: string, simple: boolean = false ): string {
@@ -260,7 +648,8 @@ class FenestraAdministranto {
                     <button onclick="FenestraAdministranto.fermiFenestron('${id}')" title="Fermi">/</button>
                     <button onclick="FenestraAdministranto.baskuligiMaksimumigxon('${id}')" title="Maksimumigi">O</button>
                     <button onclick="FenestraAdministranto.minimumigiFenestron('${id}')" title="Minimumigi">|</button>
-                    <p class="title-bar-title">${title}</p>
+                    <button class="tab-add-btn" onclick="event.stopPropagation(); FenestraAdministranto.aldoniTabon('${id}')" title="Nova Tabo">x</button>
+                    ${this._konstruiTabstrion( id )}
                 </ksaka>
             `;
         }
@@ -270,8 +659,9 @@ class FenestraAdministranto {
                     <button class="control-btn" onclick="FenestraAdministranto.fermiFenestron('${id}')" title="Fermi">/</button>
                     <button class="control-btn" onclick="FenestraAdministranto.baskuligiMaksimumigxon('${id}')" title="Maksimumigi">O</button>
                     <button class="control-btn" onclick="FenestraAdministranto.minimumigiFenestron('${id}')" title="Minimumigi">|</button>
+                    <button class="control-btn tab-add-btn" onclick="event.stopPropagation(); FenestraAdministranto.aldoniTabon('${id}')" title="Nova Tabo">x</button>
                 </div>
-                <div class="title-bar-title">${title}</div>
+                ${this._konstruiTabstrion( id )}
             </ksaka>
         `;
     }
@@ -299,46 +689,30 @@ class FenestraAdministranto {
     // ⟪ Ŝargi Aplikon el Vojo ⟫
 
     static sxargiAplikonDeVojo( path: string, titolo: string ): void {
-        const ujo = akiriFenestranUjon();
+        // Kontroli ĉu aplikaĵo jam estas malfermita kiel tabo ie ajn
+        const ekzistantaTabo = Array.from( document.querySelectorAll( ".tab-btn" ) ).find( ( t: any ) =>
+            ( t.dataset.src || "" ) === path
+        ) as HTMLElement | undefined;
 
-        // Kontroli ĉu aplikaĵo jam estas malfermita
-        const ekzistantaFenestro = Array.from( document.querySelectorAll( ".window" ) ).find( ( f: any ) => {
-            const iframo = f.querySelector( "iframe" );
-            return iframo && iframo.src.includes( path );
-        } );
-        
-        
-        if ( ekzistantaFenestro ) {
-            // Aplikaĵo jam malfermita — fokusigi ĝin kaj refreŝigi lastatempajn
-            this.fokusigiFenestron( ekzistantaFenestro.id );
+        if ( ekzistantaTabo ) {
+            // Aplikaĵo jam malfermita — aktivigi ĝian tabon kaj refreŝigi lastatempajn
+            this.aktivigiTabon( ekzistantaTabo.dataset.tab as string );
             this.renderiLastatempajn();
             return;
         }
 
-        const id = "win-" + Date.now();
-        const fenestro = this._kreiFenestranElementon( id, titolo );
-        const app = ( typeof CONSTANTS.APPS_DATA !== "undefined" ) ? CONSTANTS.APPS_DATA.find( ( a: any ) => a.path === path ) : null;
-        fenestro.dataset.emoji = app?.emoji || "🖥️";
+        // Trovi grupan fenestron ( ĉefan taban fenestron ) por enigi la tabon
+        const grupaFenestro = this._akiriGrupanFenestron();
+        if ( grupaFenestro ) {
+            this.aldoniTabonAl( grupaFenestro, path, titolo );
+            return;
+        }        // Neniu grupa fenestro — krei novan fenestron kun la unua tabo
         const { x, y } = this._aleatoriaFenestraPozicio( CONSTANTS.WM.WINDOW_BASE_Y_LOAD );
-        fenestro.style.left = x + "px";
-        fenestro.style.top = y + "px";
-        fenestro.style.zIndex = ( ++this.statikaZIndekso ).toString();
-
-        const iframeId = "iframe-" + id;
-        fenestro.innerHTML = `
-        <div class="cepufal" style="padding: 0; inline-size: 100%;">
-            ${this._konstruiTitolaBreton( id, titolo, true )}
-            ${this._konstruiIframanEnhavon( iframeId, path )}
-        </div>
-        ` + this._konstruiGrandSxangxilojn( id );
-
-        ujo.appendChild( fenestro );
-        this._agordiFenestrajnInteragojn( fenestro );
-        this.gxisdatigiTaskobretajnAplikojn();
-        this._injektiStilojnEnIframon( iframeId );
-
-        // Animacii fenestran malfermon kun frakcioj
-        AnimacioAdministranto.fenestroMalfermi( fenestro, { ...CONSTANTS.ANIM_SETTINGS.windowOpen } );
+        this._kreiFenestronKunTabo(
+            ( iframeId ) => this._konstruiIframanEnhavon( iframeId, path ),
+            path,
+            { titolo, cepufal: true, injekti: true, x, y }
+        );
 
         // Refreŝigi lastatempajn por montri novan fenestron
         this.renderiLastatempajn();
@@ -347,36 +721,13 @@ class FenestraAdministranto {
     // ⟪ Krei Fenestron ⟫
 
     static kreiFenestron( path: string, enhavo: string = "" ): void {
-        const id = "win-" + Date.now();
         const titolo = path.split( "/" ).pop()?.replace( ".html", "" ) || "App";
-        const ujo = akiriFenestranUjon();
-        const fenestro = this._kreiFenestranElementon( id, titolo );
-        const app = ( typeof CONSTANTS.APPS_DATA !== "undefined" ) ? CONSTANTS.APPS_DATA.find( ( a: any ) => a.path === path ) : null;
-        fenestro.dataset.emoji = app?.emoji || "🖥️";
-        const { x, y } = this._aleatoriaFenestraPozicio( CONSTANTS.WM.WINDOW_BASE_Y_CREATE );
-        fenestro.style.left = x + "px";
-        fenestro.style.top = y + "px";
-        fenestro.style.zIndex = ( ++this.statikaZIndekso ).toString();
-
-        const aplikaĵaUrl = this.aplikaĵajURLoj[ path ];
-        const iframeId = "iframe-" + id;
-        const internaEnhavo = aplikaĵaUrl
-            ? this._konstruiIframanEnhavon( iframeId, aplikaĵaUrl )
-            : ( enhavo || `<div><p>${titolo}</p></div>` );
-
-        fenestro.innerHTML = this._konstruiTitolaBreton( id, titolo ) + internaEnhavo +
-            this._konstruiGrandSxangxilojn( id );
-
-        this._agordiFenestrajnInteragojn( fenestro );
-        ujo.appendChild( fenestro );
-        this.gxisdatigiTaskobretajnAplikojn();
-
-        if ( aplikaĵaUrl ) {
-            this._injektiStilojnEnIframon( iframeId );
-        }
-
-        // Animacii fenestran malfermon kun frakcioj
-        AnimacioAdministranto.fenestroMalfermi( fenestro, { ...CONSTANTS.ANIM_SETTINGS.windowOpen } );
+        const aplikaĵaUrl = ( typeof CONSTANTS.APPS_DATA !== "undefined" ) ? ( CONSTANTS.APPS_DATA.find( ( a: any ) => a.path === path )?.path ?? "" ) : "";
+        this._kreiFenestronKunTabo(
+            ( iframeId ) => aplikaĵaUrl ? this._konstruiIframanEnhavon( iframeId, aplikaĵaUrl ) : ( enhavo || `<div><p>${titolo}</p></div>` ),
+            aplikaĵaUrl,
+            { titolo, simpla: false, injekti: !!aplikaĵaUrl }
+        );
     }
 
     // ⟪ Komenci GrandŜanĝon ⟫
@@ -464,6 +815,7 @@ class FenestraAdministranto {
                 this.agordiAplikonAktiva();
                 fenestro.remove();
                 this.gxisdatigiTaskobretajnAplikojn();
+                this.gxisdatigiDokon();
                 this.renderiLastatempajn();
             } );
 
@@ -568,7 +920,7 @@ class FenestraAdministranto {
                 fenestro.classList.add( "minimized" );
                 this.gxisdatigiTaskobretajnAplikojn();
                 this.renderiLastatempajn();
-                if ( typeof aktualigiDokon === "function" ) aktualigiDokon();
+                this.gxisdatigiDokon();
             } );
         }
     }
@@ -581,6 +933,7 @@ class FenestraAdministranto {
             if ( fenestro.classList.contains( "minimized" ) ) {
                 fenestro.classList.remove( "minimized" );
                 AnimacioAdministranto.restaŭriFenestron( fenestro );
+                this.gxisdatigiDokon();
             }
             fenestro.style.zIndex = ( ++this.statikaZIndekso ).toString();
             if ( ( window as any ).PanelaAdministranto ) ( window as any ).PanelaAdministranto.fermiCxiujnPanelojn();
@@ -602,7 +955,7 @@ class FenestraAdministranto {
         }
 
         listo.innerHTML = Array.from( fenestroj ).map( ( f: any ) => {
-            const titolo = f.querySelector( ".title-bar-title" )?.innerText || "App";
+            const titolo = akiriFenestranTitolon( f );
             const emoĝio = f.dataset.emoji || "🖥️";
             const id = f.id;
             return `
@@ -625,22 +978,33 @@ class FenestraAdministranto {
         const doko = document.getElementById( "taskbar-dock" );
         if ( !doko ) return;
 
-        const fenestroj = document.querySelectorAll( ".window" );
-        if ( fenestroj.length === 0 ) {
+        // Ĉe nefoneblaj ekranoj minimumigitaj fenestroj eniras la taskobreto-dokon;
+        // ĉe porteblaj ekranoj la doko restas kaŝita.
+        const estasPortebla = window.innerWidth < CONSTANTS.BREAKPOINTS.MOBILE || window.innerHeight < CONSTANTS.BREAKPOINTS.MOBILE;
+        doko.dataset.portebla = estasPortebla ? "true" : "false";
+
+        // Ĉiuj minimumigitaj fenestroj eniras la dokon ( ili restas en DOM por restaŭro )
+        const minimumigitaj = Array.from( document.querySelectorAll( ".window.minimized" ) ) as HTMLElement[];
+
+        if ( minimumigitaj.length === 0 ) {
             doko.classList.remove( "visible" );
+            doko.innerHTML = "";
             return;
         }
 
-        doko.innerHTML = Array.from( fenestroj ).map( ( f: any ) => {
-            const titolo = f.querySelector( ".title-bar-title" )?.innerText || "App";
+        doko.innerHTML = minimumigitaj.map( ( f: any ) => {
+            const titolo = akiriFenestranTitolon( f );
             const id = f.id;
-            const estasMinimumigita = f.classList.contains( "minimized" );
+            const emoĝio = f.dataset.emoji || "🖥️";
             return `
-                <button class="dock-btn n2tase ${estasMinimumigita ? "minimized" : ""}" onclick="FenestraAdministranto.fokusigiFenestron('${id}')" title="${titolo}">
-                    ${titolo[ 0 ].toUpperCase()}
+                <button class="dock-btn n2tase" onclick="event.stopPropagation(); FenestraAdministranto.fokusigiFenestron('${id}')" title="${titolo}">
+                    <span class="dock-btn-icon">${emoĝio}</span>
+                    <span class="dock-btn-title">${titolo}</span>
                 </button>
             `;
         } ).join( "" );
+
+        doko.classList.toggle( "visible", !estasPortebla );
     }
 
     // ⟪ Agordi Aplikon Aktiva ⟫
@@ -656,12 +1020,6 @@ class FenestraAdministranto {
     // ⟪ Ĝisdatigi Taskobretajn Aplikojn ⟫
 
     static gxisdatigiTaskobretajnAplikojn(): void {
-        const centro = akiriHejmanAreon();
-        const taskobar = akiriTaskobreton();
-        if ( !centro || !taskobar ) return;
-
-        centro.querySelectorAll( ".taskbar-app-btn" ).forEach( ( b: HTMLElement ) => b.remove() );
-
         // Lastatempaj aplikaĵoj nur montrataj en lastatempa panelo kaj komenca menuo, ne en taskobreto
         this.agordiAplikonAktiva();
     }
@@ -908,6 +1266,19 @@ class FenestraAdministranto {
 
         // Iniciati taskobreton kun konservita pozicio kaj enŝovoj
         this.iniciiTaskobreton();
+
+        // Restarigi lingvon kaj etikedan montron el localStorage
+        const konservitaLingvo = localStorage.getItem( "os-language" );
+        if ( konservitaLingvo ) this.agordiLingvon( konservitaLingvo );
+
+        // Regului la dokan videblecon ĉe grandecaj ŝanĝoj ( portebla ↔ nefonebla )
+        window.addEventListener( "resize", () => this.gxisdatigiDokon() );
+
+        // Etikedmontra resto post kiam ĉiuj administrantoj estas konstruitaj
+        const konservitaEtikedo = localStorage.getItem( "os-label-display" );
+        if ( konservitaEtikedo ) {
+            window.addEventListener( "load", () => this.agordiEtikedMontron( konservitaEtikedo ) );
+        }
     }
 
     // ⟪ Agordi Lingvon ⟫
@@ -916,28 +1287,17 @@ class FenestraAdministranto {
         if ( typeof window.k2regawe === "function" ) {
             window.k2regawe( val );
         }
+        localStorage.setItem( "os-language", val );
     }
 
     // ⟪ Agordi Etikedan Montron ⟫
 
     static agordiEtikedMontron( val: string ): void {
-        if ( ( window as any ).LabortablaPiktogramoAdministranto ) {
-            const dim = ( window as any ).LabortablaPiktogramoAdministranto;
-            if ( dim.desktop ) {
-                dim.desktop.etikedReĝimo = val;
-                dim.desktop.inicii();
-            }
-            if ( dim.startMenu ) {
-                dim.startMenu.etikedReĝimo = val;
-                dim.startMenu.inicii();
-            }
+        localStorage.setItem( "os-label-display", val );
 
-            // Re-aldoni piktogramojn al ambaŭ kradoj
-            APPS.forEach( ( app: any, i: number ) => {
-                dim.desktop?.aldoniPiktogramon( app, i );
-                dim.startMenu?.aldoniPiktogramon( app, i );
-            } );
-            dim._rearanĝiCxiujn();
+        // La krado-rekonstruo apartenas al la piktograma administranto
+        if ( ( window as any ).LabortablaPiktogramoAdministranto?.agordiEtikedReĝimon ) {
+            ( window as any ).LabortablaPiktogramoAdministranto.agordiEtikedReĝimon( val );
         }
     }
 
@@ -1059,6 +1419,18 @@ class FenestraAdministranto {
 }
 
 // ⟨ Aŭskulti postMessage De Agorda Iframo ⟩
+
+// La agorda aplikaĵo sendas anglajn agojn; ĉi tiu mapo tradukas ilin
+// al la esperantaj metodoj de FenestraAdministranto.
+const agordajAgoj: { [ key: string ]: string } = {
+    setTheme: "agordiTemon",
+    setWallpaper: "agordiTapeton",
+    updateTaskbarSettings: "gxisdatigiTaskobretajnAgordojn",
+    setLabelDisplay: "agordiEtikedMontron",
+    setLanguage: "agordiLingvon",
+    setTaskbarPosition: "agordiTaskobretanPozicion"
+};
+
 window.addEventListener( "message", ( e ) => {
     if ( e.data?.source !== "settings" ) return;
     const { action, value } = e.data;
@@ -1074,6 +1446,12 @@ window.addEventListener( "message", ( e ) => {
     }
     if ( action === "clearWallpaper" ) {
         (window as any).FenestraAdministranto.forigiTapeton();
+        return;
+    }
+    
+    const metodo = agordajAgoj[ action ];
+    if ( metodo && typeof ( window as any ).FenestraAdministranto[ metodo ] === "function" ) {
+        ( window as any ).FenestraAdministranto[ metodo ]( value );
         return;
     }
     

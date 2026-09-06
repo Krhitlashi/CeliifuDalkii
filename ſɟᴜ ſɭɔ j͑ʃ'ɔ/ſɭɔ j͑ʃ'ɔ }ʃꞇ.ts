@@ -8,16 +8,15 @@ import "./ꞁȷ̀ɔ j͑ʃƽɔƽ.js";
 // ⟨ Utilajoj ⟩ - provizas help-funkciojn
 import "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ſɟᴜ ſɭɹ ſȷɔ.js";
 import "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ſɟᴜ ı],ɔ ŋᷠᴜ.js";
-import "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ſɟᴜ j͑ʃ'ᴜ ı],ᴜ.js";
 import "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ſɟᴜ ſɭɔƽ.js";
 import "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ſɟᴜ ſ͕ɭwȝ.js";
-import "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ſɟᴜƽ ꞁȷ̀ɜ ſɭɔʞ.js";
 import "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ſɟᴜ ſ̀ȷᴜȝ.js";
 import "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ŋᷠᴜ ſȷɔ ſɭ,ꞇ.js";
 
 // ⟨ Administrantoj ⟩ - ĉi tiuj alkroĉas al fenestro
 import "./ɭʃᴜ ֭ſɭᴜ j͐ʃᴜ ſ͕ɭᴜƴ.js";
 import "./ı],ɔ ſɭw ſᶘɜ.js";
+import "./ı],ɔ ſɟᴜ ſɟɔ ı],ᴜ.js";
 import "./ꞁȷ̀ᴜ ɽ͑ʃ'ᴜ ɭʃᴜ ı],c̗ᴜ.js";
 import "./}ʃɹ ɭʃᴜ j͑ʃɔ }ʃw.js";
 import "./ſɟᴜ ſɭɹ ſןɹ.js";

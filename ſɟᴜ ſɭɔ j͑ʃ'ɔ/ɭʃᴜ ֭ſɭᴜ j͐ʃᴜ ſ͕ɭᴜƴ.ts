@@ -53,9 +53,9 @@ const AnimacioAdministranto: {
         } );
     },
 
-    // ⟪ Poziciaj Utilajoj ⟫
+    // ⟪ Poziciaj Utilaĵoj ⟫
 
-    // Akiri kompletan pozician agordon por taskobreta pozicio
+    // Akiri kompletan pozician agordon por taskobreta pozicio ( el CONSTANTS.TASKBAR_POSITIONS )
     akiriPozicianAgordon(pos: any = null): any {
         const taskbar: HTMLElement | null = akiriTaskobreton();
         const position: string = pos || taskbar?.dataset.position || "left";
@@ -65,21 +65,14 @@ const AnimacioAdministranto: {
             return this._positionConfigCache[position];
         }
 
-        const transforms: { [key: string]: { slide: string; offset: string; axis: string; invert: number } } = {
-            top: { slide: "translateY(-100%)", offset: "translateY({offset}px)", axis: "Y", invert: -1 },
-            bottom: { slide: "translateY(100%)", offset: "translateY(-{offset}px)", axis: "Y", invert: -1 },
-            left: { slide: "translateX(-100%)", offset: "translateX({offset}px)", axis: "X", invert: 1 },
-            right: { slide: "translateX(100%)", offset: "translateX(-{offset}px)", axis: "X", invert: 1 }
-        };
-
-        const cfg = transforms[position] || transforms.bottom;
+        const cfg: any = CONSTANTS.TASKBAR_POSITIONS[ position ] || CONSTANTS.TASKBAR_POSITIONS.bottom;
 
         const result = {
             position,
             slideTransform: cfg.slide,
-            offsetTransform: cfg.offset,
-            axis: cfg.axis,
-            invert: cfg.invert,
+            offsetTransform: cfg.panelOffset,
+            axis: position === "left" || position === "right" ? "X" : "Y",
+            invert: position === "left" || position === "right" ? 1 : -1,
             insetProp: position
         };
 
@@ -107,19 +100,6 @@ const AnimacioAdministranto: {
             right: `translateX(${percentage}%)`
         };
         return transforms[direction] || transforms.bottom;
-    },
-
-    // ⟪ Akiri Taskobretan Randan Ofseton ⟫
-
-    akiriTaskobretanOfseton(fraction: number = 1): { transform: string; inset: { [key: string]: string } } {
-        const { position, offsetTransform, insetProp } = this.akiriPozicianAgordon();
-        const tbSize: number = akiriTaskobretanGrandecon();
-        const offset: number = tbSize * fraction;
-
-        return {
-            transform: offsetTransform.replace("{offset}", offset.toString()),
-            inset: { [insetProp]: `${offset}px` }
-        };
     },
 
     // ⟪ Akiri Taskobretan Grandecon por Pozicio ⟫
@@ -235,94 +215,26 @@ const AnimacioAdministranto: {
         return this.glitiPanelon(element, panelId, false, { duration, easing, fraction, display: options.display });
     },
 
-    // ⟪ Gliti En ( el rando ) ⟫
+    // ⟪ Animacii Panelan Malfermon ( el taskobreta rando ) ⟫
 
-    glitiEn(element: HTMLElement, options: any = {}): Promise<void> {
-        const fromEdge: string = options.fromEdge || "bottom";
-        const startTransform: string = this.akiriDirektanTransformon(fromEdge.replace("%", ""), 1);
+    malfermiPanelon(element: HTMLElement, panelId: string, options: any = {}): Promise<void> {
+        if (!element) return Promise.resolve();
 
-        return this._animacii(
-            element,
-            { transform: startTransform, opacity: 0 },
-            { transform: "translate(0, 0)", opacity: 1 },
-            { ...options, easing: options.easing ?? this.mildigoj.easeOut },
-            ( el ) => {
-                el.style.display = options.display || "flex";
-                el.style.transform = startTransform;
-                el.style.opacity = "0";
-                el.style.pointerEvents = "none";
-            },
-            ( el ) => {
-                el.style.transform = "";
-                el.style.opacity = "";
-                el.style.pointerEvents = "";
-            }
-        );
+        const duration: number = options.duration ?? this.apriorajxoj.duration;
+        const easing: string = options.easing ?? this.mildigoj.easeOut;
+
+        return this.glitiEnElTaskobreto(element, panelId, { duration, easing, fraction: options.fraction, display: options.display });
     },
 
-    // ⟪ Gliti El ( al rando ) ⟫
+    // ⟪ Animacii Panelan Fermon ( al taskobreta rando ) ⟫
 
-    glitiEl(element: HTMLElement, options: any = {}): Promise<void> {
-        const toEdge: string = options.toEdge || "bottom";
-        const endTransform: string = this.akiriDirektanTransformon(toEdge.replace("%", ""), 1);
+    fermiPanelon(element: HTMLElement, panelId: string, options: any = {}): Promise<void> {
+        if (!element) return Promise.resolve();
 
-        return this._animacii(
-            element,
-            { transform: "translate(0, 0)", opacity: 1 },
-            { transform: endTransform, opacity: 0 },
-            { ...options, easing: options.easing ?? this.mildigoj.easeIn },
-            ( el ) => { el.style.pointerEvents = "none"; },
-            ( el ) => {
-                el.style.display = "none";
-                el.style.transform = "";
-                el.style.opacity = "";
-                el.style.pointerEvents = "";
-            }
-        );
-    },
+        const duration: number = options.duration ?? this.apriorajxoj.duration;
+        const easing: string = options.easing ?? this.mildigoj.easeIn;
 
-    // ⟪ Skali En ( ŝprucefiko ) ⟫
-
-    skaliEn(element: HTMLElement, options: any = {}): Promise<void> {
-        const fromScale: number = options.fromScale ?? CONSTANTS.ANIM.FRACTIONS.sevenEighths;
-
-        return this._animacii(
-            element,
-            { transform: `scale(${fromScale})`, opacity: 0 },
-            { transform: "scale(1)", opacity: 1 },
-            { ...options, easing: options.easing ?? this.mildigoj.spring },
-            ( el ) => {
-                el.style.display = options.display || "flex";
-                el.style.transform = `scale(${fromScale})`;
-                el.style.opacity = "0";
-                el.style.pointerEvents = "none";
-            },
-            ( el ) => {
-                el.style.transform = "";
-                el.style.opacity = "";
-                el.style.pointerEvents = "";
-            }
-        );
-    },
-
-    // ⟪ Skali El ( ŝrumpa efiko ) ⟫
-
-    skaliEl(element: HTMLElement, options: any = {}): Promise<void> {
-        const toScale: number = options.toScale ?? CONSTANTS.ANIM.FRACTIONS.sevenEighths;
-
-        return this._animacii(
-            element,
-            { transform: "scale(1)", opacity: 1 },
-            { transform: `scale(${toScale})`, opacity: 0 },
-            { ...options, easing: options.easing ?? this.mildigoj.easeIn },
-            ( el ) => { el.style.pointerEvents = "none"; },
-            ( el ) => {
-                el.style.display = "none";
-                el.style.transform = "";
-                el.style.opacity = "";
-                el.style.pointerEvents = "";
-            }
-        );
+        return this.glitiElAlTaskobreto(element, panelId, { duration, easing, fraction: options.fraction, display: options.display });
     },
 
     // ⟪ Fenestro Malferma Animacio ( gliti + malaperi el taskobreto ) ⟫
@@ -330,19 +242,8 @@ const AnimacioAdministranto: {
     fenestroMalfermi(element: HTMLElement, options: any = {}): Promise<void> {
         const fraction: number = options.fraction ?? CONSTANTS.ANIM.FRACTIONS.oneEighth;
         const scale: number = options.scale ?? CONSTANTS.ANIM.FRACTIONS.sevenEighths;
-
-        // Akiri taskobretan pozicion kaj ofseton
-        const { position, offset } = this.akiriTaskobretanGrandonPorPozicio(null, fraction);
-
-        // Kalkuli ofseton bazitan sur taskobreta pozicio
-        const offsets: { [key: string]: string } = {
-            left: `translateX(${offset}px) translateY(-20px)`,
-            right: `translateX(-${offset}px) translateY(-20px)`,
-            top: `translateY(${offset}px)`,
-            bottom: `translateY(-${offset}px)`
-        };
-
-        const startTransform: string = offsets[position] || offsets.bottom;
+        const axis = this.akiriTaskobretanGrandonPorPozicio(null, fraction);
+        const startTransform: string = this._fenestraTaskobretoTransformo(axis.position, axis.offset, true);
 
         return this._animacii(
             element,
@@ -366,19 +267,8 @@ const AnimacioAdministranto: {
     fenestroFermi(element: HTMLElement, options: any = {}): Promise<void> {
         const fraction: number = options.fraction ?? CONSTANTS.ANIM.FRACTIONS.oneEighth;
         const scale: number = options.scale ?? CONSTANTS.ANIM.FRACTIONS.sevenEighths;
-
-        // Akiri taskobretan pozicion kaj ofseton
-        const { position, offset } = this.akiriTaskobretanGrandonPorPozicio(null, fraction);
-
-        // Kalkuli finan transformon al taskobreto
-        const offsets: { [key: string]: string } = {
-            left: `translateX(${offset}px) translateY(8px)`,
-            right: `translateX(-${offset}px) translateY(8px)`,
-            top: `translateY(${offset}px)`,
-            bottom: `translateY(-${offset}px)`
-        };
-
-        const endTransform: string = offsets[position] || offsets.bottom;
+        const axis = this.akiriTaskobretanGrandonPorPozicio(null, fraction);
+        const endTransform: string = this._fenestraTaskobretoTransformo(axis.position, axis.offset, false);
 
         return this._animacii(
             element,
@@ -393,6 +283,18 @@ const AnimacioAdministranto: {
                 el.style.pointerEvents = "";
             }
         );
+    },
+
+    // ⟪ Unuigita Fenestra Taskobreto-Transformo ( malfermo kaj fermo ) ⟫
+
+    _fenestraTaskobretoTransformo(position: string, offset: number, estasMalfermo: boolean): string {
+        const cfg: any = CONSTANTS.TASKBAR_POSITIONS[ position ] || CONSTANTS.TASKBAR_POSITIONS.bottom;
+        const baza: string = cfg.windowOffset.replace("{offset}", offset.toString());
+        if ( position === "left" || position === "right" ) {
+            const etaY: string = estasMalfermo ? CONSTANTS.ANIM_SETTINGS.windowOpen.offsetY : CONSTANTS.ANIM_SETTINGS.windowClose.offsetY;
+            return baza + ` translateY(${etaY})`;
+        }
+        return baza;
     },
 
     // ⟪ Minimumigi Fenestran Animacion ( skali en taskobreton ) ⟫
@@ -453,36 +355,22 @@ const AnimacioAdministranto: {
     // ⟪ Maksimumigi Fenestran Animacion ⟫
 
     maksimumigiFenestron(element: HTMLElement, options: any = {}): Promise<void> {
-        const fromScale: number = options.fromScale ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.scale;
-
-        return this._animacii(
+        return this._skaliKerno(
             element,
-            { transform: `scale(${fromScale})`, opacity: CONSTANTS.ANIM.FRACTIONS.sixEighths },
-            { transform: "scale(1)", opacity: 1 },
-            { ...options, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.easing },
-            undefined,
-            ( el ) => {
-                el.style.transform = "";
-                el.style.opacity = "";
-            }
+            options.fromScale ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.scale,
+            true,
+            { ...options, startOpacity: CONSTANTS.ANIM.FRACTIONS.sixEighths, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.easing }
         );
     },
 
     // ⟪ Restarigi el Maksimumiga Animacio ⟫
 
     malmaksimumigiFenestron(element: HTMLElement, options: any = {}): Promise<void> {
-        const toScale: number = options.toScale ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.scale;
-
-        return this._animacii(
+        return this._skaliKerno(
             element,
-            { transform: "scale(1)", opacity: 1 },
-            { transform: `scale(${toScale})`, opacity: CONSTANTS.ANIM.FRACTIONS.sixEighths },
-            { ...options, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.easing },
-            undefined,
-            ( el ) => {
-                el.style.transform = "";
-                el.style.opacity = "";
-            }
+            options.toScale ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.scale,
+            false,
+            { ...options, endOpacity: CONSTANTS.ANIM.FRACTIONS.sixEighths, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.easing }
         );
     },
 
@@ -491,101 +379,35 @@ const AnimacioAdministranto: {
     restaŭriFenestron(element: HTMLElement, options: any = {}): Promise<void> {
         const fraction: number = options.fraction ?? CONSTANTS.ANIM.FRACTIONS.oneEighth;
 
-        return this._animacii(
-            element,
-            { transform: `scale(${fraction})`, opacity: 0 },
-            { transform: "scale(1)", opacity: 1 },
-            { ...options, duration: options.duration ?? CONSTANTS.ANIM.DURATION_DEFAULT, easing: options.easing ?? this.mildigoj.spring },
-            ( el ) => {
-                el.style.display = "block";
-                el.style.transform = `scale(${fraction})`;
-                el.style.opacity = "0";
-            },
-            ( el ) => {
-                el.style.transform = "";
-                el.style.opacity = "";
-            }
-        );
-    },
-
-    // ⟪ Ondeta Efiko ( por butonoj ) ⟫
-
-    ondeto(element: HTMLElement, event: MouseEvent, options: any = {}): void {
-        if (!element) return;
-
-        const duration: number = options.duration ?? CONSTANTS.ANIM.DURATION_DEFAULT;
-        const color: string = options.color ?? `rgba(255, 255, 255, ${CONSTANTS.ANIM.FRACTIONS.twoEighths})`;
-
-        const ripple: HTMLSpanElement = document.createElement("span");
-        ripple.className = "ripple-effect";
-        ripple.style.position = "absolute";
-        ripple.style.borderRadius = "50%";
-        ripple.style.backgroundColor = color;
-        ripple.style.transform = "scale(0)";
-        ripple.style.animation = `ripple ${duration}ms ${this.mildigoj.easeOut}`;
-        ripple.style.pointerEvents = "none";
-
-        const rect: DOMRect = element.getBoundingClientRect();
-        const size: number = Math.max(rect.width, rect.height) * 2;
-        ripple.style.width = ripple.style.height = size + "px";
-        ripple.style.left = (event?.clientX - rect.left - size / 2) + "px";
-        ripple.style.top = (event?.clientY - rect.top - size / 2) + "px";
-
-        element.style.position = "relative";
-        element.style.overflow = "hidden";
-        element.appendChild(ripple);
-
-        setTimeout(() => ripple.remove(), duration);
-    },
-
-    // ⟪ Animacii Valoron ( por nombriloj, ŝoviloj ) ⟫
-
-    animaciiValoron(element: HTMLElement, start: number, end: number, duration: number, formatter?: (val: number) => string): Promise<void> {
-        if (!element) return Promise.resolve();
-
-        const startTime: number = performance.now();
-
-        return new Promise((resolve) => {
-            const animate = (currentTime: number) => {
-                const elapsed: number = currentTime - startTime;
-                const progress: number = Math.min(elapsed / duration, 1);
-
-                const easedProgress: number = this.analiziMildigon(this.mildigoj.easeOut, progress);
-
-                const currentValue: number = start + (end - start) * easedProgress;
-
-                if (formatter) {
-                    element.textContent = formatter(currentValue);
-                } else {
-                    element.textContent = Math.round(currentValue).toString();
-                }
-
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    resolve();
-                }
-            };
-
-            requestAnimationFrame(animate);
+        return this._skaliKerno(element, fraction, true, {
+            ...options,
+            duration: options.duration ?? CONSTANTS.ANIM.DURATION_DEFAULT,
+            easing: options.easing ?? this.mildigoj.spring,
+            agordiEkrano: true,
+            display: "block"
         });
     },
 
-    // ⟪ Analizi Mildigan Funkcion ⟫
+    // ⟪ Skali En ( ŝprucaĵo ) ⟫
 
-    analiziMildigon(easing: string, t: number): number {
-        if (easing.includes("cubic-bezier")) {
-            return t < CONSTANTS.ANIM.FRACTIONS.fourEighths ? 2 * t * t : -1 + (4 - 2 * t) * t;
-        }
-        return t;
+    skaliEn(element: HTMLElement, options: any = {}): Promise<void> {
+        return this._skaliKerno(
+            element,
+            options.fromScale ?? CONSTANTS.ANIM.FRACTIONS.sevenEighths,
+            true,
+            { ...options, easing: options.easing ?? this.mildigoj.spring, agordiEkrano: true, blokiEventojn: true }
+        );
     },
 
-    // ⟪ Nuligi Ĉiujn Animaciojn sur Elemento ⟫
+    // ⟪ Skali El ( ŝrumpa efiko ) ⟫
 
-    nuligiAnimaciojn(element: HTMLElement): void {
-        if (element && element.getAnimations) {
-            element.getAnimations().forEach(anim => anim.cancel());
-        }
+    skaliEl(element: HTMLElement, options: any = {}): Promise<void> {
+        return this._skaliKerno(
+            element,
+            options.toScale ?? CONSTANTS.ANIM.FRACTIONS.sevenEighths,
+            false,
+            { ...options, easing: options.easing ?? this.mildigoj.easeIn, blokiEventojn: true, finoKaŝi: true }
+        );
     },
 
     // ⟪ Ŝpruca Animacio ( por kunteksta menuo ) ⟫
@@ -593,19 +415,11 @@ const AnimacioAdministranto: {
     sxprucEn(element: HTMLElement, options: any = {}): Promise<void> {
         const scale: number = options.scale ?? CONSTANTS.ANIM_SETTINGS.popup.scale;
 
-        return this._animacii(
+        return this._skaliKerno(
             element,
-            { transform: `scale(${scale})`, opacity: 0 },
-            { transform: "scale(1)", opacity: 1 },
-            { ...options, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.popup.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.popup.easing },
-            ( el ) => {
-                el.style.transform = `scale(${scale})`;
-                el.style.opacity = "0";
-            },
-            ( el ) => {
-                el.style.transform = "";
-                el.style.opacity = "";
-            }
+            scale,
+            true,
+            { ...options, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.popup.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.popup.easing }
         );
     },
 
@@ -614,69 +428,46 @@ const AnimacioAdministranto: {
     sxprucEl(element: HTMLElement, options: any = {}): Promise<void> {
         const scale: number = options.scale ?? CONSTANTS.ANIM_SETTINGS.popup.scale;
 
+        return this._skaliKerno(
+            element,
+            scale,
+            false,
+            { ...options, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.popup.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.popup.easing, blokiEventojn: true, finoKaŝi: true }
+        );
+    },
+
+    // ⟪ Unuigita Skala Kerno ( eniro kaj eliro ) ⟫
+    // options:
+    //   agordiEkrano - ĉu la eniro difinas el.style.display ( fenestroj jes, menuoj ne )
+    //   display - la display-valoro uzata kiam agordiEkrano ( defaŭlte "flex" )
+    //   blokiEventojn - ĉu pointer-events estas malŝaltita dum la animacio
+    //   finoKaŝi - ĉu la eliro kaŝas la elementon post la animacio
+    //   startOpacity / endOpacity - laŭvolaj opakecaj ekstremoj ( defaŭlte 0 kaj 1 )
+
+    _skaliKerno(element: HTMLElement, scale: number, estasEniro: boolean, options: any = {}): Promise<void> {
+        const startTransform: string = estasEniro ? `scale(${scale})` : "scale(1)";
+        const endTransform: string = estasEniro ? "scale(1)" : `scale(${scale})`;
+        const startOpacity: number = options.startOpacity ?? 0;
+        const endOpacity: number = options.endOpacity ?? 1;
+
         return this._animacii(
             element,
-            { transform: "scale(1)", opacity: 1 },
-            { transform: `scale(${scale})`, opacity: 0 },
-            { ...options, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.popup.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.popup.easing },
-            ( el ) => { el.style.pointerEvents = "none"; },
+            { transform: startTransform, opacity: estasEniro ? startOpacity : 1 },
+            { transform: endTransform, opacity: estasEniro ? 1 : endOpacity },
+            options,
             ( el ) => {
-                el.style.display = "none";
+                if ( estasEniro && options.agordiEkrano ) el.style.display = options.display || "flex";
+                el.style.transform = startTransform;
+                el.style.opacity = estasEniro ? startOpacity.toString() : "1";
+                if ( options.blokiEventojn ) el.style.pointerEvents = "none";
+            },
+            ( el ) => {
+                if ( options.finoKaŝi ) el.style.display = "none";
                 el.style.transform = "";
                 el.style.opacity = "";
                 el.style.pointerEvents = "";
             }
         );
-    },
-
-    // ⟪ Ŝpruca Animacio ( por kunteksta menuo ) - Heredaĵa Aliajnimo ⟫
-
-    popup(element: HTMLElement, options: any = {}): Promise<void> {
-        return this.sxprucEn(element, options);
-    },
-
-    // ⟪ Plenekrana Aplika Malapero En ⟫
-
-    plenekranaApliko(element: HTMLElement, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-        return this.malaperiEn(element, options);
-    },
-
-    // ⟪ Heredaĵa Aliajnimo ⟫
-    fullScreenApp(element: HTMLElement, options: any = {}): Promise<void> {
-        return this.plenekranaApliko(element, options);
-    },
-
-    // ⟪ Animacii Panelan Malfermon ( el taskobreta rando ) ⟫
-
-    malfermiPanelon(element: HTMLElement, panelId: string, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-
-        const fraction: number = options.fraction ?? CONSTANTS.ANIM.FRACTIONS.full;
-        const duration: number = options.duration ?? CONSTANTS.ANIM_SETTINGS.panelSlide.duration;
-        const easing: string = options.easing ?? CONSTANTS.ANIM_SETTINGS.panelSlide.easing;
-
-        return this.glitiEnElTaskobreto(element, panelId, {
-            duration,
-            easing,
-            fraction
-        });
-    },
-
-    // ⟪ Animacii Panelan Fermon ( al taskobreta rando ) ⟫
-
-    fermiPanelon(element: HTMLElement, panelId: string, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
-
-        const fraction: number = options.fraction ?? CONSTANTS.ANIM.FRACTIONS.full;
-        const duration: number = options.duration ?? CONSTANTS.ANIM_SETTINGS.panelSlide.duration;
-        const easing: string = options.easing ?? CONSTANTS.ANIM_SETTINGS.panelSlide.easing;
-
-        return this.glitiElAlTaskobreto(element, panelId, {
-            duration,
-            easing,
-            fraction
-        });
     }
 };
 

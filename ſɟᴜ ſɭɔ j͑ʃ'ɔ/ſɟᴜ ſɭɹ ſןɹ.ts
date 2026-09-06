@@ -1,20 +1,12 @@
 // ≺⧼ Sistemo ⧽≻ - Ĉefa OS-Kunordigo
 
 const Sistemo = {
-    // ⟪ Utiloj ⟫
+    // ⟪ Utilaĵoj ⟫
 
     alOktalaCxeno( str: any ) {
         if ( !str || typeof window.vab6caja !== "function" ) return str;
         if ( str.includes( ":" ) ) return str.split( ":" ).map( (p: any) => window.vab6caja( parseInt( p, 0o10 ) ) || p ).join( "." );
         return window.vab6caja( parseInt( str, 0o10 ) ) || str;
-    },
-
-    gxisdatigiHorlogxon() {
-        const el = document.getElementById( "clock" );
-        if ( el && typeof window.castifeh2 === "function" && typeof window.vab6caja === "function" ) {
-            const t = window.castifeh2( new Date() );
-            el.innerText = `${window.vab6caja( t.she )}.${window.vab6caja( t.qe )}.${window.vab6caja( t.he )}`;
-        }
     },
 
     // ⟪ Inicii ⟫
@@ -26,15 +18,12 @@ const Sistemo = {
         if ( (window as any).PanelaAdministranto ) (window as any).PanelaAdministranto.iniciiEksterklakanTraktilon();
         if ( (window as any).SciigoAdministranto ) (window as any).SciigoAdministranto.inicii();
         if ( (window as any).HorlogxoAdministranto ) (window as any).HorlogxoAdministranto.inicii();
+        if ( (window as any).StatusaAdministranto ) (window as any).StatusaAdministranto.inicii();
 
-        // 2. ⟨ Servobukloj ⟩
-        setInterval( () => this.gxisdatigiHorlogxon(), 0o2000 );
-        this.gxisdatigiHorlogxon();
-
-        // 3. ⟨ Eventoj ⟩
+        // 2. ⟨ Eventoj ⟩
         this.agordiEventojn();
 
-        // 4. ⟨ Fina Bildigo ⟩
+        // 3. ⟨ Fina Bildigo ⟩
         if ( (window as any).LabortablaPiktogramoAdministranto ) {
             requestAnimationFrame( () => (window as any).LabortablaPiktogramoAdministranto.inicii() );
         }

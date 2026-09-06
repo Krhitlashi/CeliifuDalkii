@@ -1,33 +1,4 @@
-// ≺⧼ Matematikaj Utilajoj ⧽≻
-
-/**
- * Premlimigi valoron inter minimumo kaj maksimumo
- * @param {number} valoro
- * @param {number} minimumo
- * @param {number} maksimumo
- * @returns {number}
- */
-function limigo( value: number, min: number, max: number ): number {
-    return Math.max( min, Math.min( max, value ) );
-}
-
-/**
- * Debounce-funkcio
- * @param {Function} funkcio
- * @param {number} atendu
- * @returns {Function}
- */
-function malakordigi<T extends ( ...args: any[] ) => void>( func: T, wait: number ): ( ...args: Parameters<T> ) => void {
-    let timeout: any;
-    return function executedFunction( ...args: Parameters<T> ) {
-        const later = () => {
-            clearTimeout( timeout );
-            func( ...args );
-        };
-        clearTimeout( timeout );
-        timeout = setTimeout( later, wait );
-    };
-}
+// ≺⧼ Matematikaj Utilaĵoj ⧽≻
 
 /**
  * Throttle-funkcio
@@ -47,6 +18,4 @@ function limkurzo<T extends ( ...args: any[] ) => void>( func: T, limit: number 
 }
 
 // Alkroĉi al fenestro por tutmonda aliro
-( window as any ).limigo = limigo;
-( window as any ).malakordigi = malakordigi;
 ( window as any ).limkurzo = limkurzo;

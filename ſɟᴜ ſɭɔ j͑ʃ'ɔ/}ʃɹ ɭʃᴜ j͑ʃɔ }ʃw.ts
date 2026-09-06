@@ -8,12 +8,12 @@ declare const cxuKlaso: any;
 declare const forigiKlason: any;
 declare const aldoniKlason: any;
 declare const agordiButonPremita: any;
+declare const aktualigiDokon: any;
 declare const akiriKomencanMenuon: any;
 declare const akiriTaskobreton: any;
 declare const akiriTaskobretanGrandecon: any;
 declare const cxuTaskbretoGranda: any;
 declare const bildigiLastatempajn: any;
-declare const aktualigiDokon: any;
 declare const akiriMalfermajnFenestrojn: any;
 
 import { klikoEkstereTraktilo } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ŋᷠᴜ ſȷɔ ſɭ,ꞇ.js";
@@ -40,11 +40,6 @@ class PanelaAdministranto {
         return panel != null && cxuKlaso(panel, "visible");
     }
 
-    // ⟪ Agordi Premitan Butonstaton ⟫
-    static agordiButononPremita(btnId: string, pressed: boolean): void {
-        agordiButonPremita(btnId, pressed);
-    }
-
     // ⟪ Kaŝi Panelon kun Direkta Animacio ⟫
     static kaŝiPanelon(panel: HTMLElement, panelId: string): Promise<void> {
         if (!panel) return Promise.resolve();
@@ -53,7 +48,7 @@ class PanelaAdministranto {
             duration: this.animationDuration
         }).then(() => {
             forigiKlason(panel, "visible");
-        });
+    });
     }
 
     // ⟪ Montri Panelon kun Direkta Animacio ⟫
@@ -64,39 +59,16 @@ class PanelaAdministranto {
 
         void panel.offsetWidth;
 
-        this.agordiButononPremita(btnId, true);
+        agordiButonPremita(btnId, true);
 
         return AnimacioAdministranto.malfermiPanelon(panel, panelId || btnId, {
             duration: this.animationDuration
         }).then(() => {
             aldoniKlason(panel, "visible");
-        });
+    });
     }
 
-    // ⟪ Fermi Sistemajn Panelojn ⟫
-    static fermiSistemajnPanelojn(): Promise<void[]> {
-        const animations: Promise<void>[] = [];
-
-        [this.panels.quickSettings, this.panels.notifications, this.panels.clockFlyout].forEach(panelId => {
-            const panel = this.akiriPanelon(panelId);
-            if (panel && this.cxuPaneloVidebla(panel)) {
-                animations.push(this.kaŝiPanelon(panel, panelId));
-            }
-        });
-
-        const dock = this.akiriPanelon(this.panels.dock);
-        if (dock && this.cxuPaneloVidebla(dock)) {
-            forigiKlason(dock, "visible");
-        }
-
-        ["status-area", "notification-btn", "clock-area"].forEach(btnId => {
-            this.agordiButononPremita(btnId, false);
-        });
-
-        return Promise.all(animations);
-    }
-
-    // ⟪ Fermi Ĉiujn Panelojn ⟫
+    // ⟪ Fermi Ĉiujn Panelojn ⟫ - Unuigita fino de sistemaj paneloj, starta menuo kaj doko
     static fermiCxiujnPanelojn(): Promise<void[]> {
         const animations: Promise<void>[] = [];
 
@@ -117,18 +89,18 @@ class PanelaAdministranto {
             }));
         }
 
-        ["status-area", "notification-btn", "clock-area", "recents-btn", "home-area"].forEach(btnId => {
-            this.agordiButononPremita(btnId, false);
-        });
-
         const dock = this.akiriPanelon(this.panels.dock);
-        if (this.cxuPaneloVidebla(dock)) {
+        if (dock && this.cxuPaneloVidebla(dock)) {
             animations.push(AnimacioAdministranto.malaperiEl(dock, {
                 duration: CONSTANTS.ANIM.DURATION_SHORT
             }).then(() => {
                 forigiKlason(dock, "visible");
             }));
         }
+
+        ["status-area", "notification-btn", "clock-area", "recents-btn", "home-area"].forEach(btnId => {
+            agordiButonPremita(btnId, false);
+        });
 
         return Promise.all(animations);
     }
@@ -138,7 +110,6 @@ class PanelaAdministranto {
         if (!panel) return;
         const taskbar: HTMLElement | null = akiriTaskobreton();
         const pos: string = taskbar ? (taskbar.dataset.position || "left") : "left";
-        const estasVertikala: boolean = pos === "left" || pos === "right";
 
         const tbSize: number = akiriTaskobretanGrandecon();
         const tbBuffer: string = `${tbSize + CONSTANTS.SYS.MARGIN * 2}px`;
@@ -149,58 +120,35 @@ class PanelaAdministranto {
         panel.style.transform = "none";
         panel.style.blockSize = "fit-content";
 
-        const pozicioj: { [key: string]: string } = this.#akiriPanelajnPoziciojn(tbBuffer, rando, interspaco, estasSxoviloj, estasVertikala, pos, btnId, panelId, taskbar);
+        const pozicioj: { [key: string]: string } = this._akiriPanelajnPoziciojn(tbBuffer, rando, interspaco, estasSxoviloj, pos, btnId, panelId);
 
         Object.entries(pozicioj).forEach(([prop, val]) => {
             (panel.style as any)[prop] = val;
         });
     }
 
-    // ⟪ Akiri Panelajn Poziciojn ⟫
-    static #akiriPanelajnPoziciojn(tbBuffer: string, rando: string, interspaco: string, estasSxoviloj: boolean, estasVertikala: boolean, pos: string, btnId: string, panelId: string | null, taskbar: HTMLElement | null): { [key: string]: string } {
+    // ⟪ Akiri Panelajn Poziciojn ⟫ - Legas CONSTANTS.TASKBAR_POSITIONS ( unuigita agordo )
+    static _akiriPanelajnPoziciojn(tbBuffer: string, rando: string, interspaco: string, estasSxoviloj: boolean, pos: string, btnId: string, panelId: string | null): { [key: string]: string } {
         const sxovilaOfseto: string = estasSxoviloj ? `calc(${tbBuffer} + 300px + ${interspaco})` : tbBuffer;
         const estasMaldekstra: boolean = btnId === "status-area" || btnId === "recents-btn";
         const estasDekstra: boolean = btnId === "clock-area" || btnId === "notification-btn";
         const estasCentra: boolean = !estasMaldekstra && !estasDekstra;
 
-        // Serĉtabelo de pozicia agordo
-        const agordoj: { [key: string]: { offset: string; align: string; opposite: string; secondary: string; transform: string } } = {
-            bottom: { offset: "bottom", align: "left", opposite: "top", secondary: "right", transform: "translateX(-50%)" },
-            top:    { offset: "top",    align: "left", opposite: "bottom", secondary: "right", transform: "translateX(-50%)" },
-            left:   { offset: "left",   align: "top",  opposite: "right", secondary: "bottom", transform: "translateY(-50%)" },
-            right:  { offset: "right",  align: "top",  opposite: "left", secondary: "bottom", transform: "translateY(-50%)" }
-        };
-
-        const agordo = agordoj[pos] || agordoj.bottom;
+        // Unuigita agordo — la sama tabelo legata de AnimacioAdministranto kaj FenestraAdministranto
+        const agordo = CONSTANTS.TASKBAR_POSITIONS[pos] || CONSTANTS.TASKBAR_POSITIONS.bottom;
         const alignValoro = estasMaldekstra ? rando : estasDekstra ? "auto" : "50%";
 
         return {
-            [agordo.offset]: sxovilaOfseto,
-            [agordo.align]: alignValoro,
-            [agordo.secondary]: estasDekstra ? rando : "auto",
+            [pos]: sxovilaOfseto,
             [agordo.opposite]: "auto",
-            transform: estasCentra ? agordo.transform : "none"
+            [agordo.secondary]: estasDekstra ? rando : "auto",
+            [agordo.align]: alignValoro,
+            transform: estasCentra ? agordo.centerTransform : "none"
         };
     }
 
     // ⟪ Baskuli Panelon ⟫
-    static baskuligiPanelon(panelId: string, btnId: string, estasSxoviloj: boolean = false): void {
-        const panel = this.akiriPanelon(panelId);
-        if (!panel) return;
-
-        const estasVidebla = this.cxuPaneloVidebla(panel);
-        this.fermiCxiujnPanelojn();
-
-        if (!estasVidebla) {
-            setTimeout(() => {
-                this.montriPanelon(panel, btnId, estasSxoviloj, panelId);
-            }, this.animationDuration);
-        }
-    }
-
-    // ⟪ Unuigita Panela Baskulilo ⟫
-
-    static baskuligi( panelId: string, btnId: string, opts?: { onBefore?: () => void; onAboutToShow?: () => void; onShow?: () => void } ): void {
+    static baskuligi(panelId: string, btnId: string, opts?: { onBefore?: () => void; onAboutToShow?: () => void; onShow?: () => void }): void {
         if ( opts?.onBefore ) opts.onBefore();
         const panel = this.akiriPanelon( panelId );
         if ( !panel ) return;
@@ -217,33 +165,14 @@ class PanelaAdministranto {
         }
     }
 
-    // ⟪ Baskuli Rapidajn Agordojn ⟫
+    // ⟪ Baskuli Rapidajn Agordojn ⟫ - la malnova enreta montra kopio kunfandiĝis en montriPanelon
     static baskuligiRapidaAgordoj(): void {
-        return this.baskuligi( this.panels.quickSettings, "status-area", {
-            onAboutToShow: () => {
-                const container = this.akiriPanelon( this.panels.quickSettings );
-                if ( container && ( container as any )._hideTimeout ) {
-                    clearTimeout( ( container as any )._hideTimeout );
-                    delete ( container as any )._hideTimeout;
-                }
-            },
-            onShow: () => {
-                const container = this.akiriPanelon( this.panels.quickSettings );
-                if ( !container ) return;
-                this.poziciigiPanelon( container, "status-area", false, "quickSettings" );
-                void container.offsetWidth;
-                aldoniKlason( container, "visible" );
-                this.agordiButononPremita( "status-area", true );
-                AnimacioAdministranto.malfermiPanelon( container, "quickSettings", {
-                    duration: this.animationDuration
-                } );
-            }
-        } );
+        this.baskuligi( this.panels.quickSettings, "status-area" );
     }
 
     // ⟪ Baskuli Sciigojn ⟫
     static baskuligiSciigojn(): void {
-        return this.baskuligi( this.panels.notifications, "notification-btn", {
+        this.baskuligi( this.panels.notifications, "notification-btn", {
             onBefore: () => {
                 if ( ( window as any ).SciigoAdministranto ) ( window as any ).SciigoAdministranto.renderi();
             }
@@ -252,14 +181,14 @@ class PanelaAdministranto {
 
     // ⟪ Baskuli Horloĝan Elflugaĵon ⟫
     static baskuligiHorlogxoElsxovo(): void {
-        return this.baskuligi( this.panels.clockFlyout, "clock-area", {
+        this.baskuligi( this.panels.clockFlyout, "clock-area", {
             onBefore: () => {
                 if ( ( window as any ).HorlogxoAdministranto ) ( window as any ).HorlogxoAdministranto.aktualigi();
             }
         } );
     }
 
-    // ⟪ Baskuli Komencan Menuon ⟫
+    // ⟪ Baskuli Komencan Menuon ⟫ - uzas la unuigitan baskulan skeletan logikon
     static baskuligiKomencaMenuo(): void {
         const startMenu: HTMLElement | null = akiriKomencanMenuon();
         if (!startMenu) return;
@@ -273,7 +202,7 @@ class PanelaAdministranto {
                 forigiKlason(document.body, "start-menu-open");
             });
         } else {
-            this.fermiSistemajnPanelojn();
+            this.fermiCxiujnPanelojn();
             setTimeout(() => {
                 if ((window as any).LabortablaPiktogramoAdministranto?.startMenu) {
                     (window as any).LabortablaPiktogramoAdministranto.startMenu.refresh();

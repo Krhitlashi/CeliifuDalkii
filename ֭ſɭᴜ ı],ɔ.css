@@ -375,6 +375,164 @@
     block-size: 64px;
 }
 
+/* ⟪ Statusaj Indikiloj ( vertikala baterio + reto ) ⟫ */
+
+.status-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--អារេង);
+}
+
+/* La ikonoj sekvu la orientiĝon de la taskobreto ( kiel la aliaj sekcioj ) */
+#taskbar[data-position="left"] .status-icons,
+#taskbar[data-position="right"] .status-icons {
+    flex-direction: column;
+}
+#taskbar[data-position="bottom"] .status-icons,
+#taskbar[data-position="top"] .status-icons {
+    flex-direction: row;
+}
+
+.battery-icon {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    inline-size: 10px;
+    block-size: 22px;
+}
+
+.battery-body {
+    inline-size: 100%;
+    block-size: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border: 1.5px solid currentColor;
+    border-radius: var(--ចិង);
+    overflow: hidden;
+}
+
+.battery-level {
+    display: block;
+    inline-size: 100%;
+    block-size: 80%;
+    background: currentColor;
+    border-radius: 1px;
+    transition: block-size 0.5s ease;
+}
+
+.wifi-icon {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: flex-end;
+    inline-size: 24px;
+    block-size: 18px;
+}
+
+.wifi-dot {
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    inline-size: 4px;
+    block-size: 4px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.wifi-arc {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    box-sizing: border-box;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+}
+
+.wifi-arc-1 { inline-size: 12px; block-size: 8px;  bottom: 4px; }
+.wifi-arc-2 { inline-size: 18px; block-size: 13px; bottom: 2px; }
+.wifi-arc-3 { inline-size: 24px; block-size: 18px; bottom: 0; }
+
+.wifi-icon.offline .wifi-arc { opacity: 0.25; }
+.wifi-icon.offline .wifi-dot { opacity: 0.4; }
+
+.wifi-icon.offline::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -2px;
+    inline-size: 22px;
+    block-size: 2px;
+    border-radius: 1px;
+    background: currentColor;
+    transform: rotate(-45deg);
+    opacity: 0.8;
+}
+
+/* ⟪ Docko de Minimumigitaj Fenestroj ⟫ */
+
+#taskbar-dock {
+    flex-direction: column;
+    gap: var(--អារេង);
+    padding: var(--អារេង);
+    border-radius: var(--អិត្ភេ);
+    border: var(--សាកព៏);
+    background: var(--ឆាងាធីច្ហិ);
+    -webkit-backdrop-filter: var(--ច្ហិនី);
+    backdrop-filter: var(--ច្ហិនី);
+}
+
+/* Ancori la dokon kontraŭflanke de la taskobreto */
+
+#taskbar[data-position="left"] ~ #taskbar-dock {
+    right: var(--អារេងព៏);
+    top: 50%;
+    transform: translateY(-50%);
+}
+#taskbar[data-position="right"] ~ #taskbar-dock {
+    left: var(--អារេងព៏);
+    top: 50%;
+    transform: translateY(-50%);
+}
+#taskbar[data-position="top"] ~ #taskbar-dock {
+    bottom: var(--អារេងព៏);
+    left: 50%;
+    transform: translateX(-50%);
+}
+#taskbar[data-position="bottom"] ~ #taskbar-dock {
+    top: var(--អារេងព៏);
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#taskbar-dock[data-portebla="true"] {
+    display: none !important;
+}
+
+#taskbar-dock .dock-btn {
+    block-size: auto;
+    justify-content: flex-start;
+    gap: var(--អារេង);
+    padding: var(--អារេងមិ) var(--អារេង);
+    cursor: pointer;
+}
+
+.dock-btn-icon {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.dock-btn-title {
+    max-inline-size: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size-adjust: 0.625;
+}
+
 /* ⟪ Mobile view ⟫ - show home bar, hide start button */
 
 @media (max-width: 767px), (max-height: 767px) {
@@ -451,6 +609,8 @@
     position: absolute;
     min-inline-size: 256px;
     min-block-size: 256px;
+    max-inline-size: 100%;
+    max-block-size: 100%;
     overflow: visible;
 }
 .window.minimized {
@@ -519,6 +679,122 @@
 .window .resize-handle-e { top: 0; right: -4px; bottom: 0; width: 8px; cursor: e-resize; }
 .window .resize-handle-w { top: 0; left: -4px; bottom: 0; width: 8px; cursor: w-resize; }
 .window > iframe { flex: 1; min-block-size: 0; min-inline-size: 0; }
+
+/* ⟪ Fenestraj Taboj ⟫ */
+
+/* La tabstrio anstataŭigas la titolon en la pilolo.
+   La temo difinas "ksaka button" ( 56px larĝa ), do la tabaj butonoj
+   devas transpasi tiun regulojn por esti kompaktaj kaj rulumeblaj. */
+
+ksaka .tab-btn,
+ksaka .tab-add-btn {
+    inline-size: auto;
+    block-size: auto;
+    padding: var(--អារេងមិ) var(--អារេង);
+}
+
+ksaka .tab-add-btn {
+    min-inline-size: 32px;
+}
+
+.window > .cepufal > .tab-enhavujo,
+.window > .tab-enhavujo {
+    flex: 1;
+    min-block-size: 0;
+    min-inline-size: 0;
+}
+
+.window ksaka {
+    min-inline-size: 0;
+}
+
+.tab-strip {
+    flex: 1;
+    min-inline-size: 0;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-inline: auto;
+    overflow-block: hidden;
+}
+
+.tab-btn {
+    flex: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    block-size: auto;
+    min-block-size: 0;
+    inline-size: auto;
+    padding: var(--អារេងមិ) var(--អារេង);
+    gap: var(--អារេងមិ);
+    cursor: grab;
+}
+
+.tab-title {
+    max-inline-size: 128px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tab-close {
+    cursor: pointer;
+    font-size-adjust: 0.625;
+    border-radius: var(--ចិង);
+    padding: 0 var(--អារេងមិ);
+    background-color: var(--តានេក);
+}
+
+.tab-close:hover {
+    background-color: var(--តានេក២);
+}
+
+.tab-add-btn {
+    flex: none;
+    min-inline-size: 32px;
+    inline-size: auto;
+    block-size: auto;
+}
+
+.tab-enhavujo {
+    position: relative;
+    flex: 1;
+    min-block-size: 0;
+    min-inline-size: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.tab-enhavujo > .tab-enhavo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-block-size: 0;
+    min-inline-size: 0;
+}
+
+.tab-drag-ghost {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+    padding: var(--អារេងមិ) var(--អារេង);
+    border-radius: var(--អិត្ភេមិ);
+    border: var(--សាកព៏២);
+    background: var(--ឆាងាធីច្ហិ);
+    -webkit-backdrop-filter: var(--ច្ហិនី);
+    backdrop-filter: var(--ច្ហិនី);
+    white-space: nowrap;
+}
+
+.tab-btn.tab-dragging {
+    opacity: 0.375;
+}
+
+.tab-strip.tab-drop-target {
+    outline: var(--សាកព៏២);
+    outline-offset: calc(-1 * var(--អារេងមិ));
+    border-radius: var(--អិត្ភេមិ);
+}
 
 /* ⟪ Utility Classes ⟫ */
 

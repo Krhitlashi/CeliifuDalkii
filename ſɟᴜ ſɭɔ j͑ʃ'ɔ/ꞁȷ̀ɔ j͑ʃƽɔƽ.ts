@@ -18,7 +18,6 @@
     // ⟨ Sistemo ⟩
     SYS: {
         SWIPE_THRESHOLD: 0o200,
-        PANEL_ANIMATION_DURATION: 0o300,
         TASKBAR_SIZE: 0o100,
         MARGIN: 0o20,
         DOCK_MARGIN: 0o10,
@@ -141,6 +140,46 @@
         }
     },
 
+    // ⟨ Taskobretaj Pozicioj ⟩ - Unuigita agordo por panelaj ŝovoj, fenestraj ŝovoj kaj panela poziciigo
+    TASKBAR_POSITIONS: {
+        top: {
+            slide: "translateY(-100%)",
+            panelOffset: "translateY(-{offset}px)",
+            windowOffset: "translateY({offset}px)",
+            opposite: "bottom",
+            secondary: "right",
+            align: "left",
+            centerTransform: "translateX(-50%)"
+        },
+        bottom: {
+            slide: "translateY(100%)",
+            panelOffset: "translateY(-{offset}px)",
+            windowOffset: "translateY(-{offset}px)",
+            opposite: "top",
+            secondary: "right",
+            align: "left",
+            centerTransform: "translateX(-50%)"
+        },
+        left: {
+            slide: "translateX(-100%)",
+            panelOffset: "translateX({offset}px)",
+            windowOffset: "translateX({offset}px)",
+            opposite: "right",
+            secondary: "bottom",
+            align: "top",
+            centerTransform: "translateY(-50%)"
+        },
+        right: {
+            slide: "translateX(100%)",
+            panelOffset: "translateX(-{offset}px)",
+            windowOffset: "translateX(-{offset}px)",
+            opposite: "left",
+            secondary: "bottom",
+            align: "top",
+            centerTransform: "translateY(-50%)"
+        }
+    },
+
     // ⟨ Aplikaĵa Agordo ⟩
     APPS_DATA: [
         { path: "ſɟᴜ ſɭɹ/ſןwʞ ꞁȷ̀ᴜ ſɟɔ j͐ʃɹʞ.html", emoji: "🌐", title: "ſןwʞ ꞁȷ̀ᴜ ſɟɔ j͐ʃɹʞ" },
@@ -163,6 +202,10 @@
             { id: "bluetooth", icon: "ᛒ", label: "Bluetooth", string: "qs_bluetooth", default: true },
             { id: "airplane", icon: "✈️", label: "Airplane", string: "qs_airplane", default: false },
             { id: "dnd", icon: "🔕", label: "DND", string: "qs_dnd", default: false }
+        ],
+        SLIDERS: [
+            { id: "volume", label: "Laŭteco", icon: "🔊", string: "qs_volume", max: 0o100, value: 0o40, handler: "volume" },
+            { id: "brightness", label: "Heleco", icon: "🔆", string: "qs_brightness", max: 0o100, value: 0o60, handler: "brightness" }
         ],
         DEFAULTS: {
             wifi: true,
@@ -210,8 +253,7 @@
 
 (window as any).APPS_DATA = (window as any).CONSTANTS.APPS_DATA;
 (window as any).QS_TOGGLES = (window as any).CONSTANTS.QS.TOGGLES;
-(window as any).CSS_VARS = (window as any).CONSTANTS.CSS_VARS;
-(window as any).SYS_TASKBAR_SIZE = (window as any).CONSTANTS.SYS.TASKBAR_SIZE;
+(window as any).QS_SLIDERS = (window as any).CONSTANTS.QS.SLIDERS;
 
 // ⟪ DOM Kaŝmemora Utilo ⟫
 
@@ -237,8 +279,8 @@ const DOMCache: any = {
 // ⟪ Sciiga Helpilo ⟫
 
 function malplenigiSciigojn(): void {
-    if ((window as any).NotificationManager) {
-        (window as any).NotificationManager.clear();
+    if ((window as any).SciigoAdministranto) {
+        (window as any).SciigoAdministranto.malplenigi();
     }
 }
 

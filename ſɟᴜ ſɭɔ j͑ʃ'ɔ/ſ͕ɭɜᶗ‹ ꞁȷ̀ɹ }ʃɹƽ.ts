@@ -233,7 +233,7 @@ export class PiktogramaKrado {
             e.stopPropagation();
             e.preventDefault();
             if ( ( window as any ).KuntekstaMenuoAdministranto ) {
-                ( window as any ).KuntekstaMenuoAdministranto.showForTile( e.clientX, e.clientY, el );
+                ( window as any ).KuntekstaMenuoAdministranto.montriPorKahelo( e.clientX, e.clientY, el );
             }
         };
 

@@ -2,6 +2,7 @@
 
 declare const APPS_DATA: any;
 declare const QS_TOGGLES: any;
+declare const QS_SLIDERS: any;
 declare const RapidaAgordoAdministranto: any;
 declare const SciigoAdministranto: any;
 declare const limkurzo: any;
@@ -21,6 +22,35 @@ export const LabortablaPiktogramoAdministranto = {
 
     _rearanĝiCxiujn() {
         [ this.labortablo, this.komencaMenuo ].forEach( grid => grid?.rearanĝi() );
+    },
+
+    // Ŝanĝi la etikedan reĝimon de ambaŭ kradoj kaj rekonstrui ĉiujn kahelojn
+    agordiEtikedReĝimon( val: string ) {
+        const kradoj = [ this.labortablo, this.komencaMenuo ].filter( ( k: any ) => k );
+
+        kradoj.forEach( ( krado: any ) => {
+            krado.etikedReĝimo = val;
+            if ( krado.container ) krado.container.innerHTML = "";
+        } );
+
+        // Rekonstrui ĉiujn piktogramojn en ambaŭ kradoj
+        APPS.forEach( ( app: AppData, i: number ) => {
+            this.labortablo?.aldoniPiktogramon( app, i );
+            this.komencaMenuo?.aldoniPiktogramon( app, i );
+        } );
+        this._alakrogiCxiujnKradojn();
+        this._rearanĝiCxiujn();
+
+        // Restarigi la konservitan labortablan aranĝon post la rekonstruo
+        if ( KonservejaUtilo && this.labortablo?.container ) {
+            const tiles = Array.from( this.labortablo.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[];
+            const labortablo = this.labortablo;
+            KonservejaUtilo.aplikiKahelanAranĝon( tiles, "desktopTileLayout", ( kahelo: HTMLElement, col: number, row: number ) => {
+                labortablo.aplikiPozicion( kahelo, col, row );
+            } );
+        }
+        this.labortablo?.refreŝigi();
+        this.komencaMenuo?.refreŝigi();
     },
 
     _alakrogiCxiujnKradojn() {
@@ -268,10 +298,7 @@ export const LabortablaPiktogramoAdministranto = {
             </div>
         ` ).join( "" );
 
-        const defaultSliders = [
-            { id: "volume", label: "Laŭteco", icon: "🔊", string: "qs_volume", max: 0o100, value: 0o40, handler: "volume" },
-            { id: "brightness", label: "Heleco", icon: "🔆", string: "qs_brightness", max: 0o100, value: 0o60, handler: "brightness" }
-        ];
+        const defaultSliders = QS_SLIDERS;
         let sliders = [ ...defaultSliders ];
         if ( savedSliderOrder ) {
             sliders = savedSliderOrder.map( ( id: string ) => defaultSliders.find( ( s: any ) => s.id === id ) ).filter( Boolean as any );
