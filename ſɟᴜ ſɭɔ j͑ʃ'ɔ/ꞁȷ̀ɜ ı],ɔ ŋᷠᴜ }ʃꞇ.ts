@@ -19,6 +19,7 @@ export interface CustomHTMLElement extends HTMLElement {
 export interface AppData {
     name: string;
     icon: string;
+    koloro: string;
     app: string;
 }
 

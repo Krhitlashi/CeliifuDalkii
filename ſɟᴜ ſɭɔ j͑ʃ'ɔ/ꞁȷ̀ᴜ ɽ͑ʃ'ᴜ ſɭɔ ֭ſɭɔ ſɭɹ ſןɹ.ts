@@ -11,6 +11,7 @@ declare const akiriTextojn: any;
 declare const APPS: any;
 declare const aktualigiDokon: any;
 declare const akiriFenestranTitolon: any;
+declare const akiriPiktogramon: any;
 
 import { setupMontrajnEventojn, akiriMontranPunkton } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ŋᷠᴜ ſȷɔ ſɭ,ꞇ.js";
 
@@ -185,13 +186,6 @@ class FenestraAdministranto {
     static _akiriAktivanTabon( fenestro: HTMLElement ): HTMLElement | null {
         const taboj = this._akiriTabojn( fenestro );
         return taboj.find( t => t.getAttribute( "aria-pressed" ) === "true" ) || taboj[ taboj.length - 1 ] || null;
-    }
-
-    // ⟪ Akiri Grupan Fenestron ( fenestro kun tabstrio ) ⟫
-
-    static _akiriGrupanFenestron(): HTMLElement | null {
-        const fenestroj = Array.from( document.querySelectorAll( ".window" ) ) as HTMLElement[];
-        return fenestroj.find( f => f.querySelector( ".tab-strip .tab-btn" ) ) || null;
     }
 
     // ⟪ Aldoni Tabon al Fenestro ⟫
@@ -520,7 +514,7 @@ class FenestraAdministranto {
         const ujo = akiriFenestranUjon();
         const fenestro = this._kreiFenestranElementon( id, titolo );
         const app = ( typeof CONSTANTS.APPS_DATA !== "undefined" ) ? CONSTANTS.APPS_DATA.find( ( a: any ) => a.path === vojo ) : null;
-        fenestro.dataset.emoji = app?.emoji || "🖥️";
+        fenestro.dataset.piktogramo = app?.piktogramo || "Defaŭlta";
 
         const hazardo = this._aleatoriaFenestraPozicio( CONSTANTS.WM.WINDOW_BASE_Y_CREATE );
         fenestro.style.left = ( opts?.x ?? hazardo.x ) + "px";
@@ -544,6 +538,8 @@ class FenestraAdministranto {
         fenestro.dataset.activeTab = tabId;
 
         ujo.appendChild( fenestro );
+        // Ĉe porteblaj ekranoj novaj fenestroj malfermiĝas plenekrane
+        if ( this.estasPortebla() ) fenestro.classList.add( "fullscreen" );
         this._agordiFenestrajnInteragojn( fenestro );
         this.gxisdatigiTaskobretajnAplikojn();
 
@@ -689,24 +685,8 @@ class FenestraAdministranto {
     // ⟪ Ŝargi Aplikon el Vojo ⟫
 
     static sxargiAplikonDeVojo( path: string, titolo: string ): void {
-        // Kontroli ĉu aplikaĵo jam estas malfermita kiel tabo ie ajn
-        const ekzistantaTabo = Array.from( document.querySelectorAll( ".tab-btn" ) ).find( ( t: any ) =>
-            ( t.dataset.src || "" ) === path
-        ) as HTMLElement | undefined;
-
-        if ( ekzistantaTabo ) {
-            // Aplikaĵo jam malfermita — aktivigi ĝian tabon kaj refreŝigi lastatempajn
-            this.aktivigiTabon( ekzistantaTabo.dataset.tab as string );
-            this.renderiLastatempajn();
-            return;
-        }
-
-        // Trovi grupan fenestron ( ĉefan taban fenestron ) por enigi la tabon
-        const grupaFenestro = this._akiriGrupanFenestron();
-        if ( grupaFenestro ) {
-            this.aldoniTabonAl( grupaFenestro, path, titolo );
-            return;
-        }        // Neniu grupa fenestro — krei novan fenestron kun la unua tabo
+        // Ĉiam malfermi en propra fenestro ( ikonaj klakoj ne grupiĝas en tabojn;
+        // taboj kreiĝas nur per la nova-tabo-butono aŭ trenante tabon en tabstrion )
         const { x, y } = this._aleatoriaFenestraPozicio( CONSTANTS.WM.WINDOW_BASE_Y_LOAD );
         this._kreiFenestronKunTabo(
             ( iframeId ) => this._konstruiIframanEnhavon( iframeId, path ),
@@ -826,7 +806,10 @@ class FenestraAdministranto {
     // ⟪ Komenci Trenadon ⟫
 
     static komenciTrenadon( e: MouseEvent | TouchEvent, id: string ): void {
-        e.preventDefault();
+        // Nur musaj eventoj preventDefault — ĉe tuŝo tio subpremus la laŭtan
+        // klakon de la butonoj en la pilolo ( fermi, maksimumigi, taboj... ),
+        // do ĉe tuŝo la gestojn blokas CSS touch-action anstataŭe
+        if ( e.type === "mousedown" ) e.preventDefault();
 
         const fenestro = document.getElementById( id );
         if ( !fenestro || ( fenestro as any )._estasRegrandiganta ) return;
@@ -842,8 +825,20 @@ class FenestraAdministranto {
         const ŝovoY = klientoY - rekt.top;
 
         const fariTrenon = ( novaX: number, novaY: number ) => {
-            fenestro.style.left = ( novaX - ŝovoX ) + "px";
-            fenestro.style.top = ( novaY - ŝovoY ) + "px";
+            let maldekstra = novaX - ŝovoX;
+            let supro = novaY - ŝovoY;
+
+            // Ĉe porteblaj ekranoj la fenestro ne rajtas eliri el la kadro:
+            // konservi almenaŭ la titolan strion atingebla ĉiudirekte
+            const estasPortebla = window.innerWidth < CONSTANTS.BREAKPOINTS.MOBILE || window.innerHeight < CONSTANTS.BREAKPOINTS.MOBILE;
+            if ( estasPortebla ) {
+                const minimumaVidebla = 64;
+                maldekstra = Math.min( Math.max( maldekstra, -( fenestro.offsetWidth - minimumaVidebla ) ), window.innerWidth - minimumaVidebla );
+                supro = Math.min( Math.max( supro, 0 ), window.innerHeight - minimumaVidebla );
+            }
+
+            fenestro.style.left = maldekstra + "px";
+            fenestro.style.top = supro + "px";
         };
 
         const haltiTrenon = () => {
@@ -941,7 +936,87 @@ class FenestraAdministranto {
         }
     }
 
-    // ⟪ Bildigi Lastatempajn ⟫
+    // ⟪ Poŝa Plenekrana Reĝimo ⟫
+
+    static estasPortebla(): boolean {
+        return window.innerWidth < CONSTANTS.BREAKPOINTS.MOBILE || window.innerHeight < CONSTANTS.BREAKPOINTS.MOBILE;
+    }
+
+    // Ĉe porteblaj ekranoj fenestroj montriĝas plenekrane ( sen pilolo );
+    // nur traversoj de la poŝa sojlo ŝanĝas la reĝimon de ĉiuj fenestroj
+    static _lastaPortebleco: boolean | null = null;
+
+    static aktualigiPlenekrananModon( devigi: boolean = false ): void {
+        const portebla = this.estasPortebla();
+        if ( !devigi && portebla === this._lastaPortebleco ) return;
+        this._lastaPortebleco = portebla;
+        document.querySelectorAll( ".window" ).forEach( ( f: any ) => f.classList.toggle( "fullscreen", portebla ) );
+    }
+
+    // Minimumigi la plej supran ne-minimumigitan fenestron ( poŝa hejmbreto )
+    static minimumigiFokusitanFenestron(): void {
+        const fenestroj = Array.from( document.querySelectorAll( ".window:not(.minimized)" ) ) as HTMLElement[];
+        if ( fenestroj.length === 0 ) return;
+        const fokusita = fenestroj.reduce( ( a, b ) => ( parseInt( b.style.zIndex || "0", 10 ) > parseInt( a.style.zIndex || "0", 10 ) ? b : a ) );
+        this.minimumigiFenestron( fokusita.id );
+    }
+
+    // Fermi la plej supran ne-minimumigitan fenestron ( poŝa hejmbreto )
+    static fermiFokusitanFenestron(): void {
+        const fenestroj = Array.from( document.querySelectorAll( ".window:not(.minimized)" ) ) as HTMLElement[];
+        if ( fenestroj.length === 0 ) return;
+        const fokusita = fenestroj.reduce( ( a, b ) => ( parseInt( b.style.zIndex || "0", 10 ) > parseInt( a.style.zIndex || "0", 10 ) ? b : a ) );
+        this.fermiFenestron( fokusita.id );
+    }
+
+    // ⟪ Poŝaj Gestoj ⟫
+
+    static iniciiPosxajnGestojn(): void {
+        const hejmbreto = document.getElementById( "home-bar" );
+
+        // Suprenŝvebo sur la hejmbreto ankaŭ fermas la fokusitan fenestron
+        // ( la simpla premo traktiĝas per la ekzista onclick de la hejmbreto )
+        if ( hejmbreto ) {
+            let komencoY: number | null = null;
+            hejmbreto.addEventListener( "touchstart", ( e: TouchEvent ) => {
+                komencoY = e.touches[ 0 ].clientY;
+            }, { passive: true } );
+            hejmbreto.addEventListener( "touchend", ( e: TouchEvent ) => {
+                if ( komencoY === null ) return;
+                const supren = komencoY - e.changedTouches[ 0 ].clientY;
+                komencoY = null;
+                if ( supren > 40 && this.estasPortebla() ) {
+                    e.stopPropagation();
+                    this.minimumigiFokusitanFenestron();
+                }
+            } );
+        }
+
+        // Malsuprenŝvebo de la supra rando → eliri plenekranan reĝimon ( fenestrigita vido )
+        let supraKomencoY: number | null = null;
+        let supraFenestro: HTMLElement | null = null;
+        document.addEventListener( "touchstart", ( e: TouchEvent ) => {
+            supraKomencoY = null;
+            supraFenestro = null;
+            const tusxo = e.touches[ 0 ];
+            if ( !tusxo || tusxo.clientY > 48 ) return;
+            const plenekranaj = Array.from( document.querySelectorAll( ".window.fullscreen:not(.minimized)" ) ) as HTMLElement[];
+            if ( plenekranaj.length === 0 ) return;
+            supraFenestro = plenekranaj.reduce( ( a, b ) => ( parseInt( b.style.zIndex || "0", 10 ) > parseInt( a.style.zIndex || "0", 10 ) ? b : a ) );
+            supraKomencoY = tusxo.clientY;
+        }, { passive: true } );
+        document.addEventListener( "touchend", ( e: TouchEvent ) => {
+            if ( supraKomencoY === null || !supraFenestro ) return;
+            const malsupren = e.changedTouches[ 0 ].clientY - supraKomencoY;
+            supraKomencoY = null;
+            if ( malsupren > 60 ) {
+                supraFenestro.classList.remove( "fullscreen" );
+                supraFenestro.style.zIndex = ( ++this.statikaZIndekso ).toString();
+                supraFenestro = null;
+            }
+        } );
+    }    // ⟪ Bildigi Lastatempajn ⟫
+
     static renderiLastatempajn(): void {
         const listo = document.getElementById( "recents-list" );
         if ( !listo ) return;
@@ -956,7 +1031,7 @@ class FenestraAdministranto {
 
         listo.innerHTML = Array.from( fenestroj ).map( ( f: any ) => {
             const titolo = akiriFenestranTitolon( f );
-            const emoĝio = f.dataset.emoji || "🖥️";
+            const emoĝio = akiriPiktogramon( f.dataset.piktogramo || "Defaŭlta" );
             const id = f.id;
             return `
                 <div class="recents-card" onclick="FenestraAdministranto.fokusigiFenestron('${id}')">
@@ -965,11 +1040,26 @@ class FenestraAdministranto {
                         <p class="title-bar-title">${titolo}</p>
                     </ksaka>
                     <div class="recents-preview">
-                        ${emoĝio}
+                        ${this._akiriRecentsanBildo( f, emoĝio )}
                     </div>
                 </div>
             `;
         } ).join( "" );
+    }
+
+    // Redoni vivan bildon de la aktiva fenestra enhavo ( klonita iframe ),
+    // aŭ la aplikaĵan piktogramon kiel rezervan prezentaĵon
+    static _akiriRecentsanBildo( fenestro: Element, rezervaEmoĝio: string ): string {
+        const aktiva = fenestro.querySelector( ".tab-enhavo:not([style*='none']) iframe, .tab-enhavo:not([style*='none']) webview" ) as HTMLIFrameElement | null
+            || fenestro.querySelector( "iframe" ) as HTMLIFrameElement | null;
+        if ( aktiva && aktiva.src ) {
+            const kopio = aktiva.cloneNode( false ) as HTMLIFrameElement;
+            kopio.id = "";
+            kopio.setAttribute( "aria-hidden", "true" );
+            kopio.setAttribute( "tabindex", "-1" );
+            return kopio.outerHTML;
+        }
+        return rezervaEmoĝio;
     }
 
     // ⟪ Ĝisdatigi Dokon ⟫
@@ -995,7 +1085,7 @@ class FenestraAdministranto {
         doko.innerHTML = minimumigitaj.map( ( f: any ) => {
             const titolo = akiriFenestranTitolon( f );
             const id = f.id;
-            const emoĝio = f.dataset.emoji || "🖥️";
+            const emoĝio = akiriPiktogramon( f.dataset.piktogramo || "Defaŭlta" );
             return `
                 <button class="dock-btn n2tase" onclick="event.stopPropagation(); FenestraAdministranto.fokusigiFenestron('${id}')" title="${titolo}">
                     <span class="dock-btn-icon">${emoĝio}</span>
@@ -1267,12 +1357,25 @@ class FenestraAdministranto {
         // Iniciati taskobreton kun konservita pozicio kaj enŝovoj
         this.iniciiTaskobreton();
 
+        // Restarigi la apartecon de la portebla krado ( antaŭ la krada konstruo en Sistemo.init )
+        const konservitaAparteco = localStorage.getItem( "os-mobile-grid-separate" );
+        if ( konservitaAparteco !== null ) {
+            CONSTANTS.DIM.MOBILE_GRID_SEPARATE = konservitaAparteco !== "off";
+        }
+
         // Restarigi lingvon kaj etikedan montron el localStorage
         const konservitaLingvo = localStorage.getItem( "os-language" );
         if ( konservitaLingvo ) this.agordiLingvon( konservitaLingvo );
 
-        // Regului la dokan videblecon ĉe grandecaj ŝanĝoj ( portebla ↔ nefonebla )
-        window.addEventListener( "resize", () => this.gxisdatigiDokon() );
+        // Regului la dokan videblecon kaj plenekranan reĝimon ĉe grandecaj ŝanĝoj ( portebla ↔ nefonebla )
+        window.addEventListener( "resize", () => {
+            this.gxisdatigiDokon();
+            this.aktualigiPlenekrananModon();
+        } );
+        this.aktualigiPlenekrananModon( true );
+
+        // Poŝaj gestoj: hejmbreto kaj ŝvebo de la supra rando
+        this.iniciiPosxajnGestojn();
 
         // Etikedmontra resto post kiam ĉiuj administrantoj estas konstruitaj
         const konservitaEtikedo = localStorage.getItem( "os-label-display" );
@@ -1301,9 +1404,31 @@ class FenestraAdministranto {
         }
     }
 
+    // ⟪ Agordi Porteblan Kradan Apartecon ⟫
+
+    static agordiPorteblanKradanApartecon( val: string ): void {
+        const aparta = val !== "off";
+        CONSTANTS.DIM.MOBILE_GRID_SEPARATE = aparta;
+        localStorage.setItem( "os-mobile-grid-separate", aparta ? "on" : "off" );
+
+        // Rekomputi la krad-dimensiojn ( labortabla origina kiam la spegulado
+        // estas malŝaltita, faldebla 6 × 8 kiam ŝaltita )
+        const admin = ( window as any ).LabortablaPiktogramoAdministranto;
+        admin?.labortablo?.rekomputiDimensiojn?.();
+        admin?.komencaMenuo?.rekomputiDimensiojn?.();
+
+        // Rekonstrui ambaŭ kradojn kun la novaj dimensioj
+        if ( admin?.agordiEtikedReĝimon ) {
+            const nuna = localStorage.getItem( "os-label-display" ) || "vertical-pill";
+            admin.agordiEtikedReĝimon( nuna );
+        }
+    }
+
     // ⟪ Agordi Taskobretan Pozicion ⟫
 
-    static agordiTaskobretanPozicion( pos: string ): void {
+    // @param persisti - ĉu konservi la pozicion en localStorage ( la aŭtomata
+    // devigo ĉe porteblaj ekranoj ne devas anstataŭigi la konservitan agordon )
+    static agordiTaskobretanPozicion( pos: string, persisti: boolean = true ): void {
         const taskobar = akiriTaskobreton();
         if ( taskobar ) taskobar.dataset.position = pos;
 
@@ -1353,8 +1478,8 @@ class FenestraAdministranto {
             }, CONSTANTS.WM.TASKBAR_REPOSITION_DELAY );
         }
 
-        // Konservi al localStorage
-        localStorage.setItem( "os-taskbar-position", pos );
+        // Konservi al localStorage ( nur se petite )
+        if ( persisti ) localStorage.setItem( "os-taskbar-position", pos );
     }
 
     // ⟪ Inicii Taskobreton ⟫
@@ -1367,54 +1492,36 @@ class FenestraAdministranto {
         taskobar.dataset.flow = "default";
         taskobar.dataset.large = "false";
 
-        // Kontroli ĉu portebla aparato ( malgranda ekrano )
-        const estasPortebla = window.innerWidth < CONSTANTS.BREAKPOINTS.MOBILE || window.innerHeight < CONSTANTS.BREAKPOINTS.MOBILE;
+        // Ĉe porteblaj ekranoj la taskobreto estas ĉiam devigita laŭ orientiĝo
+        // ( portreto: sube; pejzaĝo: flanke ) — SEN anstataŭigi la konservitan
+        // agordon, do transiri al normala vido restarigas la uzantan preferon.
+        // Ĉe normalaj ekranoj la konservita pozicio estas restarigata.
+        const aktualigiTaskobreton = ( devigi: boolean = false ) => {
+            const estasPortebla = window.innerWidth < CONSTANTS.BREAKPOINTS.MOBILE || window.innerHeight < CONSTANTS.BREAKPOINTS.MOBILE;
 
-        // Aŭtomate pozicii taskobreton bazite sur ekrana grando kaj orientiĝo
-        const aŭtomatePoziciiTaskobreton = () => {
-            const novaEstasPortebla = window.innerWidth < CONSTANTS.BREAKPOINTS.MOBILE || window.innerHeight < CONSTANTS.BREAKPOINTS.MOBILE;
-            const novaEstasPortreta = window.innerHeight > window.innerWidth;
-            const nunaPozicio = taskobar.dataset.position;
-
-            if ( novaEstasPortebla ) {
-                const validasPorPortreto = nunaPozicio === "bottom";
-                const validasPorPejzaĝo = nunaPozicio === "left" || nunaPozicio === "right";
-                const bezonasĜisdatigon = novaEstasPortreta ? !validasPorPortreto : !validasPorPejzaĝo;
-
-                if ( bezonasĜisdatigon ) {
-                    this.agordiTaskobretanPozicion( novaEstasPortreta ? "bottom" : "left" );
+            if ( estasPortebla ) {
+                const estasPortreta = window.innerHeight > window.innerWidth;
+                const devigaPozicio = estasPortreta ? "bottom" : "left";
+                if ( devigi || taskobar.dataset.position !== devigaPozicio ) {
+                    this.agordiTaskobretanPozicion( devigaPozicio, false );
+                }
+            } else {
+                const konservitaPozicio = localStorage.getItem( "os-taskbar-position" ) || "left";
+                if ( devigi || taskobar.dataset.position !== konservitaPozicio ) {
+                    this.agordiTaskobretanPozicion( konservitaPozicio, false );
                 }
             }
         };
 
-        if ( estasPortebla ) {
-            // Portebla: aŭtomate detekti orientiĝon kaj agordi pozicion
-            const estasPortreta = window.innerHeight > window.innerWidth;
-            const konservitaPozicio = localStorage.getItem( "os-taskbar-position" );
+        // Ĉiam apliki almenaŭ unufoje ĉe starto — la voko ankaŭ starigas la
+        // panelajn enŝovojn ( --panel-inset-* ), sen kiuj la labortablo etendiĝas
+        // ĝis la randoj de la ekrano
+        aktualigiTaskobreton( true );
 
-            if ( konservitaPozicio ) {
-                // Uzi konservitan pozicion se ĝi kongruas kun orientiĝo
-                const validasPorPortreto = konservitaPozicio === "bottom";
-                const validasPorPejzaĝo = konservitaPozicio === "left" || konservitaPozicio === "right";
-
-                if ( ( estasPortreta && validasPorPortreto ) || ( !estasPortreta && validasPorPejzaĝo ) ) {
-                    this.agordiTaskobretanPozicion( konservitaPozicio );
-                } else {
-                    // Aŭtomate agordi bazite sur orientiĝo
-                    this.agordiTaskobretanPozicion( estasPortreta ? "bottom" : "left" );
-                }
-            } else {
-                // Neniu konservita pozicio - aŭtomate agordi bazite sur orientiĝo
-                this.agordiTaskobretanPozicion( estasPortreta ? "bottom" : "left" );
-            }
-
-            // Aŭskulti orientiĝajn ŝanĝojn kaj regrandigojn
-            window.addEventListener( "orientationchange", aŭtomatePoziciiTaskobreton );
-            window.addEventListener( "resize", aŭtomatePoziciiTaskobreton );
-        } else {
-            const konservitaPozicio = localStorage.getItem( "os-taskbar-position" ) || "left";
-            this.agordiTaskobretanPozicion( konservitaPozicio );
-        }
+        // Aŭskulti orientiĝajn ŝanĝojn kaj regrandigojn por sekvi vidtransirojn
+        // ( envolvitaj por ne transdoni la eventon kiel la devigi-flagon )
+        window.addEventListener( "orientationchange", () => aktualigiTaskobreton() );
+        window.addEventListener( "resize", () => aktualigiTaskobreton() );
     }
 }
 
@@ -1428,7 +1535,8 @@ const agordajAgoj: { [ key: string ]: string } = {
     updateTaskbarSettings: "gxisdatigiTaskobretajnAgordojn",
     setLabelDisplay: "agordiEtikedMontron",
     setLanguage: "agordiLingvon",
-    setTaskbarPosition: "agordiTaskobretanPozicion"
+    setTaskbarPosition: "agordiTaskobretanPozicion",
+    setMobileGridSeparate: "agordiPorteblanKradanApartecon"
 };
 
 window.addEventListener( "message", ( e ) => {

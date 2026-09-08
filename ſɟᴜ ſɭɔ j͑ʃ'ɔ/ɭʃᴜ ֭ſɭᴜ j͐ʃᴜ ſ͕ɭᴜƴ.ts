@@ -161,6 +161,37 @@ const AnimacioAdministranto: {
     ): Promise<void> {
         if (!element) return Promise.resolve();
 
+        // Ĉe porteblaj ekranoj paneloj animacias kiel plenekranaj fenestroj:
+        // glito el la taskobreta rando + skalo + malaperi ( sama kiel fenestroMalfermi/Fermi )
+        const portebla = window.innerWidth < CONSTANTS.BREAKPOINTS.MOBILE || window.innerHeight < CONSTANTS.BREAKPOINTS.MOBILE;
+        if ( portebla ) {
+            const frakcio: number = CONSTANTS.ANIM.FRACTIONS.oneEighth;
+            const skalo: number = CONSTANTS.ANIM.FRACTIONS.sevenEighths;
+            const akso = this.akiriTaskobretanGrandonPorPozicio(null, frakcio);
+            const taskbretaTransformo = this._fenestraTaskobretoTransformo(akso.position, akso.offset, isEntering);
+            const startTransform = isEntering ? `${taskbretaTransformo} scale(${skalo})` : "scale(1)";
+            const endTransform = isEntering ? "scale(1)" : `${taskbretaTransformo} scale(${skalo})`;
+
+            return this._animacii(
+                element,
+                { transform: startTransform, opacity: isEntering ? 0 : 1 },
+                { transform: endTransform, opacity: isEntering ? 1 : 0 },
+                options,
+                ( el ) => {
+                    el.style.display = options.display || "flex";
+                    el.style.transform = startTransform;
+                    el.style.opacity = isEntering ? "0" : "1";
+                    el.style.pointerEvents = "none";
+                },
+                ( el ) => {
+                    el.style.transform = "";
+                    el.style.opacity = "";
+                    el.style.pointerEvents = "";
+                    if (!isEntering) el.style.display = "none";
+                }
+            );
+        }
+
         const fraction: number = options.fraction ?? 1;
         const direction = this.akiriPanelanDirekton(panelId);
         const edge = isEntering ? direction.from : direction.to;

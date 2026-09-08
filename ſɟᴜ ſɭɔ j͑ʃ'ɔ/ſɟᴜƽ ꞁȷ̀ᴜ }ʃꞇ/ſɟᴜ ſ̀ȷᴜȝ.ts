@@ -66,7 +66,8 @@ const KonservejaUtilo = {
                 col: parseInt( kahelo.dataset.col as string ) || 0,
                 row: parseInt( kahelo.dataset.row as string ) || 0,
                 colSpan: parseInt( kahelo.dataset.colSpan as string ) || 1,
-                rowSpan: parseInt( kahelo.dataset.rowSpan as string ) || 1
+                rowSpan: parseInt( kahelo.dataset.rowSpan as string ) || 1,
+                page: parseInt( kahelo.dataset.page as string ) || 0
             } ) ).filter( ero => ero.id );
             
             localStorage.setItem( stokejaŜlosilo, JSON.stringify( aranĝo ) );
@@ -80,7 +81,7 @@ const KonservejaUtilo = {
      * @param {string} stokejaŝlosilo - Ŝlosilo por localStorage ( defaŭlte: "desktopTileLayout" )
      * @returns {Array<{id: string, col: number, row: number, colSpan: number, rowSpan: number}>}
      */
-    sxargiKahelanAranĝon( stokejaŜlosilo: string = "desktopTileLayout" ): Array<{id: string, col: number, row: number, colSpan: number, rowSpan: number}> {
+    sxargiKahelanAranĝon( stokejaŜlosilo: string = "desktopTileLayout" ): Array<{id: string, col: number, row: number, colSpan: number, rowSpan: number, page?: number}> {
         try {
             const ero = localStorage.getItem( stokejaŜlosilo );
             return ero ? JSON.parse( ero ) : [];
@@ -103,10 +104,17 @@ const KonservejaUtilo = {
             const kahelId = kahelo.id || kahelo.dataset.app || kahelo.dataset.id;
             const konservita = konservitaAranĝo.find( ero => ero.id === kahelId );
             if ( konservita ) {
+                // Forĵeti konservitajn poziciojn ekster la nuna krado ( la aranĝo
+                // estis konservita por alia krada grandeco kaj denziglos ĝin )
+                if ( konservita.col < 0 || konservita.row < 0 ) return;
+
                 kahelo.dataset.col = konservita.col.toString();
                 kahelo.dataset.row = konservita.row.toString();
                 kahelo.dataset.colSpan = konservita.colSpan.toString();
                 kahelo.dataset.rowSpan = konservita.rowSpan.toString();
+                if ( typeof konservita.page === "number" ) {
+                    kahelo.dataset.page = konservita.page.toString();
+                }
                 if ( aplikiPozicionFn ) {
                     aplikiPozicionFn( kahelo, konservita.col, konservita.row, konservita.colSpan, konservita.rowSpan );
                 }

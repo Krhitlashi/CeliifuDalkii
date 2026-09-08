@@ -32,8 +32,24 @@ const Sistemo = {
     agordiEventojn() {
         const hb = document.getElementById( "home-bar" );
         if ( hb ) hb.onclick = () => {
-            if ( document.body.classList.contains( "start-menu-open" ) ) (window as any).PanelaAdministranto.fermiCxiujnPanelojn();
-            else (window as any).PanelaAdministranto.baskuligiKomencaMenuo();
+            const paneloj = (window as any).PanelaAdministranto;
+            const ekranTiro = document.querySelector( "#quick-settings-container.visible, #notifications-panel.visible, #recents-panel.visible, #clock-panel.visible, #taskbar-dock.visible, #start-menu.open" );
+
+            // Unue fermi malfermitajn panelojn/ombrejojn ( hejmbreto = hejmen )
+            if ( ekranTiro ) {
+                paneloj.fermiCxiujnPanelojn();
+                return;
+            }
+
+            // Ĉe porteblaj ekranoj premo sur la hejmbreto minimumigas la fokusitan aplikaĵon
+            // al la taskobreto ( hejmo ) anstataŭ plene fermi ĝin
+            const wm = (window as any).FenestraAdministranto;
+            if ( wm?.estasPortebla?.() ) {
+                wm.minimumigiFokusitanFenestron();
+                return;
+            }
+            if ( document.body.classList.contains( "start-menu-open" ) ) paneloj.fermiCxiujnPanelojn();
+            else paneloj.baskuligiKomencaMenuo();
         };
 
         const tb = document.getElementById( "taskbar" );

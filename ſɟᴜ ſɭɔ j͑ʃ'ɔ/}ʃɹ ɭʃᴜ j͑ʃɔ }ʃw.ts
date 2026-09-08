@@ -200,6 +200,8 @@ class PanelaAdministranto {
             }).then(() => {
                 forigiKlason(startMenu, "open");
                 forigiKlason(document.body, "start-menu-open");
+                // Malpremi la startan butonon kiel la aliaj taskobretaj butonoj
+                agordiButonPremita( "home-area", false );
             });
         } else {
             this.fermiCxiujnPanelojn();
@@ -213,6 +215,8 @@ class PanelaAdministranto {
                 }).then(() => {
                     aldoniKlason(startMenu, "open");
                     aldoniKlason(document.body, "start-menu-open");
+                    // Premi la startan butonon kiel la aliaj taskobretaj butonoj
+                    agordiButonPremita( "home-area", true );
                 });
             }, this.animationDuration);
         }

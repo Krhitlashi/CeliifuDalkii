@@ -85,6 +85,14 @@
         </select>
     </thala>
 
+    <thala>
+        <p class="ksakap2sa" data-oskakefani="settings_mobile_grid"></p>
+        <label>
+            <input type="checkbox" id="mobile-grid-separate" checked>
+            <span data-oskakefani="settings_mobile_grid_separate"></span>
+        </label>
+    </thala>
+
     <sak></sak>
 
     <button id="reset-storage-btn" data-oskakefani="settings_reset_storage"></button>
@@ -116,6 +124,7 @@
     document.getElementById("label-display").onchange = e => send("setLabelDisplay", e.target.value);
     document.getElementById("language").onchange = e => send("setLanguage", e.target.value);
     document.getElementById("taskbar-position").onchange = e => send("setTaskbarPosition", e.target.value);
+    document.getElementById("mobile-grid-separate").onchange = e => send("setMobileGridSeparate", e.target.checked ? "on" : "off");
     document.getElementById("reset-storage-btn").onclick = () => {
         localStorage.clear();
         location.reload();
@@ -133,6 +142,7 @@
     }
     
     document.getElementById("taskbar-position").value = localStorage.getItem("os-taskbar-position") || "left";
+    document.getElementById("mobile-grid-separate").checked = (localStorage.getItem("os-mobile-grid-separate") || "on") !== "off";
     const savedTaskbarSize = localStorage.getItem("os-taskbar-size") || "48";
     document.getElementById("taskbar-size").value = savedTaskbarSize;
     document.getElementById("taskbar-size-val").innerText = savedTaskbarSize + "px";
@@ -175,6 +185,8 @@
             "settings_inside": "ſɟɹ ֭ſɭɹ",
             "settings_off": "}ʃɔƣ̋ ꞁȷ̀ᴜ ſ̀ȷɔ",
             "settings_language": "ſ͔ɭᴜ ᶅſɔ",
+            "settings_mobile_grid": "Portebla Krado",
+            "settings_mobile_grid_separate": "Aparta krado por portebla reĝimo",
             "settings_taskbar_layout": "ſɟᴜƽ ꞁȷ̀ᴜ ı],ᴜ j͑ʃп́ɔ ſɭɔ ֭ſɭɔ",
             "settings_position": "ꞁȷ̀ᴜ ɽ͑ʃ'ᴜȝ",
             "settings_left": "ſɟƨᴜ ŋᷠᴜ",
@@ -203,6 +215,8 @@
             "settings_inside": "Inside",
             "settings_off": "Off",
             "settings_language": "Language",
+            "settings_mobile_grid": "Mobile Grid",
+            "settings_mobile_grid_separate": "Separate grid for mobile mode",
             "settings_taskbar_layout": "Taskbar Layout",
             "settings_position": "Position",
             "settings_left": "Left",

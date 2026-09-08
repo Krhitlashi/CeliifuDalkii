@@ -20,6 +20,8 @@ interface PiktogramaKradaInterfaco {
     fiksaLarĝo: number | null;
     fiksaAlto: number | null;
     estasPortebla: boolean;
+    nunaPaĝo: number;
+    pasxiPagxon( direkto: number ): void;
     alakrogiPostTrenado( el: HTMLElement ): void;
     cxuAreoOkupita( c: number, r: number, kolSpan: number, vicSpan: number, ekskludiEl: HTMLElement | null ): boolean;
     aplikiPozicion( el: HTMLElement, c: number, r: number, xOffset?: number ): void;
@@ -42,6 +44,8 @@ export function agordiKaheloTreni( krado: PiktogramaKradaInterfaco, el: HTMLElem
     const originalaPatro = el.parentElement;
     const originalaSekvaGefrato = el.nextSibling;
     let estisTrenita = false;
+    let randaDirekto = 0;
+    let paĝajŜanĝoj = 0;
 
     agordiElementanTrenadon( el, true );
     el.style.zIndex = ( CONSTANTS.WM.BASE_Z_INDEX + 0o100 ).toString();
@@ -59,6 +63,23 @@ export function agordiKaheloTreni( krado: PiktogramaKradaInterfaco, el: HTMLElem
         // Agordi estasTrenanta nur post movado preter sojlo
         if ( !estisTrenita && trenDistanco > CONSTANTS.DIM.DRAG_THRESHOLD ) {
             estisTrenita = true;
+        }
+
+        // Rulumi al apuda paĝo when the tile is dragged past the top/bottom edge
+        if ( estisTrenita && krado.containerId === "desktop" ) {
+            const erojPoPaĝo = Math.max( 1, krado.rows * krado.cols );
+            const tutajPaĝoj = Math.ceil( ( ( window as any ).APPS || [] ).length / erojPoPaĝo );
+            if ( tutajPaĝoj > 1 ) {
+                // La paĝoj ŝanĝiĝas vertikale, do la randoj estas supro/malsupro
+                const rando = 40;
+                if ( klientoY > window.innerHeight - rando ) {
+                    if ( randaDirekto !== 1 ) { randaDirekto = 1; paĝajŜanĝoj++; krado.pasxiPagxon( 1 ); }
+                } else if ( klientoY < rando ) {
+                    if ( randaDirekto !== -1 ) { randaDirekto = -1; paĝajŜanĝoj++; krado.pasxiPagxon( -1 ); }
+                } else if ( randaDirekto !== 0 ) {
+                    randaDirekto = 0;
+                }
+            }
         }
 
         // Fermi komencan menuon se treno sufiĉe malproksima
@@ -107,6 +128,11 @@ export function agordiKaheloTreni( krado: PiktogramaKradaInterfaco, el: HTMLElem
                 ( krado as any ).transigiPiktogramonDeKomencaMenuo( el );
                 return;
             }
+        }
+
+        // Se la trenado transiris paĝojn, asigni la kahelon al la nuna paĝo
+        if ( paĝajŜanĝoj > 0 && typeof ( krado as any ).nunaPaĝo === "number" ) {
+            el.dataset.page = ( krado as any ).nunaPaĝo.toString();
         }
 
         // Restarigi pozicion aŭ alklaki

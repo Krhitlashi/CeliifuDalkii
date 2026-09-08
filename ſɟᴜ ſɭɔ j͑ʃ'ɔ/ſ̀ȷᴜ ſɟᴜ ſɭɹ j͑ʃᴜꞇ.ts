@@ -1,6 +1,7 @@
 // ≺⧼ Labortabla Piktograma Administranto ⧽≻
 
 declare const APPS_DATA: any;
+declare const CONSTANTS: any;
 declare const QS_TOGGLES: any;
 declare const QS_SLIDERS: any;
 declare const RapidaAgordoAdministranto: any;
@@ -8,8 +9,10 @@ declare const SciigoAdministranto: any;
 declare const limkurzo: any;
 declare const KonservejaUtilo: any;
 declare const baskuligiQsButonon: any;
+declare const akiriPiktogramon: any;
+declare const akiriPiktogramanFonon: any;
 
-import { PiktogramaKrado, MOBILE_GRID_ROWS, MOBILE_GRID_COLS } from "./ſ͕ɭɜᶗ‹ ꞁȷ̀ɹ }ʃɹƽ.js";
+import { PiktogramaKrado, MOBILE_GRID_ROWS, MOBILE_GRID_COLS, DESKTOP_GRID_COLS, DESKTOP_GRID_ROWS } from "./ſ͕ɭɜᶗ‹ ꞁȷ̀ɹ }ʃɹƽ.js";
 import { AppData } from "./ꞁȷ̀ɜ ı],ɔ ŋᷠᴜ }ʃꞇ.js";
 
 let APPS: AppData[] = [];
@@ -73,6 +76,25 @@ export const LabortablaPiktogramoAdministranto = {
     },
 
     // Movigi kahelon al specifa paĝo (nur portebla)
+    // En redakta reĝimo ( portebla ): deŝovi ĉiujn kahelojn unu paĝon malsupren,
+    // kreante novan malplenan paĝon supre ( rulumo supre de la unua paĝo )
+    deŝoviKahelojnUnuPaĝon() {
+        if ( !this.labortablo ) return;
+        const erojPoPaĝo = this.labortablo.rows * this.labortablo.cols;
+        if ( erojPoPaĝo <= 0 ) return;
+
+        const tiles = Array.from( this.labortablo.container?.querySelectorAll( ".app-tile" ) || [] ) as HTMLElement[];
+        tiles.forEach( kahelo => {
+            const indekso = APPS.findIndex( ( app: any ) => app.app === kahelo.dataset.app );
+            if ( indekso === -1 ) return;
+            const novaIndekso = indekso + erojPoPaĝo;
+            this.labortablo!.alakrogiAlKrado( kahelo, novaIndekso );
+        } );
+        this._konserviLabortablanArangxon();
+        this.labortablo.refreŝigi();
+        this._gxisdatigiPaĝajnIndikilojn();
+    },
+
     movigiKahelonAlPagxo( kahelo: HTMLElement, celPaĝo: number ) {
         if ( !kahelo || !this.labortablo ) return;
 
@@ -85,7 +107,7 @@ export const LabortablaPiktogramoAdministranto = {
         kahelo.remove();
 
         // Re-aldoni ĉe nova paĝpozicio
-        const erojPoPaĝo = MOBILE_GRID_ROWS * MOBILE_GRID_COLS;
+        const erojPoPaĝo = Math.max( 1, this.labortablo.rows * this.labortablo.cols );
         const novaIndekso = ( celPaĝo * erojPoPaĝo ) + ( aplikaIndekso % erojPoPaĝo );
 
         const novaEl = this.labortablo.aldoniPiktogramon( APPS[ aplikaIndekso ], novaIndekso );
@@ -97,12 +119,14 @@ export const LabortablaPiktogramoAdministranto = {
         // Refreŝigi por montri kahelon sur nova paĝo
         this.labortablo.nunaPaĝo = celPaĝo;
         this.labortablo.refreŝigi();
+        this._konserviLabortablanArangxon();
     },
 
     transigiPiktogramonDeKomencaMenuo( el: HTMLElement ) {
         const appData = {
             name: el.dataset.title || el.dataset.app?.split( "/" ).pop()?.replace( ".html", "" ) || "App",
-            icon: ( el.querySelector( ".icon" ) as HTMLElement )?.innerText || "🖥️",
+            icon: ( el.querySelector( ".icon" ) as HTMLElement )?.innerHTML || akiriPiktogramon( "Defaŭlta" ),
+            koloro: ( el.querySelector( ".icon" ) as HTMLElement )?.dataset.koloro || "",
             app: el.dataset.app || ""
         };
         
@@ -140,7 +164,8 @@ export const LabortablaPiktogramoAdministranto = {
 
         APPS = APPS_DATA.map( ( app: any ) => ( {
             name: app.title || app.path.split( "/" ).pop().replace( ".html", "" ),
-            icon: app.emoji,
+            icon: app.piktogramo,
+            koloro: app.koloro || "",
             app: app.path
         } ) );
 
@@ -151,28 +176,41 @@ export const LabortablaPiktogramoAdministranto = {
             this.labortablo?.aldoniPiktogramon( app, i );
             this.komencaMenuo?.aldoniPiktogramon( app, i );
         } );
-
-        // ⟨ Ŝargi titolojn de paĝoj mem por lokal aplikaĵoj ⟩
         this._sxargiTitolojnDeLokalajPaĝoj();
 
-        // Apliki konservitan kahelan aranĝon el stokejo
+        // Apliki konservitan kahelan aranĝon el stokejo ( nur se ĝi kongruas kun
+        // la nuna krado; alie forĵeti ĝin por eviti denzigajn stakojn )
         if ( KonservejaUtilo && this.labortablo?.container ) {
-            const tiles = Array.from( this.labortablo.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[];
-            const desktop = this.labortablo;
-            KonservejaUtilo.aplikiKahelanAranĝon( tiles, "desktopTileLayout", ( tile: HTMLElement, col: number, row: number ) => {
-                desktop.aplikiPozicion( tile, col, row );
-            } );
+            const konservita = KonservejaUtilo.sxargiKahelanAranĝon?.( "desktopTileLayout" ) || [];
+            // Validi kontraŭ la efektivaj kraddimensioj ( la originala krado kiam
+            // la spegulado estas malŝaltita, la faldebla 6 × 8 kiam ŝaltita )
+            const labKolumnoj = this.labortablo.cols;
+            const labVicoj = this.labortablo.rows;
+            const kongruas = konservita.length === 0 || konservita.every( ( ero: any ) =>
+                ero.col < labKolumnoj && ero.row < labVicoj );
+            if ( kongruas ) {
+                const tiles = Array.from( this.labortablo.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[];
+                const desktop = this.labortablo;
+                KonservejaUtilo.aplikiKahelanAranĝon( tiles, "desktopTileLayout", ( tile: HTMLElement, col: number, row: number ) => {
+                    desktop.aplikiPozicion( tile, col, row );
+                } );
+            } else if ( !kongruas ) {
+                KonservejaUtilo.forigi?.( "desktopTileLayout" );
+            }
         }
 
         this._iniciiRapidaAgordojn();
         this._rearanĝiCxiujn();
         this._kreiPaĝajnIndikilojn();
-        setTimeout( () => this.labortablo?.rearanĝi(), 0o140 );
+        setTimeout( () => this.labortablo?.rearanĝi(), 140 );
 
         window.addEventListener( "resize", limkurzo( () => {
             this._pritraktiGrandSxangxon();
-            setTimeout( () => this._alakrogiCxiujnKradojn(), 0o200 );
-        }, 0o312 ) );
+            setTimeout( () => {
+                this._alakrogiCxiujnKradojn();
+                this._gxisdatigiPaĝajnIndikilojn();
+            }, 200 );
+        }, 300 ) );
 
         if ( RapidaAgordoAdministranto ) RapidaAgordoAdministranto.inicii();
         if ( (window as any).SciigoAdministranto ) (window as any).SciigoAdministranto.inicii();
@@ -228,39 +266,60 @@ export const LabortablaPiktogramoAdministranto = {
         const ekzistanta = document.querySelector( ".page-indicators" );
         if ( ekzistanta ) ekzistanta.remove();
 
-        // Krei paĝajn indikilojn por portebla reĝimo
-        const erojPoPaĝo = MOBILE_GRID_ROWS * MOBILE_GRID_COLS;
+        // Krei paĝajn indikilojn por la nuna krado ( portebla aŭ labortabla )
+        const krado = this.labortablo;
+        const erojPoPaĝo = krado ? Math.max( 1, krado.rows * krado.cols ) : ( MOBILE_GRID_ROWS * MOBILE_GRID_COLS );
         const tutajPaĝoj = Math.ceil( APPS.length / erojPoPaĝo );
-
-        if ( tutajPaĝoj <= 1 ) return;
 
         const ujo = document.createElement( "div" );
         ujo.className = "page-indicators";
 
         for ( let i = 0; i < tutajPaĝoj; i++ ) {
             const punkto = document.createElement( "div" );
-            punkto.className = "page-indicator" + ( i === 0 ? " active" : "" );
+            punkto.className = "page-indicator" + ( i === this.labortablo?.nunaPaĝo ? " active" : "" );
             punkto.onclick = () => {
                 if ( this.labortablo ) {
+                    const antaŭa = this.labortablo.nunaPaĝo;
                     this.labortablo.nunaPaĝo = i;
                     this.labortablo.refreŝigi();
+                    if ( i !== antaŭa ) this.labortablo.animaciiPaĝanSvingon( i > antaŭa ? 1 : -1 );
                     this._gxisdatigiPaĝajnIndikilojn();
                 }
             };
             ujo.appendChild( punkto );
         }
 
+        // La ujo restas en la dokumento eĉ kun unu paĝo, por ke rulumoj ĉe la
+        // rando povu montri la indikilojn ( randa sugesto )
         document.body.appendChild( ujo );
     },
 
     _gxisdatigiPaĝajnIndikilojn() {
-        const ujo = document.querySelector( ".page-indicators" );
-        if ( !ujo || !this.labortablo ) return;
+        if ( !this.labortablo ) return;
+        if ( !document.querySelector( ".page-indicators" ) ) this._kreiPaĝajnIndikilojn();
 
-        const punktoj = ujo.querySelectorAll( ".page-indicator" );
+        // Rekonstrui la punktojn kiam la paĝnombro ŝanĝiĝis ( krad-dimensioj )
+        const krado = this.labortablo;
+        const erojPoPaĝo = Math.max( 1, krado.rows * krado.cols );
+        const tutajPaĝoj = Math.max( 1, Math.ceil( APPS.length / erojPoPaĝo ) );
+        let ujo = document.querySelector( ".page-indicators" ) as HTMLElement;
+        let punktoj = ujo.querySelectorAll( ".page-indicator" );
+        if ( punktoj.length !== tutajPaĝoj ) {
+            this._kreiPaĝajnIndikilojn();
+            ujo = document.querySelector( ".page-indicators" ) as HTMLElement;
+            if ( !ujo ) return;
+            punktoj = ujo.querySelectorAll( ".page-indicator" );
+        }
+
         punktoj.forEach( ( punkto, i ) => {
-            punkto.classList.toggle( "active", i === ( this.labortablo as any )?.nunaPaĝo );
+            punkto.classList.toggle( "active", i === krado.nunaPaĝo );
         } );
+
+        // Montri la indikilojn dum la paĝa ŝanĝo, kaŝi ilin post mallonga paŭzo
+        // ( re-akiri la ujon post ia ajn rekonstruado, por ke la flugo efektiviĝu )
+        ujo.classList.add( "visible" );
+        clearTimeout( ( this as any )._indikilaTempigilo );
+        ( this as any )._indikilaTempigilo = setTimeout( () => ujo.classList.remove( "visible" ), 1200 );
     },
 
     _iniciiRapidaAgordojn() {

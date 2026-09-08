@@ -4,6 +4,7 @@ declare const CONSTANTS: any;
 declare const EnigaAdministranto: any;
 declare const akiriTaskobreton: any;
 declare const akiriElementajnSpanojn: any;
+declare const akiriPiktogramanFonon: any;
 
 import { AppData, IconGridConfig, CustomHTMLElement } from "./ꞁȷ̀ɜ ı],ɔ ŋᷠᴜ }ʃꞇ.js";
 import { akiriUjonGrandecojn, akiriElementanPozicion, kalkuliĈelanGrandecon } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ſɟᴜ ſɭɔƽ.js";
@@ -15,6 +16,10 @@ export const MOBILE_GRID_COLS = CONSTANTS.DIM.MOBILE_COLS;
 export const DESKTOP_GRID_ROWS = CONSTANTS.DIM.DEFAULT_ROWS;
 export const DESKTOP_GRID_COLS = CONSTANTS.DIM.DEFAULT_COLS;
 
+// Originala labortabla krado ( uzata kiam la krado-spegulado estas malŝaltita )
+const ORIGINAL_GRID_ROWS = 0o10;   // 8 vicoj
+const ORIGINAL_GRID_COLS = 0o20;   // 16 kolumnoj
+
 // ⟪ Piktograma Krado ⟫
 
 export class PiktogramaKrado {
@@ -22,19 +27,24 @@ export class PiktogramaKrado {
     container: HTMLElement | null;
     config: IconGridConfig;
     estasPortebla: boolean;
-    rows: number;
-    cols: number;
+    rows: number = 0;
+    cols: number = 0;
     komencajVicoj: number;
     komencajKolumnoj: number;
     bottomUp: boolean;
     fiksaLarĝo: number | null;
     fiksaAlto: number | null;
     redaktaReĝimo: boolean;
+    pagigas: boolean;
+    randaPaĝumo: boolean;
     etikedReĝimo: string;
     nunaPaĝo: number;
     tutajPaĝoj: number;
     tuŝaKomencoY: number;
     tuŝaKomencoX: number;
+    musPremita: boolean;
+    musKomencoY: number;
+    musKomencoX: number;
 
     constructor( containerId: string, config: IconGridConfig = {} ) {
         this.containerId = containerId;
@@ -43,19 +53,23 @@ export class PiktogramaKrado {
 
         // Aŭtomate detekti porteblan vs labortablan
         this.estasPortebla = this.cxuPortebla();
-        this.rows = this.estasPortebla ? MOBILE_GRID_ROWS : ( config.rows || DESKTOP_GRID_ROWS );
-        this.cols = this.estasPortebla ? MOBILE_GRID_COLS : ( config.cols || DESKTOP_GRID_COLS );
+        this.rekomputiDimensiojn();
         this.komencajVicoj = this.rows;
         this.komencajKolumnoj = this.cols;
         this.bottomUp = config.bottomUp || false;
         this.fiksaLarĝo = config.width ?? null;
         this.fiksaAlto = config.height ?? null;
         this.redaktaReĝimo = false;
+        this.pagigas = false;
+        this.randaPaĝumo = false;
         this.etikedReĝimo = config.labelMode || "external";
         this.nunaPaĝo = 0;
         this.tutajPaĝoj = 1;
         this.tuŝaKomencoY = 0;
         this.tuŝaKomencoX = 0;
+        this.musPremita = false;
+        this.musKomencoY = 0;
+        this.musKomencoX = 0;
 
         if ( !this.container ) return;
 
@@ -71,6 +85,11 @@ export class PiktogramaKrado {
         this.container.addEventListener( "touchmove", ( e: TouchEvent ) => this.pritraktiTuŝanMovon( e ), { passive: false } );
         this.container.addEventListener( "touchend", ( e: TouchEvent ) => this.pritraktiTuŝanFinon( e ), { passive: true } );
 
+        // Musa trenado por paĝado ( labortabla krado )
+        this.container.addEventListener( "mousedown", ( e: MouseEvent ) => this.pritraktiMusanKomencon( e ) );
+        window.addEventListener( "mousemove", ( e: MouseEvent ) => this.pritraktiMusanMovon( e ) );
+        window.addEventListener( "mouseup", ( e: MouseEvent ) => this.pritraktiMusanFinon( e ) );
+
         // Aŭskulti ekran-grandajn ŝanĝojn
         window.addEventListener( "resize", () => this.pritraktiEkrananGrandSxangxon() );
 
@@ -81,17 +100,64 @@ export class PiktogramaKrado {
         return window.innerWidth < CONSTANTS.BREAKPOINTS.MOBILE || window.innerHeight < CONSTANTS.BREAKPOINTS.MOBILE;
     }
 
+    // Ĉu la ĉefa ( labortabla ) krado spegulas la porteblan aranĝon ( faldebla 6 × 8 )
+    cxuCxefaKradoSpegulita(): boolean {
+        return CONSTANTS.DIM.MOBILE_GRID_SEPARATE === false;
+    }
+
+    // Rekomputi la krad-dimensiojn laŭ la nuna reĝimo ( vokita ĉe agorda ŝanĝo )
+    rekomputiDimensiojn(): void {
+        if ( this.containerId === "start-menu-content" ) {
+            // Tirujo poŝte: 6 vicoj × 2 kolumnoj; labortable: 8 × 8
+            this.rows = this.estasPortebla ? 6 : 8;
+            this.cols = this.estasPortebla ? 2 : 8;
+        } else if ( this.containerId === "desktop" && !this.estasPortebla && !this.cxuCxefaKradoSpegulita() ) {
+            // Spegulado malŝaltita: la originala labortabla krado
+            this.rows = ORIGINAL_GRID_ROWS;
+            this.cols = ORIGINAL_GRID_COLS;
+        } else {
+            this.rows = this.estasPortebla ? MOBILE_GRID_ROWS : DESKTOP_GRID_ROWS;
+            this.cols = this.estasPortebla ? MOBILE_GRID_COLS : DESKTOP_GRID_COLS;
+        }
+        this.komencajVicoj = this.rows;
+        this.komencajKolumnoj = this.cols;
+        this.nunaPaĝo = 0;
+    }
+
     pritraktiEkrananGrandSxangxon(): void {
         const estisPortebla = this.estasPortebla;
         this.estasPortebla = this.cxuPortebla();
 
         if ( estisPortebla !== this.estasPortebla ) {
             // Ekrana grando ŝanĝiĝis inter portebla kaj labortabla
-            this.rows = this.estasPortebla ? MOBILE_GRID_ROWS : DESKTOP_GRID_ROWS;
-            this.cols = this.estasPortebla ? MOBILE_GRID_COLS : DESKTOP_GRID_COLS;
-            this.refreŝigi();
+            this.rekomputiDimensiojn();
+            this.refluigiKahelojn();
             this.rearanĝi();
         }
+    }
+
+    // Refluigi kahelojn el iliaj app-indeksoj: forigas malnovajn koordinatojn
+    // kalkulitajn por alia krad-dimensiono ( ekz. labortablaj kolonoj 0–7 en la
+    // 4-kolona portebla krado amasiĝas ) kaj restarigas la konservitan
+    // labortablan aranĝon kiam oni revenas al la labortabla krado
+    refluigiKahelojn(): void {
+        if ( !this.container || ( this.containerId !== "desktop" && this.containerId !== "start-menu-content" ) ) return;
+
+        const tiles = Array.from( this.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[];
+        tiles.forEach( kahelo => {
+            const indekso = ( ( window as any ).APPS || [] ).findIndex( ( app: any ) => app.app === kahelo.dataset.app );
+            this.alakrogiAlKrado( kahelo, indekso === -1 ? 0 : indekso );
+        } );
+
+        if ( !this.estasPortebla && this.containerId === "desktop" && ( window as any ).KonservejaUtilo ) {
+            ( window as any ).KonservejaUtilo.aplikiKahelanAranĝon( tiles, "desktopTileLayout", ( kahelo: HTMLElement, col: number, row: number ) => {
+                // Forĵeti konservitajn poziciojn ekster la nuna krado
+                if ( col >= this.cols || row >= this.rows ) return;
+                this.aplikiPozicion( kahelo, col, row );
+            } );
+        }
+
+        this.refreŝigi();
     }
 
     pritraktiTuŝanKomencon( e: TouchEvent ): void {
@@ -100,36 +166,164 @@ export class PiktogramaKrado {
     }
 
     pritraktiTuŝanMovon( e: TouchEvent ): void {
-        if ( this.containerId === "desktop" || this.containerId === "start-menu-content" ) {
+        // Nur bloki la implicitan rulumon; la papera svingo mem pritraktiĝas ĉe tuŝofino
+        if ( this.containerId === "start-menu-content" ) {
             e.preventDefault();
         }
+    }
+
+    // Musa paĝado: premu kaj trenu vertikale sur la krada fono ( labortabla krado )
+    pritraktiMusanKomencon( e: MouseEvent ): void {
+        if ( e.button !== 0 ) return;
+        this.musPremita = e.target === this.container;
+        this.musKomencoY = e.clientY;
+        this.musKomencoX = e.clientX;
+    }
+
+    pritraktiMusanMovon( e: MouseEvent ): void {
+        if ( !this.musPremita ) return;
+        const difY = e.clientY - this.musKomencoY;
+        const difX = e.clientX - this.musKomencoX;
+        if ( Math.abs( difY ) > 62 && Math.abs( difY ) > Math.abs( difX ) ) {
+            this.musPremita = false;
+            if ( this.redaktaReĝimo ) {
+                this.pritraktiPaĝanAldonon( difY );
+            } else {
+                this.pasxiPagxon( difY > 0 ? -1 : 1 );
+            }
+        }
+        if ( Math.abs( difY ) > 62 || Math.abs( difX ) > 62 ) this.musPremita = false;
+    }
+
+    pritraktiMusanFinon( _e: MouseEvent ): void {
+        this.musPremita = false;
+        this.musKomencoY = 0;
+        this.musKomencoX = 0;
     }
 
     pritraktiTuŝanFinon( e: TouchEvent ): void {
         const tuŝaFinoY = e.changedTouches[0].clientY;
         const tuŝaFinoX = e.changedTouches[0].clientX;
         const difY = tuŝaFinoY - this.tuŝaKomencoY;
-        const difX = tuŝaFinoX - this.tuŝaKomencoX;
-
-        // Vertikala svingo por paĝado ( nur portebla )
-        if ( this.estasPortebla && Math.abs( difY ) > Math.abs( difX ) && Math.abs( difY ) > 0o62 ) {
-            if ( difY > 0 ) {
-                // Svingi malsupren - antaŭa paĝo
-                if ( this.nunaPaĝo > 0 ) {
-                    this.nunaPaĝo--;
-                    this.refreŝigi();
-                    if ( ( window as any ).LabortablaPiktogramoAdministranto ) ( window as any ).LabortablaPiktogramoAdministranto._gxisdatigiPaĝajnIndikilojn();
-                }
-            } else {
-                // Svingi supren - sekva paĝo
-                const maksPaĝo = Math.ceil( ( ( window as any ).APPS || [] ).length / ( this.rows * this.cols ) ) - 1;
-                if ( this.nunaPaĝo < maksPaĝo ) {
-                    this.nunaPaĝo++;
-                    this.refreŝigi();
-                    if ( ( window as any ).LabortablaPiktogramoAdministranto ) ( window as any ).LabortablaPiktogramoAdministranto._gxisdatigiPaĝajnIndikilojn();
-                }
+        const difX = tuŝaFinoX - this.tuŝaKomencoX;        // Vertikala svingo por paĝado ( portebla kaj labortabla krado )
+        // Gestoj komencitaj sur kahelo estas kahelaj trenoj, ne svingoj —
+        // alie la fino de kahela treno re-flipus la paĝon ( paĝa rekomenco )
+        if ( this.containerId === "desktop" && e.target === this.container && Math.abs( difY ) > Math.abs( difX ) && Math.abs( difY ) > 0o62 ) {
+            // En redakta reĝimo vertikala rulumo aldonas novan paĝon supren/malsupren
+            if ( this.redaktaReĝimo ) {
+                this.pritraktiPaĝanAldonon( difY );
+                return;
             }
+            this.pasxiPagxon( difY > 0 ? -1 : 1 );
+            return;
         }
+
+        // Frapo sur malplena labortabla spaco baskuligas redaktan reĝimon ( portebla )
+        if ( this.estasPortebla && this.containerId === "desktop" && e.target === this.container && Math.abs( difX ) < 0o12 && Math.abs( difY ) < 0o12 ) {
+            this.baskuligiRedaktadon();
+            return;
+        }
+
+        // Rulumo ĝis la dekstra rando malfermas la komencan menuon ( nur portebla )
+        if ( this.estasPortebla && this.containerId === "desktop" && difX < -80 && Math.abs( difX ) > Math.abs( difY ) ) {
+            if ( ( window as any ).PanelaAdministranto ) ( window as any ).PanelaAdministranto.baskuligiKomencaMenuo();
+        }
+    }
+
+    // En redakta reĝimo: rulumi preter la rando kreas novan paĝon
+    pritraktiPaĝanAldonon( difY: number ): void {
+        const admin = ( window as any ).LabortablaPiktogramoAdministranto;
+        if ( difY < 0 ) {
+            // Rulumi supren ĉe la lasta paĝo: navigi al nova malplena paĝo sube
+            const maksPaĝo = Math.ceil( ( ( window as any ).APPS || [] ).length / ( this.rows * this.cols ) ) - 1;
+            if ( this.nunaPaĝo >= maksPaĝo ) {
+                this.nunaPaĝo++;
+                this.refreŝigi();
+                this.animaciiPaĝanSvingon( 1 );
+                admin?._gxisdatigiPaĝajnIndikilojn();
+            } else this.pasxiPagxon( 1 );
+        } else {
+            // Rulumi malsupren ĉe la unua paĝo: deŝovi ĉiujn kahelojn unu paĝon ( nova paĝo supre )
+            if ( this.nunaPaĝo === 0 ) {
+                admin?.deŝoviKahelojnUnuPaĝon();
+            } else this.pasxiPagxon( -1 );
+        }
+    }
+
+    // Paŝigi antaŭen (+1) aŭ malantaŭen (-1) kun enirejaj kaj elirejaj animacioj
+    pasxiPagxon( direkto: number ): void {
+        const maksPaĝo = Math.ceil( ( ( window as any ).APPS || [] ).length / ( this.rows * this.cols ) ) - 1;
+        const novaPaĝo = Math.max( 0, Math.min( maksPaĝo, this.nunaPaĝo + direkto ) );
+        if ( novaPaĝo === this.nunaPaĝo || this.pagigas ) {
+            // Ĉe la rando de la paĝoj ( aŭ kun nur unu paĝo ) montri la
+            // indikilojn tiel la uzanto vidas ke la gesto estis registrita
+            if ( !this.randaPaĝumo ) ( window as any ).LabortablaPiktogramoAdministranto?._gxisdatigiPaĝajnIndikilojn();
+            return;
+        }
+        this.pagigas = true;
+
+        const malnovaDirekto = direkto;
+        const fari = () => {
+            this.nunaPaĝo = novaPaĝo;
+            this.refreŝigi();
+            this.animaciiPaĝanSvingon( malnovaDirekto );
+            if ( ( window as any ).LabortablaPiktogramoAdministranto ) ( window as any ).LabortablaPiktogramoAdministranto._gxisdatigiPaĝajnIndikilojn();
+            setTimeout( () => { this.pagigas = false; }, 260 );
+        };
+
+        // Unue elireja animacio de la nuna paĝo, tiam la ŝanĝo kun enireja animacio
+        this.animaciiPaĝanEliron( malnovaDirekto, fari );
+    }
+
+    // Elireja animacio: la nuna paĝo glitas el la vido en la svingan direkton
+    animaciiPaĝanEliron( direkto: number, poste: () => void ): void {
+        const kaheloj = Array.from( this.container?.querySelectorAll( ".app-tile:not([style*='none']):not(.dragging)" ) || [] ) as HTMLElement[];
+        if ( kaheloj.length === 0 ) {
+            poste();
+            return;
+        }
+
+        const transloko = 24;
+        const al = `translateY(${direkto > 0 ? -transloko : transloko}px)`;
+        let finiĝintaj = 0;
+        const postĈiuj = () => {
+            if ( ++finiĝintaj >= kaheloj.length ) poste();
+        };
+
+        kaheloj.forEach( ( kahelo ) => {
+            const animacio = kahelo.animate(
+                [
+                    { opacity: "1", transform: "translate(0, 0)" },
+                    { opacity: "0", transform: al }
+                ],
+                { duration: 120, easing: "cubic-bezier(0.5, 0, 0.75, 0.4)" }
+            );
+            animacio.onfinish = postĈiuj;
+            animacio.oncancel = postĈiuj;
+        } );
+
+        // Rezerva tempigilo se la animacioj ne raportas finon
+        setTimeout( postĈiuj, 220 );
+    }
+
+    // Enireja animacio: la nova paĝo glitas en la vidon el la svinga direkto
+    animaciiPaĝanSvingon( direkto: number ): void {
+        if ( !this.container ) return;
+        const kaheloj = Array.from( this.container.querySelectorAll( ".app-tile:not([style*='none']):not(.dragging)" ) ) as HTMLElement[];
+        if ( kaheloj.length === 0 ) return;
+
+        const transloko = 24;
+        const de = `translateY(${direkto > 0 ? transloko : -transloko}px)`;
+
+        kaheloj.forEach( ( kahelo, i ) => {
+            kahelo.animate(
+                [
+                    { opacity: "0", transform: de },
+                    { opacity: "1", transform: "translate(0, 0)" }
+                ],
+                { duration: 220, easing: "cubic-bezier(0.22, 1, 0.36, 1)", delay: i * 12, fill: "backwards" }
+            );
+        } );
     }
 
     inicii(): void {
@@ -165,17 +359,17 @@ export class PiktogramaKrado {
             if ( this.etikedReĝimo === "external" ) {
                 if ( rect.width < sojlo ) {
                     efektivaPozicio = "bottom";
-                    if ( this.containerId === "start-menu-content" ) {
+                    if ( this.containerId === "start-menu-content" && !this.estasPortebla ) {
                         novaVicSpan = 2;
                         novaKolSpan = 1;
                     }
                 } else if ( rect.height < sojlo ) {
                     efektivaPozicio = "left";
-                    if ( this.containerId === "start-menu-content" ) {
+                    if ( this.containerId === "start-menu-content" && !this.estasPortebla ) {
                         novaKolSpan = 2;
                         novaVicSpan = 1;
                     }
-                } else if ( this.containerId === "start-menu-content" ) {
+                } else if ( this.containerId === "start-menu-content" && !this.estasPortebla ) {
                     novaKolSpan = 1;
                     novaVicSpan = 1;
                 }
@@ -257,7 +451,13 @@ export class PiktogramaKrado {
 
         const piktogramaSpan = document.createElement( "span" );
         piktogramaSpan.className = "icon";
-        piktogramaSpan.innerText = appData.icon;
+        piktogramaSpan.innerHTML = appData.icon;
+        // Duontravidebla overlajo de la ĉefa koloro, kiu etendiĝas plene super la
+        // kartan fonon de la butono ( ne en la SVG, kaj ne nur ĉirkaŭ la glifo )
+        if ( appData.koloro ) {
+            piktogramaSpan.dataset.koloro = appData.koloro;
+            butonEl.style.backgroundImage = akiriPiktogramanFonon( appData.koloro );
+        }
         butonEl.appendChild( piktogramaSpan );
 
         cepufalEl.appendChild( butonEl );
@@ -295,9 +495,12 @@ export class PiktogramaKrado {
             }
 
             if ( povasTreni ) {
+                // Bloki la sving-flaŝon dum aktiva kahela trenado trans paĝojn
+                this.randaPaĝumo = true;
                 const poz = EnigaAdministranto.akiriMontranPozicion( e );
                 agordiKaheloTreni( this, el, poz.x, poz.y, () => {
                     estasTrenanta = false;
+                    this.randaPaĝumo = false;
                 } );
             }
         };
@@ -319,9 +522,25 @@ export class PiktogramaKrado {
         // Konservi paĝinformon sur elemento
         el.dataset.page = paĝaIndekso.toString();
 
-        // Montri/kaŝi bazite sur paĝado (nur portebla labortablo)
-        if ( this.estasPortebla && this.containerId === "desktop" ) {
+        // Montri/kaŝi bazite sur paĝado ( portebla kaj labortabla krado )
+        // La aktive trenata kahelo restas videbla eĉ kiam la paĝo ŝanĝiĝas
+        if ( this.containerId === "desktop" && ( el as any )._estasRegrandiganta !== true && !el.classList.contains( "dragging" ) ) {
             el.style.display = paĝaIndekso === this.nunaPaĝo ? "" : "none";
+        }
+        // Tirujo poŝte: simplaj 1×1 kaheloj en 6 vicoj × 2 kolumnoj ( sen la
+        // labortablaj spacaj etendoj, kiuj kolapsigus ĝin al 3 vido-vicojn )
+        // Plenigi kolumnon- maje kiel la hejma krado; kreskigi vicojn por rulumi
+        if ( this.containerId === "start-menu-content" && this.estasPortebla ) {
+            const bezonatajVicoj = Math.ceil( ( indeksoSurPaĝo + 1 ) / this.cols );
+            if ( bezonatajVicoj > this.rows ) {
+                this.rows = bezonatajVicoj;
+                this.refluigiKahelojn();
+                return;
+            }
+            const c = Math.floor( indeksoSurPaĝo / this.rows );
+            const r = ( this.rows - 1 ) - ( indeksoSurPaĝo % this.rows );
+            this.aplikiPozicion( el, c, r );
+            return;
         }
         if ( this.containerId !== "start-menu-content" ) {
             const c = Math.floor( indeksoSurPaĝo / this.rows );
@@ -443,6 +662,10 @@ export class PiktogramaKrado {
         for ( const kahelo of Array.from( this.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[] ) {
             if ( kahelo === ekskludiEl ) continue;
 
+            // La paĝoj dividas la saman koordinatspacon: nur konsideri kahelojn
+            // de la NUNA paĝo, alie ĉiu faligo sur alia paĝo kolizius kun ili
+            if ( this.containerId === "desktop" && kahelo.dataset.page !== String( this.nunaPaĝo ) ) continue;
+
             // Uzi nunan pozicion el datumaro
             const kc = parseInt( kahelo.dataset.col || "0" );
             const kr = parseInt( kahelo.dataset.row || "0" );
@@ -529,8 +752,9 @@ export class PiktogramaKrado {
             const { col: c, row: r } = akiriElementanPozicion( kahelo );
             const paĝo = parseInt( kahelo.dataset.page || "0" ) || 0;
 
-            // Ĝisdatigi paĝan videblecon ( nur portebla labortablo )
-            if ( this.estasPortebla && this.containerId === "desktop" ) {
+            // Ĝisdatigi paĝan videblecon ( portebla kaj labortabla krado )
+            // La aktive trenata kahelo restas videbla dum paĝa ŝanĝo
+            if ( this.containerId === "desktop" && !kahelo.classList.contains( "dragging" ) ) {
                 kahelo.style.display = paĝo === this.nunaPaĝo ? "" : "none";
             }
 
@@ -544,9 +768,10 @@ export class PiktogramaKrado {
 ( window as any ).PiktogramaKrado = PiktogramaKrado;
 
 /**
- * Akiri maksimuman paĝnombron por portebla paĝado
+ * Akiri maksimuman paĝnombron por la nuna krado ( portebla aŭ labortabla )
  */
-export function akiriMaksimumanPaĝon( apps?: any[] ): number {
-    const erojPoPaĝo = MOBILE_GRID_ROWS * MOBILE_GRID_COLS;
+export function akiriMaksimumanPaĝon( apps?: any[], kolumnoj?: number, vicoj?: number ): number {
+    const krado = ( window as any ).LabortablaPiktogramoAdministranto?.labortablo;
+    const erojPoPaĝo = ( kolumnoj ?? krado?.cols ?? MOBILE_GRID_COLS ) * ( vicoj ?? krado?.rows ?? MOBILE_GRID_ROWS );
     return Math.ceil( ( apps || ( window as any ).APPS || [] ).length / erojPoPaĝo ) - 1;
 }

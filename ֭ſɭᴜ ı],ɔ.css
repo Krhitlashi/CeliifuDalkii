@@ -98,6 +98,19 @@
     white-space: nowrap;
 }
 
+/* ⟪ SVG Piktogramoj ⟫ - la piktogramoj skaliĝas kiel la tiparo ( 1em ) */
+
+.icon svg, .dock-btn-icon svg, .recents-preview svg, .home-bar-icon svg {
+    inline-size: 1em;
+    block-size: 1em;
+    display: block;
+}
+
+#taskbar .home-bar-icon svg {
+    inline-size: 1.5em;
+    block-size: 1.5em;
+}
+
 /* ⟪ App Tile Resize Handle ⟫ */
 
 .app-tile .resize-handle {
@@ -161,33 +174,39 @@
 /* Page indicator dots for mobile */
 .page-indicators {
     position: fixed;
-    bottom: calc(var(--taskbar-width) + var(--អារេងព៏) + 0o20);
-    left: 50%;
-    transform: translateX(-50%);
-    display: none;
-    gap: 0o10;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+}
+
+.page-indicators.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.page-indicator {
+    width: 0o10;
+    height: 0o10;
+    border-radius: 50%;
+    background: var(--កេភ២, #9aa0a6);
+    opacity: 0.5;
+    transition: opacity 0.25s, background 0.25s;
+    cursor: pointer;
+}
+
+.page-indicator.active {
+    opacity: 1;
+    background: var(--កេភ, #e8eaed);
 }
 
 @media (max-width: 767px), (max-height: 767px) {
-    .page-indicators {
-        display: flex;
-    }
-    
-    .page-indicator {
-        width: 0o10;
-        height: 0o10;
-        border-radius: 50%;
-        background: var(--កេភ២);
-        opacity: 0.5;
-        transition: opacity 0.25s, background 0.25s;
-    }
-    
-    .page-indicator.active {
-        opacity: 1;
-        background: var(--កេភ);
-    }
-    
     /* Touch-friendly window controls on mobile */
     .window .title-bar {
         min-height: 0o60;
@@ -288,6 +307,18 @@
     border-radius: var(--អិត្ភេចិ);
     display: flex;
     flex-direction: column;
+    min-block-size: 128px;
+    flex: 1;
+    min-inline-size: 0;
+}
+#recents-list {
+    flex: 1;
+    overflow: auto;
+    overscroll-behavior: contain;
+}
+#recents-panel {
+    flex-direction: column;
+    align-items: stretch;
 }
 .recents-card .recents-preview {
     display: flex;
@@ -297,6 +328,21 @@
     block-size: 100%;
     background: var(--តានេកខេលេ);
     border-radius: var(--អិត្ភេចិ);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Viva fenestra bildo ( klonita iframe ) plenigas la prezentaĵon */
+.recents-preview iframe {
+    position: absolute;
+    inset: 0;
+    inline-size: 200% !important;
+    block-size: 200% !important;
+    border: none;
+    pointer-events: none;
+    transform: scale(0.5);
+    transform-origin: top left;
+    filter: blur(0.5px);
 }
 .recents-card:hover .recents-preview {
     background: var(--តានេក២);
@@ -536,6 +582,28 @@
 /* ⟪ Mobile view ⟫ - show home bar, hide start button */
 
 @media (max-width: 767px), (max-height: 767px) {
+    /* Paneloj ( ombroj ) okupas la saman areon kiel plenekranaj fenestroj
+       ( la rondaj anguloj de la temo restas, kaj la enhavo rulumiĝas ) */
+    #quick-settings-container,
+    #notifications-panel,
+    #recents-panel,
+    #clock-panel {
+        top: var(--panel-inset-top, 0) !important;
+        bottom: var(--panel-inset-bottom, 0) !important;
+        left: var(--panel-inset-left, 0) !important;
+        right: var(--panel-inset-right, 0) !important;
+        inline-size: auto !important;
+        block-size: auto !important;
+        max-inline-size: none !important;
+        overflow: auto !important;
+        overscroll-behavior: contain;
+    }
+
+    /* Internaj paneloj plenigas la ujon sen la mallarĝa kapo */
+    .system-panel {
+        max-inline-size: none !important;
+        overflow: visible;
+    }
     #taskbar .home-bar {
         display: flex !important;
         inline-size: 48px;
@@ -617,7 +685,8 @@
     visibility: hidden;
     pointer-events: none;
 }
-.window.maximized {
+.window.maximized,
+.window.fullscreen {
     min-inline-size: 0;
     min-block-size: 0;
     top: var(--panel-inset-top, 0) !important;
@@ -626,6 +695,12 @@
     right: var(--panel-inset-right, 0) !important;
     width: auto !important;
     height: auto !important;
+}
+
+/* Ĉe porteblaj ekranoj la plenekrana fenestro kaŝas la fenestran pilolon */
+
+@media (max-width: 767px), (max-height: 767px) {
+    .window.fullscreen ksaka { display: none !important; }
 }
 
 /* Horizontal Title Bars (Top/Bottom) */
@@ -706,6 +781,14 @@ ksaka .tab-add-btn {
 
 .window ksaka {
     min-inline-size: 0;
+    /* Bloki retumajn gestojn dum tuŝ-trenado de la pilolo, sed permesi
+       klakojn ( preventDefault ĉe tuŝstarto subpremus ilin ) */
+    touch-action: none;
+}
+
+.window ksaka .tab-strip {
+    /* La tabstrio restas rulumebla per tuŝo horizontale */
+    touch-action: pan-x;
 }
 
 .tab-strip {
