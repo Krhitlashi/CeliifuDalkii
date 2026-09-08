@@ -73,7 +73,7 @@ function agordiElementanTrenadon( el: HTMLElement, trenanta: boolean ): void {
 }
 
 /**
- * Akiri elementan pozicion kaj span-valorojn el datumaro
+ * Akiri elementan pozicion kaj span-valorojn el datumaro ( spanoj delegas al akiriElementajnSpanojn )
  * @param {HTMLElement} el
  * @returns {{col: number, row: number, colSpan: number, rowSpan: number}}
  */
@@ -81,8 +81,7 @@ export function akiriElementanPozicion( el: HTMLElement ): { col: number; row: n
     return {
         col: parseInt( el.dataset.col as string ) || 0,
         row: parseInt( el.dataset.row as string ) || 0,
-        colSpan: parseInt( el.dataset.colSpan as string ) || 1,
-        rowSpan: parseInt( el.dataset.rowSpan as string ) || 1
+        ...akiriElementajnSpanojn( el )
     };
 }
 

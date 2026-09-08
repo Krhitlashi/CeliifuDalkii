@@ -2,7 +2,6 @@
 
 declare const CONSTANTS: any;
 declare const APPS: any;
-declare const kjesaiGawe: any;
 declare const skakefani: any;
 declare const FenestraAdministranto: any;
 
@@ -92,10 +91,12 @@ function akiriFenestranTitolon( fenestro: HTMLElement ): string {
 
 /**
  * Akiri lingvajn ĉenojn
+ * La aktiva lingvo venas de <html lang> ( la gastigita k2regawe ĝisdatigas ĝin ),
+ * ne de la rultempa variablo kxesuGawe ( nedependabla ekster la gastigita skripto )
  * @returns {object}
  */
 function akiriTextojn(): { [key: string]: string } {
-    const lang = ( typeof kjesaiGawe !== "undefined" ? kjesaiGawe : "aih" );
+    const lang = document.documentElement.lang || "aih";
     return ( typeof skakefani !== "undefined" && ( skakefani as any )[ lang ] )
         ? ( skakefani as any )[ lang ]
         : ( skakefani ? ( skakefani as any ).en : {} );

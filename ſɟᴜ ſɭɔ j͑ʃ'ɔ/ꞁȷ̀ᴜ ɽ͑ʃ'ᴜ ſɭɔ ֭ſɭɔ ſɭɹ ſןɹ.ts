@@ -54,6 +54,16 @@ function _hexToRgba( hex: string, alfa: number ): string {
 const _randEntjer = ( min: number, max: number ): number =>
     Math.floor( min + Math.random() * ( max - min + 1 ) );
 
+// ⟨ Ruluma Limigilo ⟩ - prokrasta envolvaĵo por regrandigaj eventaŭskultiloj ( sen gastigita limkurzo )
+
+function limigiRuluman( fn: () => void, atendo: number = 0o200 ): () => void {
+    let tempigilo: number | null = null;
+    return () => {
+        if ( tempigilo !== null ) clearTimeout( tempigilo );
+        tempigilo = window.setTimeout( fn, atendo );
+    };
+}
+
 const _randPozicio = (): string =>
     `${_randEntjer( 0o17, 0o125 )}% ${_randEntjer( 0o17, 0o125 )}%`;
 
@@ -1017,15 +1027,20 @@ class FenestraAdministranto {
         } );
     }    // ⟪ Bildigi Lastatempajn ⟫
 
-    static renderiLastatempajn(): void {
+    // La rendiro ŝparatas dum la panelo estas kaŝita — la malferma vojo ( montriLastatempajn )
+    // devigas ĝin per devigi = true, do kaŝitaj klonitaj iframe-oj ne re-elsutas tutajn paĝojn
+    static renderiLastatempajn(devigi: boolean = false): void {
         const listo = document.getElementById( "recents-list" );
         if ( !listo ) return;
+
+        const panelo = document.getElementById( "recents-panel" );
+        if ( !devigi && panelo && !panelo.classList.contains( "visible" ) ) return;
 
         const fenestroj = document.querySelectorAll( ".window" );
         const tekstoj = typeof akiriTextojn === "function" ? akiriTextojn() : {};
 
         if ( fenestroj.length === 0 ) {
-            listo.innerHTML = `<div style="padding: 24px; text-align: center; opacity: 0.5;">${tekstoj.recents_no_apps || "No open apps"}</div>`;
+            listo.innerHTML = `<div class="recents-empty">${tekstoj.recents_no_apps || "No open apps"}</div>`;
             return;
         }
 
@@ -1368,10 +1383,11 @@ class FenestraAdministranto {
         if ( konservitaLingvo ) this.agordiLingvon( konservitaLingvo );
 
         // Regului la dokan videblecon kaj plenekranan reĝimon ĉe grandecaj ŝanĝoj ( portebla ↔ nefonebla )
-        window.addEventListener( "resize", () => {
+        // ( limigita — la doko rekonstruas sian HTML-on ĉe ĉiu voko )
+        window.addEventListener( "resize", limigiRuluman( () => {
             this.gxisdatigiDokon();
             this.aktualigiPlenekrananModon();
-        } );
+        } ) );
         this.aktualigiPlenekrananModon( true );
 
         // Poŝaj gestoj: hejmbreto kaj ŝvebo de la supra rando
@@ -1519,9 +1535,9 @@ class FenestraAdministranto {
         aktualigiTaskobreton( true );
 
         // Aŭskulti orientiĝajn ŝanĝojn kaj regrandigojn por sekvi vidtransirojn
-        // ( envolvitaj por ne transdoni la eventon kiel la devigi-flagon )
+        // ( envolvitaj por ne transdoni la eventon kiel la devigi-flagon ; regrandigo limigatas )
         window.addEventListener( "orientationchange", () => aktualigiTaskobreton() );
-        window.addEventListener( "resize", () => aktualigiTaskobreton() );
+        window.addEventListener( "resize", limigiRuluman( () => aktualigiTaskobreton() ) );
     }
 }
 
@@ -1572,5 +1588,5 @@ window.addEventListener( "message", ( e ) => {
 document.addEventListener( "DOMContentLoaded", () => (window as any).FenestraAdministranto.inicii() );
 
 ( window as any ).FenestraAdministranto = FenestraAdministranto;
-( window as any ).bildigiLastatempajn = () => (window as any).FenestraAdministranto.renderiLastatempajn();
+( window as any ).bildigiLastatempajn = ( devigi: boolean = true ) => (window as any).FenestraAdministranto.renderiLastatempajn( devigi );
 ( window as any ).aktualigiDokon = () => (window as any).FenestraAdministranto.gxisdatigiDokon();

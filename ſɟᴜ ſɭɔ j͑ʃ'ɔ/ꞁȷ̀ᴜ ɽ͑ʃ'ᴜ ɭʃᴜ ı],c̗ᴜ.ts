@@ -57,7 +57,8 @@ class SciigoAdministranto {
             const noNotifText = tekstoj.notif_none;
             list.innerHTML = `<div>${noNotifText}</div>`;
             const system = (window as any).Sistemo;
-            if (countSpan && system) countSpan.innerText = system.alOktalaCxeno("0");
+            // vab6caja prenas la nombron rekte ( parseInt de oktala ĉeno denziglus ciferojn ≥ 8 )
+            if (countSpan && system) countSpan.innerText = typeof ( window as any ).vab6caja === "function" ? ( window as any ).vab6caja( 0 ) : "0";
             return;
         }
 
@@ -71,12 +72,13 @@ class SciigoAdministranto {
                     <div class="notif-desc">${desc}</div>
                 </div>
                 <div class="notif-icon">${n.icon}</div>
-                <button onclick="SciigoAdministranto.forsxuti(${origIdx})" style="margin-inline-start: auto;">/</button>
+                <button onclick="SciigoAdministranto.forsxuti(${origIdx})">/</button>
             </ciihii>`;
         }).join("");
 
         const system = (window as any).Sistemo;
-        if (countSpan && system) countSpan.innerText = system.alOktalaCxeno(this.akiriNombron().toString());
+        // vab6caja prenas la nombron rekte ( parseInt de oktala ĉeno denziglus ciferojn ≥ 8 )
+        if (countSpan && system) countSpan.innerText = typeof ( window as any ).vab6caja === "function" ? ( window as any ).vab6caja( this.akiriNombron() ) : this.akiriNombron().toString();
     }
 
     // ⟨ Inicii ⟩

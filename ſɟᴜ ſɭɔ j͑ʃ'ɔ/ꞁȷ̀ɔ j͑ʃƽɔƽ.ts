@@ -280,7 +280,7 @@ function akiriPiktogramon(ŝlosilo: string): string {
 
     // ⟨ CSS Variablaj Nomoj ⟩
     CSS_VARS: {
-        taskbarSize: "--taskbar-inline-size",
+        taskbarSize: "--taskbar-width",
         panelInset: "--panel-inset",
         brightness: "--os-brightness"
     },
@@ -323,12 +323,6 @@ const DOMCache: any = {
             (this as any)._kaŝmemoro[id] = document.getElementById(id);
         }
         return (this as any)._kaŝmemoro[id];
-    },
-    malplenigi(): void {
-        (this as any)._kaŝmemoro = {};
-    },
-    forigi(id: string): void {
-        delete (this as any)._kaŝmemoro[id];
     }
 };
 

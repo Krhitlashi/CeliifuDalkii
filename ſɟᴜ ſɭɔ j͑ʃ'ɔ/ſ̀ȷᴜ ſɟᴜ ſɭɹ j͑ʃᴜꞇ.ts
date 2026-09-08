@@ -50,7 +50,7 @@ export const LabortablaPiktogramoAdministranto = {
             const labortablo = this.labortablo;
             KonservejaUtilo.aplikiKahelanAranĝon( tiles, "desktopTileLayout", ( kahelo: HTMLElement, col: number, row: number ) => {
                 labortablo.aplikiPozicion( kahelo, col, row );
-            } );
+            }, labortablo.cols + "x" + labortablo.rows );
         }
         this.labortablo?.refreŝigi();
         this.komencaMenuo?.refreŝigi();
@@ -58,7 +58,15 @@ export const LabortablaPiktogramoAdministranto = {
 
     _alakrogiCxiujnKradojn() {
         [ this.labortablo, this.komencaMenuo ].forEach( grid => {
-            if ( grid?.container ) grid.container.querySelectorAll( ".app-tile" ).forEach( ( t: any ) => grid.alakrogiPostTrenado( t as HTMLElement ) );
+            if ( !grid?.container ) return;
+            // Antaŭ-derivi paĝojn por kaŝitaj kradoj ( tirujo ) kaj kaŝitaj
+            // paĝoj — alakrogiPostTrenado re-derivas poziciojn el pikselaj
+            // rektanguloj, kiuj estas 0 × 0 por ne-vidataj elementoj kaj
+            // densigus ĉiujn kahelojn ĉe ( 0 , 0 )
+            const kaheloj = Array.from( grid.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[];
+            const estasKaŝita = grid.containerId === "start-menu-content" || kaheloj.some( k => k.style.display === "none" );
+            if ( estasKaŝita ) grid.refluigiKahelojn();
+            else kaheloj.forEach( k => grid.alakrogiPostTrenado( k ) );
         } );
     },
 
@@ -71,7 +79,8 @@ export const LabortablaPiktogramoAdministranto = {
     _konserviLabortablanArangxon() {
         if ( KonservejaUtilo && this.labortablo?.container ) {
             const tiles = Array.from( this.labortablo.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[];
-            KonservejaUtilo.konserviKahelanAranĝon( tiles, "desktopTileLayout" );
+            // Stampi la krad-formon, por ke paĝnumeroj nur restariĝu kiam ĝi kongruas
+            KonservejaUtilo.konserviKahelanAranĝon( tiles, "desktopTileLayout", this.labortablo.cols + "x" + this.labortablo.rows );
         }
     },
 
@@ -193,7 +202,7 @@ export const LabortablaPiktogramoAdministranto = {
                 const desktop = this.labortablo;
                 KonservejaUtilo.aplikiKahelanAranĝon( tiles, "desktopTileLayout", ( tile: HTMLElement, col: number, row: number ) => {
                     desktop.aplikiPozicion( tile, col, row );
-                } );
+                }, desktop.cols + "x" + desktop.rows );
             } else if ( !kongruas ) {
                 KonservejaUtilo.forigi?.( "desktopTileLayout" );
             }
@@ -213,7 +222,7 @@ export const LabortablaPiktogramoAdministranto = {
         }, 300 ) );
 
         if ( RapidaAgordoAdministranto ) RapidaAgordoAdministranto.inicii();
-        if ( (window as any).SciigoAdministranto ) (window as any).SciigoAdministranto.inicii();
+        // ( SciigoAdministranto.inicii jam vokatas de Sistemo.init — ne duobligu ĝin )
     },
 
     // ⟪ Ŝargi titolojn de paĝoj mem per HTTP ( fetch + DOMParser ) ⟫
@@ -269,7 +278,9 @@ export const LabortablaPiktogramoAdministranto = {
         // Krei paĝajn indikilojn por la nuna krado ( portebla aŭ labortabla )
         const krado = this.labortablo;
         const erojPoPaĝo = krado ? Math.max( 1, krado.rows * krado.cols ) : ( MOBILE_GRID_ROWS * MOBILE_GRID_COLS );
-        const tutajPaĝoj = Math.ceil( APPS.length / erojPoPaĝo );
+        // Okupitaj paĝoj ( deŝovitaj / movitaj kaheloj ) povas superi la
+        // ap-derivitan nombron — ili devas resti atingeblaj
+        const tutajPaĝoj = Math.max( Math.ceil( APPS.length / erojPoPaĝo ), ( krado?.akiriMaksimumanOkupitanPaĝon?.() ?? 0 ) + 1 );
 
         const ujo = document.createElement( "div" );
         ujo.className = "page-indicators";
@@ -301,7 +312,7 @@ export const LabortablaPiktogramoAdministranto = {
         // Rekonstrui la punktojn kiam la paĝnombro ŝanĝiĝis ( krad-dimensioj )
         const krado = this.labortablo;
         const erojPoPaĝo = Math.max( 1, krado.rows * krado.cols );
-        const tutajPaĝoj = Math.max( 1, Math.ceil( APPS.length / erojPoPaĝo ) );
+        const tutajPaĝoj = Math.max( 1, Math.ceil( APPS.length / erojPoPaĝo ), krado.akiriMaksimumanOkupitanPaĝon() + 1 );
         let ujo = document.querySelector( ".page-indicators" ) as HTMLElement;
         let punktoj = ujo.querySelectorAll( ".page-indicator" );
         if ( punktoj.length !== tutajPaĝoj ) {
@@ -348,7 +359,7 @@ export const LabortablaPiktogramoAdministranto = {
             QS_TOGGLES.forEach( ( t: any ) => { if ( !savedToggleOrder.includes( t.id ) ) toggles.push( t ); } );
         }
         qsGrid.innerHTML = toggles.map( ( t: any ) => `
-            <div class="xeku1okek" data-qs-id="${t.id}" onclick="window.LabortablaPiktogramoAdministranto._pritraktiRAAKlako( event , this , 'xeku1okek-order' )">
+            <div class="xeku1okek" data-qs-id="${t.id}" onclick="window.LabortablaPiktogramoAdministranto._pritraktiRAAKlako( event , this )">
                 <button class="caku1o" data-setting="${t.id}" aria-pressed="${t.default}" onclick="if ( window.baskuligiQsButonon ) baskuligiQsButonon( this )">
                     <span class="icon">${t.icon}</span>
                     <span class="label" data-oskakefani="${t.string}">${t.label}</span>
@@ -364,7 +375,7 @@ export const LabortablaPiktogramoAdministranto = {
             defaultSliders.forEach( ( s: any ) => { if ( !savedSliderOrder.includes( s.id ) ) sliders.push( s ); } );
         }
         slidersContainer.innerHTML = sliders.map( ( s: any ) => `
-            <div class="xeku1okek" data-qs-id="${s.id}" onclick="window.LabortablaPiktogramoAdministranto._pritraktiRAAKlako( event , this , 'qs-slider-order' )">
+            <div class="xeku1okek" data-qs-id="${s.id}" onclick="window.LabortablaPiktogramoAdministranto._pritraktiRAAKlako( event , this )">
                 <ciihii class="">
                     <span class="label" data-oskakefani="${s.string}">${s.label}</span>
                     <span class="icon">${s.icon}</span>
@@ -414,12 +425,17 @@ export const LabortablaPiktogramoAdministranto = {
         if ( (window as any).RapidaAgordoAdministranto ) (window as any).RapidaAgordoAdministranto.restaŭriUI();
     },
 
+    // Klako sur kahelo aŭ ĝia remburaĵo — en redakta reĝimo blokas la baskulon,
+    // alie plusendas al la interna butono por ke klakoj sur la etikedo ankaŭ funkciu
     _pritraktiRAAKlako( e: any, el: HTMLElement ) {
         if ( document.getElementById( "quick-settings-container" )?.classList.contains( "qs-editing" ) ) {
             if ( e.target.tagName === "INPUT" ) return;
             e.preventDefault(); e.stopPropagation();
         } else if ( el.classList.contains( "xeku1okek" ) ) {
-            if ( typeof baskuligiQsButonon === "function" ) baskuligiQsButonon( el );
+            const butono = el.querySelector( ".caku1o" ) as HTMLElement | null;
+            if ( butono && e.target !== butono && !butono.contains( e.target ) && typeof baskuligiQsButonon === "function" ) {
+                baskuligiQsButonon( butono );
+            }
         }
     },
 

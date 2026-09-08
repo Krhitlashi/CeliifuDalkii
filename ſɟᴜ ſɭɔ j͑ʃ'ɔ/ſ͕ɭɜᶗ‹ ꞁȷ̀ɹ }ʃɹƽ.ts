@@ -108,9 +108,9 @@ export class PiktogramaKrado {
     // Rekomputi la krad-dimensiojn laŭ la nuna reĝimo ( vokita ĉe agorda ŝanĝo )
     rekomputiDimensiojn(): void {
         if ( this.containerId === "start-menu-content" ) {
-            // Tirujo poŝte: 6 vicoj × 2 kolumnoj; labortable: 8 × 8
-            this.rows = this.estasPortebla ? 6 : 8;
-            this.cols = this.estasPortebla ? 2 : 8;
+            // Tirujo poŝte: 6 vicoj × 2 kolumnoj; labortable: plena 8 × 8 krado
+            this.rows = this.estasPortebla ? 0o6 : 0o10;
+            this.cols = this.estasPortebla ? 0o2 : 0o10;
         } else if ( this.containerId === "desktop" && !this.estasPortebla && !this.cxuCxefaKradoSpegulita() ) {
             // Spegulado malŝaltita: la originala labortabla krado
             this.rows = ORIGINAL_GRID_ROWS;
@@ -235,7 +235,7 @@ export class PiktogramaKrado {
         const admin = ( window as any ).LabortablaPiktogramoAdministranto;
         if ( difY < 0 ) {
             // Rulumi supren ĉe la lasta paĝo: navigi al nova malplena paĝo sube
-            const maksPaĝo = Math.ceil( ( ( window as any ).APPS || [] ).length / ( this.rows * this.cols ) ) - 1;
+            const maksPaĝo = akiriMaksimumanPaĝon( undefined, this.cols, this.rows );
             if ( this.nunaPaĝo >= maksPaĝo ) {
                 this.nunaPaĝo++;
                 this.refreŝigi();
@@ -250,9 +250,23 @@ export class PiktogramaKrado {
         }
     }
 
+    // Maksimuma paĝo enhavanta almenaŭ unu kahelon ( povas superi la
+    // aplik-derivitan paĝnombron post deŝovoj aŭ movoj inter paĝoj )
+    akiriMaksimumanOkupitanPaĝon(): number {
+        if ( !this.container ) return 0;
+        let maks = 0;
+        this.container.querySelectorAll( ".app-tile" ).forEach( k => {
+            const paĝo = parseInt( ( k as HTMLElement ).dataset.page || "0" ) || 0;
+            if ( paĝo > maks ) maks = paĝo;
+        } );
+        return maks;
+    }
+
     // Paŝigi antaŭen (+1) aŭ malantaŭen (-1) kun enirejaj kaj elirejaj animacioj
     pasxiPagxon( direkto: number ): void {
-        const maksPaĝo = Math.ceil( ( ( window as any ).APPS || [] ).length / ( this.rows * this.cols ) ) - 1;
+        // Okupitaj paĝoj estas navigeblaj eĉ kiam la aplik-derivita nombro estas
+        // pli malgranda ( kaheloj movitaj al pli postaj paĝoj )
+        const maksPaĝo = Math.max( akiriMaksimumanPaĝon( undefined, this.cols, this.rows ), this.akiriMaksimumanOkupitanPaĝon() );
         const novaPaĝo = Math.max( 0, Math.min( maksPaĝo, this.nunaPaĝo + direkto ) );
         if ( novaPaĝo === this.nunaPaĝo || this.pagigas ) {
             // Ĉe la rando de la paĝoj ( aŭ kun nur unu paĝo ) montri la
@@ -342,9 +356,6 @@ export class PiktogramaKrado {
             const taskobarPozicio = taskbar?.dataset.position || "left";
 
             let efektivaPozicio = taskobarPozicio;
-            const { colSpan: malnovaKolSpan, rowSpan: malnovaVicSpan } = akiriElementajnSpanojn( el );
-            let novaKolSpan = malnovaKolSpan;
-            let novaVicSpan = malnovaVicSpan;
 
             // Mezuri faktan pilolan dikecon
             const titolaBreto = el.querySelector( "ksaka" ) as HTMLElement | null;
@@ -359,31 +370,14 @@ export class PiktogramaKrado {
             if ( this.etikedReĝimo === "external" ) {
                 if ( rect.width < sojlo ) {
                     efektivaPozicio = "bottom";
-                    if ( this.containerId === "start-menu-content" && !this.estasPortebla ) {
-                        novaVicSpan = 2;
-                        novaKolSpan = 1;
-                    }
                 } else if ( rect.height < sojlo ) {
                     efektivaPozicio = "left";
-                    if ( this.containerId === "start-menu-content" && !this.estasPortebla ) {
-                        novaKolSpan = 2;
-                        novaVicSpan = 1;
-                    }
-                } else if ( this.containerId === "start-menu-content" && !this.estasPortebla ) {
-                    novaKolSpan = 1;
-                    novaVicSpan = 1;
                 }
             }
 
             el.dataset.position = efektivaPozicio;
             if ( titolaBreto ) {
                 titolaBreto.dataset.position = efektivaPozicio;
-            }
-
-            if ( novaKolSpan !== malnovaKolSpan || novaVicSpan !== malnovaVicSpan ) {
-                el.dataset.colSpan = novaKolSpan.toString();
-                el.dataset.rowSpan = novaVicSpan.toString();
-                this.aplikiPozicion( el, parseInt( el.dataset.col || "0" ), parseInt( el.dataset.row || "0" ) );
             }
         } );
     }
@@ -550,34 +544,11 @@ export class PiktogramaKrado {
         }
 
         // Komenca menuo: uzi plenan indekson por ruluma aranĝo
-        const taskbar = typeof akiriTaskobreton === "function" ? akiriTaskobreton() : document.getElementById( "taskbar" );
-        const taskobarPozicio = taskbar?.dataset.position || "left";
-        const estasVertikalaTaskobreto = taskobarPozicio === "left" || taskobarPozicio === "right";
-
-        // Adapta etendado
-        if ( estasVertikalaTaskobreto ) {
-            el.dataset.colSpan = "2";
-            el.dataset.rowSpan = "1";
-        } else {
-            el.dataset.colSpan = "1";
-            el.dataset.rowSpan = "2";
-        }
-
-        const { colSpan: cs, rowSpan: rs } = akiriElementajnSpanojn( el );
-
-        // Plenigi vertikale (malsupre supren), poste horizontale
-        if ( estasVertikalaTaskobreto ) {
-            const erojPoKol = this.rows;
-            const kolGrupo = Math.floor( index / erojPoKol );
-            const c = kolGrupo * cs;
-            const r = ( this.rows - rs ) - ( index % erojPoKol );
-            this.aplikiPozicion( el, c, r );
-        } else {
-            const erojPoKol = Math.floor( this.rows / rs );
-            const c = Math.floor( index / erojPoKol ) * cs;
-            const r = ( this.rows - rs ) - ( index % erojPoKol ) * rs;
-            this.aplikiPozicion( el, c, r );
-        }
+        // Labortable: ĉiuj kaheloj restas 1 × 1 en la plena 8 × 8 krado
+        // ( plenigi vertikale malsupren-supren, poste horizontale )
+        const c = Math.floor( index / this.rows );
+        const r = ( this.rows - 1 ) - ( index % this.rows );
+        this.aplikiPozicion( el, c, r );
     }
 
     aplikiPozicion( el: HTMLElement, c: number, r: number, xOffset: number = 0 ): void {

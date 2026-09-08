@@ -153,12 +153,14 @@
 
         const langNames = { aih: "ꞁȷ̀ɹ ſɭˬɔ", en: "English", ja: "日本語", ar: "العربية" };
 
-        Object.keys(skakefani).forEach(lang => {
-            const option = document.createElement("option");
+        // La gastigita tradukaj skriptoj difinas skakefani kiel leksikan tutmondaĵon,
+        // ne kiel fenestran proprieton — uzu la lokan skakefani por la lingva listo
+        Object.keys( skakefani ).forEach( lang => {
+            const option = document.createElement( "option" );
             option.value = lang;
-            option.innerText = langNames[lang] || lang;
-            langSelect.appendChild(option);
-        });
+            option.innerText = langNames[ lang ] || lang;
+            langSelect.appendChild( option );
+        } );
 
         // Set current language
         langSelect.value = document.documentElement.lang || "aih";
@@ -227,21 +229,9 @@
         }
     };
 
-    // Use default skakefani from external scripts
-    // Merge local translations with global skakefani
+    // Apply translations directly — ne atendo window.skakefani ( ĝi neniam ekzistas kiel
+    // fenestra proprieto, do la malnova atendo-buklo polus eterne )
     window.onload = function() {
-        // Wait for external skakefani to load, then merge
-        if ( typeof window.skakefani === "undefined" ) {
-            setTimeout( arguments.callee, 0o100 );
-            return;
-        }
-        // Merge local translations into global skakefani
-        for ( const lang in skakefani ) {
-            if ( !window.skakefani[ lang ] ) {
-                window.skakefani[ lang ] = {};
-            }
-            Object.assign( window.skakefani[ lang ], skakefani[ lang ] );
-        }
         // Apply translations
         if ( typeof k2regawe === "function" ) {
             k2regawe( document.documentElement.lang || "aih" );

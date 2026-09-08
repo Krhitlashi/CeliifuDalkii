@@ -58,8 +58,10 @@ const KonservejaUtilo = {
      * Konservi labortablajn kahelajn poziciojn kaj grandojn al localStorage
      * @param {HTMLElement[]} kaheloj - Tabelo de kahelaj elementoj
      * @param {string} stokejaŝlosilo - Ŝlosilo por localStorage ( defaŭlte: "desktopTileLayout" )
+     * @param {string} [kradaFormo] - Laŭvola krad-formo-stampo ( "kolumnoj x vicoj" ),
+     * por ke paĝnumeroj nur restariĝu en la sama krad-aranĝo
      */
-    konserviKahelanAranĝon( kaheloj: HTMLElement[], stokejaŜlosilo: string = "desktopTileLayout" ): void {
+    konserviKahelanAranĝon( kaheloj: HTMLElement[], stokejaŜlosilo: string = "desktopTileLayout", kradaFormo?: string ): void {
         try {
             const aranĝo = kaheloj.map( kahelo => ( {
                 id: kahelo.id || kahelo.dataset.app || kahelo.dataset.id,
@@ -69,11 +71,25 @@ const KonservejaUtilo = {
                 rowSpan: parseInt( kahelo.dataset.rowSpan as string ) || 1,
                 page: parseInt( kahelo.dataset.page as string ) || 0
             } ) ).filter( ero => ero.id );
-            
-            localStorage.setItem( stokejaŜlosilo, JSON.stringify( aranĝo ) );
+
+            localStorage.setItem( stokejaŜlosilo, JSON.stringify( kradaFormo ? { _gridShape: kradaFormo, layout: aranĝo } : aranĝo ) );
         } catch ( e ) {
             console.error( "( ſ̀ȷɜᴜ̩ ſɭɹ }ʃꞇ ) Malsukcesis konservi kahelan aranĝon", e );
         }
+    },
+
+    /**
+     * Malŝarĝi la krudan konservitan aranĝon ( malnova tabelo aŭ stampita objekto )
+     * @param {string} stokejaŝlosilo
+     * @returns {{layout: Array<any>, gridShape: string|null}}
+     */
+    malŝarĝiKahelanAranĝon( stokejaŜlosilo: string = "desktopTileLayout" ): { layout: Array<any>, gridShape: string | null } {
+        try {
+            const analizita = JSON.parse( localStorage.getItem( stokejaŜlosilo ) || "null" );
+            if ( Array.isArray( analizita ) ) return { layout: analizita, gridShape: null };
+            if ( analizita && Array.isArray( analizita.layout ) ) return { layout: analizita.layout, gridShape: analizita._gridShape ?? null };
+        } catch { /* koruptita ero — uzi malplenan aranĝon */ }
+        return { layout: [], gridShape: null };
     },
 
     /**
@@ -82,12 +98,7 @@ const KonservejaUtilo = {
      * @returns {Array<{id: string, col: number, row: number, colSpan: number, rowSpan: number}>}
      */
     sxargiKahelanAranĝon( stokejaŜlosilo: string = "desktopTileLayout" ): Array<{id: string, col: number, row: number, colSpan: number, rowSpan: number, page?: number}> {
-        try {
-            const ero = localStorage.getItem( stokejaŜlosilo );
-            return ero ? JSON.parse( ero ) : [];
-        } catch {
-            return [];
-        }
+        return this.malŝarĝiKahelanAranĝon( stokejaŜlosilo ).layout;
     },
 
     /**
@@ -96,9 +107,13 @@ const KonservejaUtilo = {
      * @param {string} stokejaŝlosilo - Ŝlosilo por localStorage ( defaŭlte: "desktopTileLayout" )
      * @param {(tile: HTMLElement, col: number, row: number, colSpan: number, rowSpan: number) => void} aplikiPozicionFn - Laŭvola funkcio por apliki poziciojn
      */
-    aplikiKahelanAranĝon( kaheloj: HTMLElement[], stokejaŜlosilo: string = "desktopTileLayout", aplikiPozicionFn?: ( kahelo: HTMLElement, col: number, row: number, colSpan: number, rowSpan: number ) => void ): void {
-        const konservitaAranĝo = this.sxargiKahelanAranĝon( stokejaŜlosilo );
+    aplikiKahelanAranĝon( kaheloj: HTMLElement[], stokejaŜlosilo: string = "desktopTileLayout", aplikiPozicionFn?: ( kahelo: HTMLElement, col: number, row: number, colSpan: number, rowSpan: number ) => void, kradaFormo?: string ): void {
+        const { layout: konservitaAranĝo, gridShape: konservitaFormo } = this.malŝarĝiKahelanAranĝon( stokejaŜlosilo );
         if ( !konservitaAranĝo.length ) return;
+
+        // Paĝnumeroj nur validas en la sama krad-formo: post transiro inter
+        // portebla kaj labortabla krado la paĝoj re-deriviĝas el la apliko-indeksoj
+        const restarigiPaĝojn = !!kradaFormo && !!konservitaFormo && kradaFormo === konservitaFormo;
 
         kaheloj.forEach( kahelo => {
             const kahelId = kahelo.id || kahelo.dataset.app || kahelo.dataset.id;
@@ -112,7 +127,7 @@ const KonservejaUtilo = {
                 kahelo.dataset.row = konservita.row.toString();
                 kahelo.dataset.colSpan = konservita.colSpan.toString();
                 kahelo.dataset.rowSpan = konservita.rowSpan.toString();
-                if ( typeof konservita.page === "number" ) {
+                if ( restarigiPaĝojn && typeof konservita.page === "number" ) {
                     kahelo.dataset.page = konservita.page.toString();
                 }
                 if ( aplikiPozicionFn ) {

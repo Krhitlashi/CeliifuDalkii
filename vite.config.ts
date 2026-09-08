@@ -31,7 +31,7 @@ const copyStaticFilesPlugin = {
   name: "copy-static-files",
   closeBundle() {
     const distDir = join(__dirname, "dist");
-    const excludedDirs = [ "node_modules", "dist", ".git", ".github", ".idea" ];
+    const excludedDirs = [ "node_modules", "dist", ".git", ".github", ".idea", ".vscode", ".freebuff" ];
 
     function findStaticFiles(dir: string, files: string[] = []): string[] {
       const entries = readdirSync(dir, { withFileTypes: true });

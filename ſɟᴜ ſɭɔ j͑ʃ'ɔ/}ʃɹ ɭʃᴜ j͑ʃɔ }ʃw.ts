@@ -30,6 +30,9 @@ class PanelaAdministranto {
         dock: "taskbar-dock"
     };
 
+    // ⟨ Pendantaj Baskuloj ⟫ - paneloj jam planitaj por malfermo ( kontraŭ rapidaj duoblaj klakoj )
+    static _pendantajBaskuloj: Set<string> = new Set();
+
     // ⟪ Akiri Panelon per ID ⟫
     static akiriPanelon(panelId: string): HTMLElement | null {
         return DOMCache.akiri(panelId);
@@ -147,22 +150,23 @@ class PanelaAdministranto {
         };
     }
 
-    // ⟪ Baskuli Panelon ⟫
+    // ⟪ Baskuli Panelon ⟫ - la remalfermo ĉenigas post la fermo-promeso ( sen tempigiloj ),
+    // do rapidaj klakoj ne remalfermas panelon meze de ĝia fermo-animacio
     static baskuligi(panelId: string, btnId: string, opts?: { onBefore?: () => void; onAboutToShow?: () => void; onShow?: () => void }): void {
         if ( opts?.onBefore ) opts.onBefore();
         const panel = this.akiriPanelon( panelId );
         if ( !panel ) return;
 
         const estasVidebla = this.cxuPaneloVidebla( panel );
-        this.fermiCxiujnPanelojn();
+        if ( !estasVidebla && this._pendantajBaskuloj.has( panelId ) ) return;
 
-        if ( !estasVidebla ) {
+        this.fermiCxiujnPanelojn().then( () => {
+            if ( estasVidebla || this.cxuPaneloVidebla( panel ) ) return;
+            this._pendantajBaskuloj.add( panelId );
             if ( opts?.onAboutToShow ) opts.onAboutToShow();
-            setTimeout( () => {
-                if ( opts?.onShow ) opts.onShow();
-                else this.montriPanelon( panel, btnId, false, panelId );
-            }, this.animationDuration );
-        }
+            const promeso = opts?.onShow ? Promise.resolve() : this.montriPanelon( panel, btnId, false, panelId );
+            promeso.then( () => this._pendantajBaskuloj.delete( panelId ) );
+        } ).catch( () => this._pendantajBaskuloj.delete( panelId ) );
     }
 
     // ⟪ Baskuli Rapidajn Agordojn ⟫ - la malnova enreta montra kopio kunfandiĝis en montriPanelon
@@ -188,41 +192,41 @@ class PanelaAdministranto {
         } );
     }
 
-    // ⟪ Baskuli Komencan Menuon ⟫ - uzas la unuigitan baskulan skeletan logikon
+    // ⟪ Baskuli Komencan Menuon ⟫ - uzas la unuigitan fermen de fermiCxiujnPanelojn
     static baskuligiKomencaMenuo(): void {
         const startMenu: HTMLElement | null = akiriKomencanMenuon();
         if (!startMenu) return;
 
         const estasMalferma = cxuKlaso(startMenu, "open");
         if (estasMalferma) {
-            AnimacioAdministranto.fermiPanelon(startMenu, "startMenu", {
+            // fermiCxiujnPanelojn fermas la startan menuon, forigas la korpan klason
+            // kaj malpremas la hejmbretan butonon ( sama kiel la aliaj paneloj )
+            this.fermiCxiujnPanelojn();
+            return;
+        }
+        if ( this._pendantajBaskuloj.has( this.panels.startMenu ) ) return;
+
+        this._pendantajBaskuloj.add( this.panels.startMenu );
+        this.fermiCxiujnPanelojn().then( () => {
+            if ( cxuKlaso( startMenu, "open" ) ) return;
+
+            if ((window as any).LabortablaPiktogramoAdministranto?.startMenu) {
+                (window as any).LabortablaPiktogramoAdministranto.startMenu.refresh();
+            }
+
+            AnimacioAdministranto.malfermiPanelon(startMenu, "startMenu", {
                 duration: this.animationDuration
             }).then(() => {
-                forigiKlason(startMenu, "open");
-                forigiKlason(document.body, "start-menu-open");
-                // Malpremi la startan butonon kiel la aliaj taskobretaj butonoj
-                agordiButonPremita( "home-area", false );
-            });
-        } else {
-            this.fermiCxiujnPanelojn();
-            setTimeout(() => {
-                if ((window as any).LabortablaPiktogramoAdministranto?.startMenu) {
-                    (window as any).LabortablaPiktogramoAdministranto.startMenu.refresh();
-                }
-
-                AnimacioAdministranto.malfermiPanelon(startMenu, "startMenu", {
-                    duration: this.animationDuration
-                }).then(() => {
-                    aldoniKlason(startMenu, "open");
-                    aldoniKlason(document.body, "start-menu-open");
-                    // Premi la startan butonon kiel la aliaj taskobretaj butonoj
-                    agordiButonPremita( "home-area", true );
-                });
-            }, this.animationDuration);
-        }
+                this._pendantajBaskuloj.delete( this.panels.startMenu );
+                aldoniKlason(startMenu, "open");
+                aldoniKlason(document.body, "start-menu-open");
+                // Premi la startan butonon kiel la aliaj taskobretaj butonoj
+                agordiButonPremita( "home-area", true );
+            }).catch( () => this._pendantajBaskuloj.delete( this.panels.startMenu ) );
+        } ).catch( () => this._pendantajBaskuloj.delete( this.panels.startMenu ) );
     }
 
-    // ⟪ Montri Lastatempajn Panelon ⟫
+    // ⟪ Montri Lastatempajn Panelon ⟫ - rendiro kaj malfermo ĉenigas post la fermo-promeso
     static montriLastatempajn(e?: Event): void {
         if (e) e.preventDefault();
 
@@ -231,28 +235,31 @@ class PanelaAdministranto {
         const dock = this.akiriPanelon(this.panels.dock);
 
         const estasVidebla = this.cxuPaneloVidebla(panel);
-        this.fermiCxiujnPanelojn();
+        if ( !estasVidebla && this._pendantajBaskuloj.has( this.panels.recents ) ) return;
 
-        if (!estasVidebla) {
-            if (typeof bildigiLastatempajn === "function") {
+        this.fermiCxiujnPanelojn().then( () => {
+            if ( estasVidebla || this.cxuPaneloVidebla( panel ) ) return;
+            this._pendantajBaskuloj.add( this.panels.recents );
+
+            if ( typeof bildigiLastatempajn === "function" ) {
                 bildigiLastatempajn();
             }
 
-            if (!cxuTaskbretoGranda() && dock) {
-                if (typeof aktualigiDokon === "function") {
+            if ( !cxuTaskbretoGranda() && dock ) {
+                if ( typeof aktualigiDokon === "function" ) {
                     aktualigiDokon();
                 }
                 const windows: NodeListOf<HTMLElement> = akiriMalfermajnFenestrojn();
-                if (windows.length > 0) {
-                    aldoniKlason(dock, "visible");
-                    AnimacioAdministranto.malaperiEn(dock, { duration: CONSTANTS.ANIM.DURATION_SHORT });
+                if ( windows.length > 0 ) {
+                    aldoniKlason( dock, "visible" );
+                    AnimacioAdministranto.malaperiEn( dock, { duration: CONSTANTS.ANIM.DURATION_SHORT } );
                 }
             }
 
-            setTimeout(() => {
-                this.montriPanelon(panel, "recents-btn", false, "recents");
-            }, this.animationDuration);
-        }
+            this.montriPanelon( panel, "recents-btn", false, "recents" ).then( () => {
+                this._pendantajBaskuloj.delete( this.panels.recents );
+            } ).catch( () => this._pendantajBaskuloj.delete( this.panels.recents ) );
+        } ).catch( () => this._pendantajBaskuloj.delete( this.panels.recents ) );
     }
 
     // ⟪ Iniciati Panelan Eksterklakan Traktilon ⟫
