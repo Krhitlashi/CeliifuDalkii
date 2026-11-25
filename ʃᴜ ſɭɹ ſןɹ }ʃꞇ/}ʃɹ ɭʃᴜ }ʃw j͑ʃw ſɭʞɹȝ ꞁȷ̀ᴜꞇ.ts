@@ -60,8 +60,8 @@ export const n2tasenusukf2qai = {
         if ( maksVulao > 0 ) {
             for ( let i = 0; i <= maksVulao; i++ ) {
                 vaxafaVulaahaCa12naha.push( {
-                    action: `move-page-${i}`,
-                    kekKsaka: `Page ${i + 1}`,
+                    action: `move-vula-${i}`,
+                    kekKsaka: `Vula ${i + 1}`,
                     kp6: `${i + 1}`,
                     i18n: "n2q-vula"
                 } );
@@ -88,7 +88,7 @@ export const n2tasenusukf2qai = {
             if ( ca12na.i18n && s2banaj[ ca12na.i18n ] ) {
                 i18nK61eo = s2banaj[ ca12na.i18n ];
                 if ( ca12na.i18n === "n2q-vula" && ca12na.kekKsaka ) {
-                    const vulaNumero = ca12na.kekKsaka.replace( "Page ", "" );
+                    const vulaNumero = ca12na.kekKsaka.replace( "Vula ", "" );
                     k61eo = i18nK61eo.replace( "{ɿ}", vulaNumero );
                 } else {
                     k61eo = i18nK61eo;

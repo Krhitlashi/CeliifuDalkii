@@ -33,38 +33,38 @@ const ca3aq = {
         }
     },
 
-    k3aqKekanArcaxoon( hakek: HTMLElement[], k3aqaCa3aq: string = "desktopTileLayout", qox2n2kaFormo?: string ): void {
+    k3aqKekanArcaxoon( hakek: HTMLElement[], k3aqaCa3aq: string = "vaxafablaKekArcaxoo", qox2n2kaFormo?: string ): void {
         try {
             const arcaxoo = hakek.map( keko => ( {
                 id: keko.id || keko.dataset.s2k2p2ni || keko.dataset.id,
-                col: parseInt( keko.dataset.col as string ) || 0,
-                row: parseInt( keko.dataset.row as string ) || 0,
-                colSpan: parseInt( keko.dataset.colSpan as string ) || 1,
-                rowSpan: parseInt( keko.dataset.rowSpan as string ) || 1,
-                page: parseInt( keko.dataset.page as string ) || 0
+                cepuSak: parseInt( keko.dataset.cepuSak as string ) || 0,
+                sak: parseInt( keko.dataset.sak as string ) || 0,
+                cepuSakQun2: parseInt( keko.dataset.cepuSakQun2 as string ) || 1,
+                sakQun2: parseInt( keko.dataset.sakQun2 as string ) || 1,
+                vula: parseInt( keko.dataset.vula as string ) || 0
             } ) ).filter( ero => ero.id );
 
-            localStorage.setItem( k3aqaCa3aq, JSON.stringify( qox2n2kaFormo ? { _gridShape: qox2n2kaFormo, layout: arcaxoo } : arcaxoo ) );
+            localStorage.setItem( k3aqaCa3aq, JSON.stringify( qox2n2kaFormo ? { _vek2p2niFormo: qox2n2kaFormo, arcaxoo: arcaxoo } : arcaxoo ) );
         } catch ( e ) {
             console.error( "( ſ̀ȷɜᴜ̩ ſɭɹ }ʃꞇ ) Malsukcesis k3aq kekan arcaxoon", e );
         }
     },
 
-    malvefalKekanArcaxoon( k3aqaCa3aq: string = "desktopTileLayout" ): { layout: Array<any>, gridShape: string | null } {
+    malvefalKekanArcaxoon( k3aqaCa3aq: string = "vaxafablaKekArcaxoo" ): { arcaxoo: Array<any>, vek2p2niFormo: string | null } {
         try {
             const analizita = JSON.parse( localStorage.getItem( k3aqaCa3aq ) || "null" );
-            if ( Array.isArray( analizita ) ) return { layout: analizita, gridShape: null };
-            if ( analizita && Array.isArray( analizita.layout ) ) return { layout: analizita.layout, gridShape: analizita._gridShape ?? null };
+            if ( Array.isArray( analizita ) ) return { arcaxoo: analizita, vek2p2niFormo: null };
+            if ( analizita && Array.isArray( analizita.arcaxoo ) ) return { arcaxoo: analizita.arcaxoo, vek2p2niFormo: analizita._vek2p2niFormo ?? null };
         } catch { /* koruptita ero - uzi qun2n arcaxoon */ }
-        return { layout: [], gridShape: null };
+        return { arcaxoo: [], vek2p2niFormo: null };
     },
 
-    vefalKekanArcaxoon( k3aqaCa3aq: string = "desktopTileLayout" ): Array<{id: string, col: number, row: number, colSpan: number, rowSpan: number, page?: number}> {
-        return this.malvefalKekanArcaxoon( k3aqaCa3aq ).layout;
+    vefalKekanArcaxoon( k3aqaCa3aq: string = "vaxafablaKekArcaxoo" ): Array<{id: string, cepuSak: number, sak: number, cepuSakQun2: number, sakQun2: number, vula?: number}> {
+        return this.malvefalKekanArcaxoon( k3aqaCa3aq ).arcaxoo;
     },
 
-    vek2p2niKekanArcaxoon( hakek: HTMLElement[], k3aqaCa3aq: string = "desktopTileLayout", vek2p2niQakeknFn?: ( keko: HTMLElement, col: number, row: number, colSpan: number, rowSpan: number ) => void, qox2n2kaFormo?: string ): void {
-        const { layout: k3aqtaArcaxoo, gridShape: k3aqtaFormo } = this.malvefalKekanArcaxoon( k3aqaCa3aq );
+    vek2p2niKekanArcaxoon( hakek: HTMLElement[], k3aqaCa3aq: string = "vaxafablaKekArcaxoo", vek2p2niQakeknFn?: ( keko: HTMLElement, cepuSak: number, sak: number, cepuSakQun2: number, sakQun2: number ) => void, qox2n2kaFormo?: string ): void {
+        const { arcaxoo: k3aqtaArcaxoo, vek2p2niFormo: k3aqtaFormo } = this.malvefalKekanArcaxoon( k3aqaCa3aq );
         if ( !k3aqtaArcaxoo.length ) return;
 
         const nekalahaVulan = !!qox2n2kaFormo && !!k3aqtaFormo && qox2n2kaFormo === k3aqtaFormo;
@@ -73,23 +73,23 @@ const ca3aq = {
             const kekId = keko.id || keko.dataset.s2k2p2ni || keko.dataset.id;
             const k3aqta = k3aqtaArcaxoo.find( ero => ero.id === kekId );
             if ( k3aqta ) {
-                if ( k3aqta.col < 0 || k3aqta.row < 0 ) return;
+                if ( k3aqta.cepuSak < 0 || k3aqta.sak < 0 ) return;
 
-                keko.dataset.col = k3aqta.col.toString();
-                keko.dataset.row = k3aqta.row.toString();
-                keko.dataset.colSpan = k3aqta.colSpan.toString();
-                keko.dataset.rowSpan = k3aqta.rowSpan.toString();
-                if ( nekalahaVulan && typeof k3aqta.page === "number" ) {
-                    keko.dataset.page = k3aqta.page.toString();
+                keko.dataset.cepuSak = k3aqta.cepuSak.toString();
+                keko.dataset.sak = k3aqta.sak.toString();
+                keko.dataset.cepuSakQun2 = k3aqta.cepuSakQun2.toString();
+                keko.dataset.sakQun2 = k3aqta.sakQun2.toString();
+                if ( nekalahaVulan && typeof k3aqta.vula === "number" ) {
+                    keko.dataset.vula = k3aqta.vula.toString();
                 }
                 if ( vek2p2niQakeknFn ) {
-                    vek2p2niQakeknFn( keko, k3aqta.col, k3aqta.row, k3aqta.colSpan, k3aqta.rowSpan );
+                    vek2p2niQakeknFn( keko, k3aqta.cepuSak, k3aqta.sak, k3aqta.cepuSakQun2, k3aqta.sakQun2 );
                 }
             }
         } );
     },
 
-    nekafKekanArcaxoon( k3aqaCa3aq: string = "desktopTileLayout" ): void {
+    nekafKekanArcaxoon( k3aqaCa3aq: string = "vaxafablaKekArcaxoo" ): void {
         this.ne3unak( k3aqaCa3aq );
     }
 };

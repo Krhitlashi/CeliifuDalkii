@@ -22,8 +22,8 @@ export interface S2k2p2niVop2 {
 }
 
 export interface IconGridConfig {
-    rows?: number;
-    cols?: number;
+    hasak?: number;
+    hacepuSak?: number;
     centered?: boolean;
     bottomUp?: boolean;
     width?: number;

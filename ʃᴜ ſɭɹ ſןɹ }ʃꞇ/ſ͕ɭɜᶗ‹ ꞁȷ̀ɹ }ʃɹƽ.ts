@@ -3,21 +3,21 @@
 declare const HAKARANI: any;
 declare const caxk12na: any;
 declare const xk12naQavek2p2nion: any;
-declare const xk12naElementajnSpanojn: any;
+declare const xk12naKfeajnTu5ekanojn: any;
 declare const xk12naTahaqken2qaianFonon: any;
 
 import { S2k2p2niVop2, IconGridConfig, CustomHTMLElement } from "./ꞁȷ̀ɜ ı],ɔ ŋᷠᴜ }ʃꞇ.js";
-import { xk12na3aqnpal6jn, xk12naElementanQakekn, knavek2feKekanpal6n } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/j͑ʃ'ɔ ſɟᴜ ı],ɹͷ̗ ꞁȷ̀ᴜ }ʃꞇ.js";
+import { xk12na3aqnpal6jn, xk12naKfeanQakekn, knavek2feKekanpal6n } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/j͑ʃ'ɔ ſɟᴜ ı],ɹͷ̗ ꞁȷ̀ᴜ }ʃꞇ.js";
 import { vahateKekoVaxafi, vahateKekopal6Vasaka } from "./ʃэ ɭʃɔȝ ꞁȷ̀ᴜ }ʃꞇ.js";
 
 // ⟪ ſ͕ɭɜ ı],ɹ }ʃɹƽ ʌ j͑ʃɔ ſȷꞇ }ʃꞇ ⟫
-export const VAXAFABLA_QOX2N2K_HASAK = HAKARANI.DIM.MOBILE_ROWS;
-export const VAXAFABLA_QOX2N2K_HACEPUSAK = HAKARANI.DIM.MOBILE_COLS;
-export const VULAPAQAI_QOX2N2K_HASAK = HAKARANI.DIM.DEFAULT_ROWS;
-export const VULAPAQAI_QOX2N2K_HACEPUSAK = HAKARANI.DIM.DEFAULT_COLS;
+export const VAXAFABLA_QOX2N2K_HASAK = HAKARANI.DIM.VAXAFABLA_HASAK;
+export const VAXAFABLA_QOX2N2K_HACEPUSAK = HAKARANI.DIM.VAXAFABLA_HACEPUSAK;
+export const VULAPAQAI_QOX2N2K_HASAK = HAKARANI.DIM.HASAK;
+export const VULAPAQAI_QOX2N2K_HACEPUSAK = HAKARANI.DIM.HACEPUSAK;
 
-const ORIGINAL_GRID_ROWS = 0o10;
-const ORIGINAL_GRID_COLS = 0o20;
+const SAXE_HASAK = 0o10;
+const SAXE_HACEPUSAK = 0o20;
 
 // ⟪ ɭʃᴜ ֭ſɭᴜ ſ͕ɭƽɔ }ʃɹ ſ͕ɭᴜꞇ ʌ ſ͕ɭɜ ı],ɹ }ʃɹƽ ⟫
 
@@ -26,8 +26,8 @@ export class qox2n2k {
     kuba: HTMLElement | null;
     config: IconGridConfig;
     catama: boolean;
-    rows: number = 0;
-    cols: number = 0;
+    hasak: number = 0;
+    hacepuSak: number = 0;
     saxeHasak: number;
     saxeHacepuSak: number;
     bottomUp: boolean;
@@ -52,8 +52,8 @@ export class qox2n2k {
 
         this.catama = this.cxuCatama();
         this.rekomputiDimensiojn();
-        this.saxeHasak = this.rows;
-        this.saxeHacepuSak = this.cols;
+        this.saxeHasak = this.hasak;
+        this.saxeHacepuSak = this.hacepuSak;
         this.bottomUp = config.bottomUp || false;
         this.kemaSefini = config.width ?? null;
         this.kemaL6da = config.height ?? null;
@@ -101,17 +101,17 @@ export class qox2n2k {
 
     rekomputiDimensiojn(): void {
         if ( this.kubaId === "n2tanu-kfeni" ) {
-            this.rows = this.catama ? 0o6 : 0o10;
-            this.cols = this.catama ? 0o2 : 0o10;
+            this.hasak = this.catama ? 0o6 : 0o10;
+            this.hacepuSak = this.catama ? 0o2 : 0o10;
         } else if ( this.kubaId === "vulapaqai" && !this.catama && !this.cxuPuf2Qox2n2kPeqeniha() ) {
-            this.rows = ORIGINAL_GRID_ROWS;
-            this.cols = ORIGINAL_GRID_COLS;
+            this.hasak = SAXE_HASAK;
+            this.hacepuSak = SAXE_HACEPUSAK;
         } else {
-            this.rows = this.catama ? VAXAFABLA_QOX2N2K_HASAK : VULAPAQAI_QOX2N2K_HASAK;
-            this.cols = this.catama ? VAXAFABLA_QOX2N2K_HACEPUSAK : VULAPAQAI_QOX2N2K_HACEPUSAK;
+            this.hasak = this.catama ? VAXAFABLA_QOX2N2K_HASAK : VULAPAQAI_QOX2N2K_HASAK;
+            this.hacepuSak = this.catama ? VAXAFABLA_QOX2N2K_HACEPUSAK : VULAPAQAI_QOX2N2K_HACEPUSAK;
         }
-        this.saxeHasak = this.rows;
-        this.saxeHacepuSak = this.cols;
+        this.saxeHasak = this.hasak;
+        this.saxeHacepuSak = this.hacepuSak;
         this.kxeteVulao = 0;
     }
 
@@ -136,9 +136,9 @@ export class qox2n2k {
         } );
 
         if ( !this.catama && this.kubaId === "vulapaqai" && ( window as any ).ca3aq ) {
-            ( window as any ).ca3aq.vek2p2niKekanArcaxoon( tiles, "desktopTileLayout", ( keko: HTMLElement, col: number, row: number ) => {
-                if ( col >= this.cols || row >= this.rows ) return;
-                this.vek2p2niQakekn( keko, col, row );
+            ( window as any ).ca3aq.vek2p2niKekanArcaxoon( tiles, "vaxafablaKekArcaxoo", ( keko: HTMLElement, cepuSak: number, sak: number ) => {
+                if ( cepuSak >= this.hacepuSak || sak >= this.hasak ) return;
+                this.vek2p2niQakekn( keko, cepuSak, sak );
             } );
         }
 
@@ -211,7 +211,7 @@ export class qox2n2k {
     caqaxk12naVulaK3unakn( xeq6kY: number ): void {
         const admin = ( window as any ).tlacak2sai;
         if ( xeq6kY < 0 ) {
-            const maksVulao = xk12naMaksimumanVulaon( undefined, this.cols, this.rows );
+            const maksVulao = xk12naMaksimumanVulaon( undefined, this.hacepuSak, this.hasak );
             if ( this.kxeteVulao >= maksVulao ) {
                 this.kxeteVulao++;
                 this.neka();
@@ -229,14 +229,14 @@ export class qox2n2k {
         if ( !this.kuba ) return 0;
         let maks = 0;
         this.kuba.querySelectorAll( ".vek2p2ni-kek" ).forEach( k => {
-            const vulao = parseInt( ( k as HTMLElement ).dataset.page || "0" ) || 0;
+            const vulao = parseInt( ( k as HTMLElement ).dataset.vula || "0" ) || 0;
             if ( vulao > maks ) maks = vulao;
         } );
         return maks;
     }
 
     pasxiVulaon( direkto: number ): void {
-        const maksVulao = Math.max( xk12naMaksimumanVulaon( undefined, this.cols, this.rows ), this.xk12naMaksimumanXk12naVulaon() );
+        const maksVulao = Math.max( xk12naMaksimumanVulaon( undefined, this.hacepuSak, this.hasak ), this.xk12naMaksimumanXk12naVulaon() );
         const sefeVulao = Math.max( 0, Math.min( maksVulao, this.kxeteVulao + direkto ) );
         if ( sefeVulao === this.kxeteVulao || this.vulaHa ) {
             if ( !this.k12taniVulaumo ) ( window as any ).tlacak2sai?._xk12na2haVulaXcanaKekjn();
@@ -315,10 +315,10 @@ export class qox2n2k {
             const kuba = el.getBoundingClientRect();
             if ( kuba.width === 0 || kuba.height === 0 ) return;
 
-            const taskbar = typeof xk12naQavek2p2nion === "function" ? xk12naQavek2p2nion() : document.getElementById( "caqaxak2p2" );
-            const taskobarQakek = taskbar?.dataset.position || "ctama";
+            const caqaxak2p2 = typeof xk12naQavek2p2nion === "function" ? xk12naQavek2p2nion() : document.getElementById( "caqaxak2p2" );
+            const caqaxak2p2Qakek = caqaxak2p2?.dataset.raqa || "ctama";
 
-            let efektivaQakek = taskobarQakek;
+            let efektivaQakek = caqaxak2p2Qakek;
 
             const k61epuf2aBreto = el.querySelector( "ksaka" ) as HTMLElement | null;
             let kekpuf2 = 0o40;
@@ -337,9 +337,9 @@ export class qox2n2k {
                 }
             }
 
-            el.dataset.position = efektivaQakek;
+            el.dataset.raqa = efektivaQakek;
             if ( k61epuf2aBreto ) {
-                k61epuf2aBreto.dataset.position = efektivaQakek;
+                k61epuf2aBreto.dataset.raqa = efektivaQakek;
             }
         } );
     }
@@ -351,8 +351,8 @@ export class qox2n2k {
         el.className = "vek2p2ni-kek";
         el.dataset.s2k2p2ni = appData.s2k2p2ni;
         el.dataset.ksaka = appData.s2k2p2niKsaka;
-        el.dataset.colSpan = "1";
-        el.dataset.rowSpan = "1";
+        el.dataset.cepuSakQun2 = "1";
+        el.dataset.sakQun2 = "1";
 
         let kobeVaxafa = false;
 
@@ -457,51 +457,51 @@ export class qox2n2k {
     alakrogiAlQox2n2k( el: HTMLElement, index: number ): void {
         if ( !this.kuba ) return;
 
-        const erojPoVulao = this.rows * this.cols;
+        const erojPoVulao = this.hasak * this.hacepuSak;
         const vulaaVecax2l = erojPoVulao > 0 ? Math.floor( index / erojPoVulao ) : 0;
         const vecax2lSurVulao = erojPoVulao > 0 ? index % erojPoVulao : index;
 
-        el.dataset.page = vulaaVecax2l.toString();
+        el.dataset.vula = vulaaVecax2l.toString();
 
         if ( this.kubaId === "vulapaqai" && ( el as any )._kobecaxopuf2 !== true && !el.classList.contains( "b6teqta" ) ) {
             el.style.display = vulaaVecax2l === this.kxeteVulao ? "" : "none";
         }
         if ( this.kubaId === "n2tanu-kfeni" && this.catama ) {
-            const pal6Hasak = Math.ceil( ( vecax2lSurVulao + 1 ) / this.cols );
-            if ( pal6Hasak > this.rows ) {
-                this.rows = pal6Hasak;
+            const pal6Hasak = Math.ceil( ( vecax2lSurVulao + 1 ) / this.hacepuSak );
+            if ( pal6Hasak > this.hasak ) {
+                this.hasak = pal6Hasak;
                 this.refluigihaKekn();
                 return;
             }
-            const c = Math.floor( vecax2lSurVulao / this.rows );
-            const r = ( this.rows - 1 ) - ( vecax2lSurVulao % this.rows );
+            const c = Math.floor( vecax2lSurVulao / this.hasak );
+            const r = ( this.hasak - 1 ) - ( vecax2lSurVulao % this.hasak );
             this.vek2p2niQakekn( el, c, r );
             return;
         }
         if ( this.kubaId !== "n2tanu-kfeni" ) {
-            const c = Math.floor( vecax2lSurVulao / this.rows );
-            const r = ( this.rows - 1 ) - ( vecax2lSurVulao % this.rows );
+            const c = Math.floor( vecax2lSurVulao / this.hasak );
+            const r = ( this.hasak - 1 ) - ( vecax2lSurVulao % this.hasak );
             this.vek2p2niQakekn( el, c, r );
             return;
         }
 
-        const c = Math.floor( index / this.rows );
-        const r = ( this.rows - 1 ) - ( index % this.rows );
+        const c = Math.floor( index / this.hasak );
+        const r = ( this.hasak - 1 ) - ( index % this.hasak );
         this.vek2p2niQakekn( el, c, r );
     }
 
     vek2p2niQakekn( el: HTMLElement, c: number, r: number, xOffset: number = 0 ): void {
-        const { colSpan, rowSpan } = xk12naElementajnSpanojn( el );
+        const { cepuSakQun2, sakQun2 } = xk12naKfeajnTu5ekanojn( el );
 
         const povasEtendi = this.kubaId === "n2tanu-kfeni";
         if ( povasEtendi ) {
             let nekaK2fe = false;
-            if ( c + colSpan > this.cols ) {
-                this.cols = c + colSpan;
+            if ( c + cepuSakQun2 > this.hacepuSak ) {
+                this.hacepuSak = c + cepuSakQun2;
                 nekaK2fe = true;
             }
-            if ( r + rowSpan > this.rows ) {
-                this.rows = r + rowSpan;
+            if ( r + sakQun2 > this.hasak ) {
+                this.hasak = r + sakQun2;
                 nekaK2fe = true;
             }
             if ( nekaK2fe ) {
@@ -509,8 +509,8 @@ export class qox2n2k {
                 return;
             }
         } else {
-            if ( c + colSpan > this.cols ) c = this.cols - colSpan;
-            if ( r + rowSpan > this.rows ) r = this.rows - rowSpan;
+            if ( c + cepuSakQun2 > this.hacepuSak ) c = this.hacepuSak - cepuSakQun2;
+            if ( r + sakQun2 > this.hasak ) r = this.hasak - sakQun2;
         }
 
         if ( c < 0 ) c = 0;
@@ -518,21 +518,21 @@ export class qox2n2k {
 
         const qaqun2 = HAKARANI.DIM.GAP_SIZE;
 
-        const sefiniKnavek2fe = `calc((${colSpan} / ${this.cols}) * (100% - ${(this.cols - 1) * qaqun2}px) + ${(colSpan - 1) * qaqun2}px)`;
-        const l6daVek2fe = `calc((${rowSpan} / ${this.rows}) * (100% - ${(this.rows - 1) * qaqun2}px) + ${(rowSpan - 1) * qaqun2}px)`;
-        const maldekstraKalk = `calc((${c} / ${this.cols}) * (100% - ${(this.cols - 1) * qaqun2}px) + ${c * qaqun2}px${xOffset ? ` + ${xOffset}px` : ""})`;
-        const puf2Kalk = `calc((${r} / ${this.rows}) * (100% - ${(this.rows - 1) * qaqun2}px) + ${r * qaqun2}px)`;
+        const sefiniKnavek2fe = `calc((${cepuSakQun2} / ${this.hacepuSak}) * (100% - ${(this.hacepuSak - 1) * qaqun2}px) + ${(cepuSakQun2 - 1) * qaqun2}px)`;
+        const l6daVek2fe = `calc((${sakQun2} / ${this.hasak}) * (100% - ${(this.hasak - 1) * qaqun2}px) + ${(sakQun2 - 1) * qaqun2}px)`;
+        const maldekstraKalk = `calc((${c} / ${this.hacepuSak}) * (100% - ${(this.hacepuSak - 1) * qaqun2}px) + ${c * qaqun2}px${xOffset ? ` + ${xOffset}px` : ""})`;
+        const puf2Kalk = `calc((${r} / ${this.hasak}) * (100% - ${(this.hasak - 1) * qaqun2}px) + ${r * qaqun2}px)`;
 
         el.style.width = sefiniKnavek2fe;
         el.style.height = l6daVek2fe;
         el.style.left = maldekstraKalk;
         el.style.top = puf2Kalk;
 
-        el.dataset.col = c.toString();
-        el.dataset.row = r.toString();
+        el.dataset.cepuSak = c.toString();
+        el.dataset.sak = r.toString();
 
         if ( povasEtendi && this.kuba ) {
-            this.kuba.style.minHeight = `${(this.rows / this.saxeHasak) * 100}%`;
+            this.kuba.style.minHeight = `${(this.hasak / this.saxeHasak) * 100}%`;
             this.kuba.style.width = "100%";
         }
     }
@@ -543,43 +543,43 @@ export class qox2n2k {
         const hakek = Array.from( this.kuba.querySelectorAll( ".vek2p2ni-kek" ) ) as HTMLElement[];
         if ( hakek.length === 0 ) return;
 
-        let minK = this.cols;
+        let minK = this.hacepuSak;
         let maksK = 0;
         hakek.forEach( keko => {
-            const { col: c, colSpan: cs } = xk12naElementanQakekn( keko );
+            const { cepuSak: c, cepuSakQun2: cs } = xk12naKfeanQakekn( keko );
             if ( c < minK ) minK = c;
             if ( c + cs > maksK ) maksK = c + cs;
         } );
 
         const xk12natahaSefiniK2fanu = maksK - minK;
         const { width: ujaL } = xk12na3aqnpal6jn( this.kemaSefini, this.kemaL6da, this.kuba );
-        const w = ujaL / this.cols;
+        const w = ujaL / this.hacepuSak;
         const xOffset = ( ujaL - ( xk12natahaSefiniK2fanu * w ) ) / 2 - ( minK * w );
 
         hakek.forEach( keko => {
-            const { col, row } = xk12naElementanQakekn( keko );
-            this.vek2p2niQakekn( keko, col, row, xOffset );
+            const { cepuSak, sak } = xk12naKfeanQakekn( keko );
+            this.vek2p2niQakekn( keko, cepuSak, sak, xOffset );
         } );
 
         if ( this.kubaId === "n2tanu-kfeni" ) {
-            this.kuba.style.minHeight = `${(this.rows / this.saxeHasak) * 100}%`;
-            this.kuba.style.minWidth = `${(this.cols / this.saxeHacepuSak) * 100}%`;
+            this.kuba.style.minHeight = `${(this.hasak / this.saxeHasak) * 100}%`;
+            this.kuba.style.minWidth = `${(this.hacepuSak / this.saxeHacepuSak) * 100}%`;
         }
     }
 
-    cxuAreoOkupita( c: number, r: number, colSpan: number, rowSpan: number, ekskludiEl: HTMLElement | null ): boolean {
+    cxuAreoOkupita( c: number, r: number, cepuSakQun2: number, sakQun2: number, ekskludiEl: HTMLElement | null ): boolean {
         if ( !this.kuba ) return false;
         for ( const keko of Array.from( this.kuba.querySelectorAll( ".vek2p2ni-kek" ) ) as HTMLElement[] ) {
             if ( keko === ekskludiEl ) continue;
 
-            if ( this.kubaId === "vulapaqai" && keko.dataset.page !== String( this.kxeteVulao ) ) continue;
+            if ( this.kubaId === "vulapaqai" && keko.dataset.vula !== String( this.kxeteVulao ) ) continue;
 
-            const kc = parseInt( keko.dataset.col || "0" );
-            const kr = parseInt( keko.dataset.row || "0" );
+            const kc = parseInt( keko.dataset.cepuSak || "0" );
+            const kr = parseInt( keko.dataset.sak || "0" );
 
-            const { colSpan: kcs, rowSpan: krs } = xk12naElementajnSpanojn( keko );
+            const { cepuSakQun2: kcs, sakQun2: krs } = xk12naKfeajnTu5ekanojn( keko );
 
-            if ( c < kc + kcs && c + colSpan > kc && r < kr + krs && r + rowSpan > kr ) {
+            if ( c < kc + kcs && c + cepuSakQun2 > kc && r < kr + krs && r + sakQun2 > kr ) {
                 return true;
             }
         }
@@ -589,8 +589,8 @@ export class qox2n2k {
     alakrogiKsozVaxafado( el: HTMLElement ): void {
         const { width: ujaL, height: ujaA } = xk12na3aqnpal6jn( this.kemaSefini, this.kemaL6da, this.kuba );
         const qaqun2 = HAKARANI.DIM.GAP_SIZE;
-        const kekSefini = knavek2feKekanpal6n( ujaL, this.cols, qaqun2 );
-        const kekL6da = knavek2feKekanpal6n( ujaA, this.rows, qaqun2 );
+        const kekSefini = knavek2feKekanpal6n( ujaL, this.hacepuSak, qaqun2 );
+        const kekL6da = knavek2feKekanpal6n( ujaA, this.hasak, qaqun2 );
 
         if ( !this.kuba ) return;
         const ujaRekt = this.kuba.getBoundingClientRect();
@@ -602,29 +602,29 @@ export class qox2n2k {
         let c = Math.round( lokaX / ( kekSefini + qaqun2 ) );
         let r = Math.round( lokaY / ( kekL6da + qaqun2 ) );
 
-        const { colSpan, rowSpan } = xk12naElementajnSpanojn( el );
+        const { cepuSakQun2, sakQun2 } = xk12naKfeajnTu5ekanojn( el );
         if ( c < 0 ) c = 0;
         if ( r < 0 ) r = 0;
 
         if ( this.kubaId !== "n2tanu-kfeni" ) {
-            if ( c + colSpan > this.cols ) c = this.cols - colSpan;
-            if ( r + rowSpan > this.rows ) r = this.rows - rowSpan;
+            if ( c + cepuSakQun2 > this.hacepuSak ) c = this.hacepuSak - cepuSakQun2;
+            if ( r + sakQun2 > this.hasak ) r = this.hasak - sakQun2;
         }
 
         el.dataset._newCol = c.toString();
         el.dataset._newRow = r.toString();
 
-        if ( this.cxuAreoOkupita( c, r, colSpan, rowSpan, el ) ) {
+        if ( this.cxuAreoOkupita( c, r, cepuSakQun2, sakQun2, el ) ) {
             let raqaB6kewita = false;
             for ( let radiuso = 1; radiuso < 0o40 && !raqaB6kewita; radiuso++ ) {
                 for ( let dc = -radiuso; dc <= radiuso && !raqaB6kewita; dc++ ) {
                     for ( let dr = -radiuso; dr <= radiuso && !raqaB6kewita; dr++ ) {
                         const nc = c + dc;
                         const nr = r + dr;
-                        if ( nc >= 0 && nc + colSpan <= this.cols && nr >= 0 && nr + rowSpan <= this.rows ) {
+                        if ( nc >= 0 && nc + cepuSakQun2 <= this.hacepuSak && nr >= 0 && nr + sakQun2 <= this.hasak ) {
                             el.dataset._newCol = nc.toString();
                             el.dataset._newRow = nr.toString();
-                            if ( !this.cxuAreoOkupita( nc, nr, colSpan, rowSpan, el ) ) {
+                            if ( !this.cxuAreoOkupita( nc, nr, cepuSakQun2, sakQun2, el ) ) {
                                 c = nc; r = nr; raqaB6kewita = true;
                             }
                         }
@@ -652,8 +652,8 @@ export class qox2n2k {
         if ( !this.kuba ) return;
         const hakek = Array.from( this.kuba.querySelectorAll( ".vek2p2ni-kek" ) ) as HTMLElement[];
         hakek.forEach( ( keko, index ) => {
-            const { col: c, row: r } = xk12naElementanQakekn( keko );
-            const vulao = parseInt( keko.dataset.page || "0" ) || 0;
+            const { cepuSak: c, sak: r } = xk12naKfeanQakekn( keko );
+            const vulao = parseInt( keko.dataset.vula || "0" ) || 0;
 
             if ( this.kubaId === "vulapaqai" && !keko.classList.contains( "b6teqta" ) ) {
                 keko.style.display = vulao === this.kxeteVulao ? "" : "none";
@@ -669,6 +669,6 @@ export class qox2n2k {
 
 export function xk12naMaksimumanVulaon( apps?: any[], hacepuSak?: number, k2fanu?: number ): number {
     const qox2n2k = ( window as any ).tlacak2sai?.vulapaqai;
-    const erojPoVulao = ( hacepuSak ?? qox2n2k?.cols ?? VAXAFABLA_QOX2N2K_HACEPUSAK ) * ( k2fanu ?? qox2n2k?.rows ?? VAXAFABLA_QOX2N2K_HASAK );
+    const erojPoVulao = ( hacepuSak ?? qox2n2k?.hacepuSak ?? VAXAFABLA_QOX2N2K_HACEPUSAK ) * ( k2fanu ?? qox2n2k?.hasak ?? VAXAFABLA_QOX2N2K_HASAK );
     return Math.ceil( ( apps || ( window as any ).HAVEK2P2NI || [] ).length / erojPoVulao ) - 1;
 }

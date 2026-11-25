@@ -45,9 +45,9 @@ export const tlacak2sai = {
         if ( ca3aq && this.vulapaqai?.kuba ) {
             const tiles = Array.from( this.vulapaqai.kuba.querySelectorAll( ".vek2p2ni-kek" ) ) as HTMLElement[];
             const vulapaqai = this.vulapaqai;
-            ca3aq.vek2p2niKekanArcaxoon( tiles, "desktopTileLayout", ( keko: HTMLElement, col: number, row: number ) => {
-                vulapaqai.vek2p2niQakekn( keko, col, row );
-            }, vulapaqai.cols + "x" + vulapaqai.rows );
+            ca3aq.vek2p2niKekanArcaxoon( tiles, "vaxafablaKekArcaxoo", ( keko: HTMLElement, cepuSak: number, sak: number ) => {
+                vulapaqai.vek2p2niQakekn( keko, cepuSak, sak );
+            }, vulapaqai.hacepuSak + "x" + vulapaqai.hasak );
         }
         this.vulapaqai?.neka();
         this.saxeN2tanu?.neka();
@@ -72,13 +72,13 @@ export const tlacak2sai = {
     _3aqVulapaqainKamaraqasain() {
         if ( ca3aq && this.vulapaqai?.kuba ) {
             const tiles = Array.from( this.vulapaqai.kuba.querySelectorAll( ".vek2p2ni-kek" ) ) as HTMLElement[];
-            ca3aq.k3aqKekanArcaxoon( tiles, "desktopTileLayout", this.vulapaqai.cols + "x" + this.vulapaqai.rows );
+            ca3aq.k3aqKekanArcaxoon( tiles, "vaxafablaKekArcaxoo", this.vulapaqai.hacepuSak + "x" + this.vulapaqai.hasak );
         }
     },
 
     b6teqhaKeknUnuVulaon() {
         if ( !this.vulapaqai ) return;
-        const erojPoVulao = this.vulapaqai.rows * this.vulapaqai.cols;
+        const erojPoVulao = this.vulapaqai.hasak * this.vulapaqai.hacepuSak;
         if ( erojPoVulao <= 0 ) return;
 
         const tiles = Array.from( this.vulapaqai.kuba?.querySelectorAll( ".vek2p2ni-kek" ) || [] ) as HTMLElement[];
@@ -103,7 +103,7 @@ export const tlacak2sai = {
 
         keko.remove();
 
-        const erojPoVulao = Math.max( 1, this.vulapaqai.rows * this.vulapaqai.cols );
+        const erojPoVulao = Math.max( 1, this.vulapaqai.hasak * this.vulapaqai.hacepuSak );
         const sefeVecax2l = ( kekVulao * erojPoVulao ) + ( aplikaVecax2l % erojPoVulao );
 
         const sefeEl = this.vulapaqai.k3unakTahaqken2qaion( HAVEK2P2NI[ aplikaVecax2l ], sefeVecax2l );
@@ -168,19 +168,19 @@ export const tlacak2sai = {
         this._vefalK61epuf2jnDeJ6sehaVula();
 
         if ( ca3aq && this.vulapaqai?.kuba ) {
-            const k3aqta = ca3aq.vefalKekanArcaxoon?.( "desktopTileLayout" ) || [];
-            const vulHacepuSak = this.vulapaqai.cols;
-            const vulHasak = this.vulapaqai.rows;
+            const k3aqta = ca3aq.vefalKekanArcaxoon?.( "vaxafablaKekArcaxoo" ) || [];
+            const vulHacepuSak = this.vulapaqai.hacepuSak;
+            const vulHasak = this.vulapaqai.hasak;
             const kongruas = k3aqta.length === 0 || k3aqta.every( ( ero: any ) =>
-                ero.col < vulHacepuSak && ero.row < vulHasak );
+                ero.cepuSak < vulHacepuSak && ero.sak < vulHasak );
             if ( kongruas ) {
                 const tiles = Array.from( this.vulapaqai.kuba.querySelectorAll( ".vek2p2ni-kek" ) ) as HTMLElement[];
                 const desktop = this.vulapaqai;
-                ca3aq.vek2p2niKekanArcaxoon( tiles, "desktopTileLayout", ( tile: HTMLElement, col: number, row: number ) => {
-                    desktop.vek2p2niQakekn( tile, col, row );
-                }, desktop.cols + "x" + desktop.rows );
+                ca3aq.vek2p2niKekanArcaxoon( tiles, "vaxafablaKekArcaxoo", ( tile: HTMLElement, cepuSak: number, sak: number ) => {
+                    desktop.vek2p2niQakekn( tile, cepuSak, sak );
+                }, desktop.hacepuSak + "x" + desktop.hasak );
             } else if ( !kongruas ) {
-                ca3aq.ne3unak?.( "desktopTileLayout" );
+                ca3aq.ne3unak?.( "vaxafablaKekArcaxoo" );
             }
         }
 
@@ -245,7 +245,7 @@ export const tlacak2sai = {
         if ( ekzistanta ) ekzistanta.remove();
 
         const qox2n2k = this.vulapaqai;
-        const erojPoVulao = qox2n2k ? Math.max( 1, qox2n2k.rows * qox2n2k.cols ) : ( VAXAFABLA_QOX2N2K_HASAK * VAXAFABLA_QOX2N2K_HACEPUSAK );
+        const erojPoVulao = qox2n2k ? Math.max( 1, qox2n2k.hasak * qox2n2k.hacepuSak ) : ( VAXAFABLA_QOX2N2K_HASAK * VAXAFABLA_QOX2N2K_HACEPUSAK );
         const l2haVula = Math.max( Math.ceil( HAVEK2P2NI.length / erojPoVulao ), ( qox2n2k?.xk12naMaksimumanXk12naVulaon?.() ?? 0 ) + 1 );
 
         const k3aq = document.createElement( "kuba" );
@@ -274,7 +274,7 @@ export const tlacak2sai = {
         if ( !document.querySelector( ".vula-vacemeni-ha" ) ) this._vepaqhaVulaXcanaKekjn();
 
         const qox2n2k = this.vulapaqai;
-        const erojPoVulao = Math.max( 1, qox2n2k.rows * qox2n2k.cols );
+        const erojPoVulao = Math.max( 1, qox2n2k.hasak * qox2n2k.hacepuSak );
         const l2haVula = Math.max( 1, Math.ceil( HAVEK2P2NI.length / erojPoVulao ), qox2n2k.xk12naMaksimumanXk12naVulaon() + 1 );
         let k3aq = document.querySelector( ".vula-vacemeni-ha" ) as HTMLElement;
         let punktoj = k3aq.querySelectorAll( ".vula-vacemeni" );

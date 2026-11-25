@@ -1026,9 +1026,9 @@ class arakehek2p2 {
     static xk12na2Qavek2p2niajnHaku1ojn( val: string ): void {
         document.documentElement.style.setProperty( "--caqaxak2p2-pal6", val + "px" );
 
-        const taskobar = xk12naQavek2p2nion();
-        if ( taskobar ) {
-            taskobar.dataset.large = ( parseInt( val ) >= HAKARANI.WM.TASKBAR_LARGE_THRESHOLD ) ? "true" : "false";
+        const caqaxak2p2 = xk12naQavek2p2nion();
+        if ( caqaxak2p2 ) {
+            caqaxak2p2.dataset.large = ( parseInt( val ) >= HAKARANI.WM.TASKBAR_LARGE_THRESHOLD ) ? "true" : "false";
         }
         
         localStorage.setItem( "caqaxak2p2-pal6", val );
@@ -1295,8 +1295,8 @@ class arakehek2p2 {
 // ⟪ j͑ʃ'ᴜ ֭ſɭᴜ ɭʃɔ ʌ ſ͕ɭᴜ j͑ʃ'ɔ ſɭɹ ſןɹ }ʃꞇ ʌ ſ͕ɭᴜ ſɭɔƽ ⟫
 
     static vahateQavek2p2nianQakekn( raqa: string, persisti: boolean = true ): void {
-        const taskobar = xk12naQavek2p2nion();
-        if ( taskobar ) taskobar.dataset.position = raqa;
+        const caqaxak2p2 = xk12naQavek2p2nion();
+        if ( caqaxak2p2 ) caqaxak2p2.dataset.raqa = raqa;
 
         const radiko = document.documentElement;
         const pal6KunQaqun2 = "calc(var(--caqaxak2p2-pal6) + var(--អារេងព៏) + var(--អារេងព៏) + var(--kuba-qaqun2))";
@@ -1322,9 +1322,9 @@ class arakehek2p2 {
         document.querySelectorAll( ".qakehek2p2" ).forEach( ( el: any ) => {
             const k61epuf2Breto = el.querySelector( ".hate-nar2sa" );
             if ( k61epuf2Breto ) {
-                k61epuf2Breto.dataset.position = raqa;
+                k61epuf2Breto.dataset.raqa = raqa;
             }
-            el.dataset.position = raqa;
+            el.dataset.raqa = raqa;
         } );
 
         if ( ( window as any ).tlacak2sai ) {
@@ -1336,7 +1336,7 @@ class arakehek2p2 {
         if ( ( window as any ).tlacak2sai?.vulapaqai ) {
             setTimeout( () => {
                 document.querySelectorAll( "#vulapaqai .vek2p2ni-kek" ).forEach( ( keko: any ) =>
-                    ( window as any ).tlacak2sai.vulapaqai.vek2p2niQakekn( keko, parseInt( keko.dataset.col ), parseInt( keko.dataset.row ) )
+                    ( window as any ).tlacak2sai.vulapaqai.vek2p2niQakekn( keko, parseInt( keko.dataset.cepuSak ), parseInt( keko.dataset.sak ) )
                 );
             }, HAKARANI.WM.TASKBAR_REPOSITION_DELAY );
         }
@@ -1347,12 +1347,12 @@ class arakehek2p2 {
 // ⟪ j͑ʃᴜ ı],ɔ ʌ ſ͕ɭᴜ j͑ʃ'ɔ ſɭɹ ſןɹ }ʃꞇ ⟫
 
     static saxeQavek2p2nion(): void {
-        const taskobar = xk12naQavek2p2nion();
-        if ( !taskobar ) return;
+        const caqaxak2p2 = xk12naQavek2p2nion();
+        if ( !caqaxak2p2 ) return;
 
-        taskobar.dataset.position = "ctama";
-        taskobar.dataset.flow = "default";
-        taskobar.dataset.large = "false";
+        caqaxak2p2.dataset.raqa = "ctama";
+        caqaxak2p2.dataset.flow = "default";
+        caqaxak2p2.dataset.large = "false";
 
         const aktualigiQavek2p2nion = ( devigi: boolean = false ) => {
             const catama = window.innerWidth < HAKARANI.BREAKPOINTS.MOBILE || window.innerHeight < HAKARANI.BREAKPOINTS.MOBILE;
@@ -1360,12 +1360,12 @@ class arakehek2p2 {
             if ( catama ) {
                 const cxuCepu = window.innerHeight > window.innerWidth;
                 const devigaQakek = cxuCepu ? "psaz" : "ctama";
-                if ( devigi || taskobar.dataset.position !== devigaQakek ) {
+                if ( devigi || caqaxak2p2.dataset.raqa !== devigaQakek ) {
                     this.vahateQavek2p2nianQakekn( devigaQakek, false );
                 }
             } else {
                 const k3aqtaQakek = localStorage.getItem( "caqaxak2p2-raqa" ) || "ctama";
-                if ( devigi || taskobar.dataset.position !== k3aqtaQakek ) {
+                if ( devigi || caqaxak2p2.dataset.raqa !== k3aqtaQakek ) {
                     this.vahateQavek2p2nianQakekn( k3aqtaQakek, false );
                 }
             }

@@ -4,7 +4,7 @@ declare const HAKARANI: any;
 declare const caxk12na: any;
 declare const xk12naSaxenN2tanun: any;
 declare const xk12na3aqnpal6jn: any;
-declare const cxuEnLimoj: any;
+declare const cxuEnTu5ekani: any;
 declare const vahateKubanVaxafadon: any;
 
 import { CustomHTMLElement } from "./ꞁȷ̀ɜ ı],ɔ ŋᷠᴜ }ʃꞇ.js";
@@ -14,8 +14,8 @@ import { knavek2feKekanpal6n } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/j͑ʃ'ɔ ſɟ
 interface Kp6Qox2n2k {
     kubaId: string;
     kuba: HTMLElement | null;
-    rows: number;
-    cols: number;
+    hasak: number;
+    hacepuSak: number;
     kemaSefini: number | null;
     kemaL6da: number | null;
     catama: boolean;
@@ -56,7 +56,7 @@ export function vahateKekoVaxafi( qox2n2k: Kp6Qox2n2k, el: HTMLElement, saxeoX: 
         }
 
         if ( kxuVaxafa && qox2n2k.kubaId === "vulapaqai" ) {
-            const erojPoVulao = Math.max( 1, qox2n2k.rows * qox2n2k.cols );
+            const erojPoVulao = Math.max( 1, qox2n2k.hasak * qox2n2k.hacepuSak );
             const l2haVula = Math.ceil( ( ( window as any ).HAVEK2P2NI || [] ).length / erojPoVulao );
             if ( l2haVula > 1 ) {
                 const rando = 40;
@@ -83,8 +83,8 @@ export function vahateKekoVaxafi( qox2n2k: Kp6Qox2n2k, el: HTMLElement, saxeoX: 
         } else {
             const { width: k3aqL, height: k3aqA } = xk12na3aqnpal6jn( qox2n2k.kemaSefini, qox2n2k.kemaL6da, qox2n2k.kuba );
             const qaqun2 = HAKARANI.DIM.GAP_SIZE;
-            const oj6L = knavek2feKekanpal6n( k3aqL, qox2n2k.cols, qaqun2 );
-            const oj6A = knavek2feKekanpal6n( k3aqA, qox2n2k.rows, qaqun2 );
+            const oj6L = knavek2feKekanpal6n( k3aqL, qox2n2k.hacepuSak, qaqun2 );
+            const oj6A = knavek2feKekanpal6n( k3aqA, qox2n2k.hasak, qaqun2 );
 
             const krudaMalq2 = saxeMalq2 + deltoX;
             const krudaSupro = saxeSupro + deltoY;
@@ -108,7 +108,7 @@ export function vahateKekoVaxafi( qox2n2k: Kp6Qox2n2k, el: HTMLElement, saxeoX: 
             const elCentroX = elRekt.left + elRekt.width / 2;
             const elCentroY = elRekt.top + elRekt.height / 2;
 
-            if ( cxuEnLimoj( elCentroX, elCentroY, vulapaqaiKuba ) ) {
+            if ( cxuEnTu5ekani( elCentroX, elCentroY, vulapaqaiKuba ) ) {
                 el.style.position = "";
                 if ( ksozVaxafaK3akak ) ksozVaxafaK3akak();
                 ( qox2n2k as any ).vaxafaTahaqken2qaionDeSaxeN2tanu( el );
@@ -117,7 +117,7 @@ export function vahateKekoVaxafi( qox2n2k: Kp6Qox2n2k, el: HTMLElement, saxeoX: 
         }
 
         if ( vulaajCaxooj > 0 && typeof ( qox2n2k as any ).kxeteVulao === "number" ) {
-            el.dataset.page = ( qox2n2k as any ).kxeteVulao.toString();
+            el.dataset.vula = ( qox2n2k as any ).kxeteVulao.toString();
         }
 
         if ( qox2n2k.kubaId === "n2tanu-kfeni" && originalaPatro ) {
@@ -149,8 +149,8 @@ export function vahateKekopal6Vasaka( qox2n2k: Kp6Qox2n2k, el: HTMLElement, saxe
     const saxeA = el.offsetHeight;
     const { width: k3aqL, height: k3aqA } = xk12na3aqnpal6jn( qox2n2k.kemaSefini, qox2n2k.kemaL6da, qox2n2k.kuba );
     const qaqun2 = HAKARANI.DIM.GAP_SIZE;
-    const oj6L = knavek2feKekanpal6n( k3aqL, qox2n2k.cols, qaqun2 );
-    const oj6A = knavek2feKekanpal6n( k3aqA, qox2n2k.rows, qaqun2 );
+    const oj6L = knavek2feKekanpal6n( k3aqL, qox2n2k.hacepuSak, qaqun2 );
+    const oj6A = knavek2feKekanpal6n( k3aqA, qox2n2k.hasak, qaqun2 );
 
     el.classList.add( "sefini-s2" );
 
@@ -164,7 +164,7 @@ export function vahateKekopal6Vasaka( qox2n2k: Kp6Qox2n2k, el: HTMLElement, saxe
         if ( kolSpan < 1 ) kolSpan = 1;
         if ( vicSpan < 1 ) vicSpan = 1;
 
-        if ( qox2n2k.cxuAreoOkupita( parseInt( el.dataset.col || "0" ), parseInt( el.dataset.row || "0" ), kolSpan, vicSpan, el ) ) return;
+        if ( qox2n2k.cxuAreoOkupita( parseInt( el.dataset.cepuSak || "0" ), parseInt( el.dataset.sak || "0" ), kolSpan, vicSpan, el ) ) return;
 
         el.style.width = `${oj6L * kolSpan + ( kolSpan - 1 ) * qaqun2}px`;
         el.style.height = `${oj6A * vicSpan + ( vicSpan - 1 ) * qaqun2}px`;
@@ -181,16 +181,16 @@ export function vahateKekopal6Vasaka( qox2n2k: Kp6Qox2n2k, el: HTMLElement, saxe
         if ( el.dataset.pendingColSpan ) {
             const sefeKolSpan = parseInt( el.dataset.pendingColSpan );
             const sefeVicSpan = parseInt( el.dataset.pendingRowSpan || "1" );
-            if ( !qox2n2k.cxuAreoOkupita( parseInt( el.dataset.col || "0" ), parseInt( el.dataset.row || "0" ), sefeKolSpan, sefeVicSpan, el ) ) {
-                el.dataset.colSpan = sefeKolSpan.toString();
-                el.dataset.rowSpan = sefeVicSpan.toString();
+            if ( !qox2n2k.cxuAreoOkupita( parseInt( el.dataset.cepuSak || "0" ), parseInt( el.dataset.sak || "0" ), sefeKolSpan, sefeVicSpan, el ) ) {
+                el.dataset.cepuSakQun2 = sefeKolSpan.toString();
+                el.dataset.sakQun2 = sefeVicSpan.toString();
             }
             delete el.dataset.pendingColSpan;
             delete el.dataset.pendingRowSpan;
         }
 
         void el.offsetWidth;
-        qox2n2k.vek2p2niQakekn( el, parseInt( el.dataset.col || "0" ), parseInt( el.dataset.row || "0" ) );
+        qox2n2k.vek2p2niQakekn( el, parseInt( el.dataset.cepuSak || "0" ), parseInt( el.dataset.sak || "0" ) );
         qox2n2k.xk12na2AdaptanOrientigon( el );
 
         if ( qox2n2k.kubaId === "vulapaqai" ) ( window as any ).tlacak2sai?._3aqVulapaqainKamaraqasain();

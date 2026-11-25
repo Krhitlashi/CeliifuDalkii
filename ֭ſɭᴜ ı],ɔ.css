@@ -45,10 +45,10 @@
     overflow: hidden;
 }
 
-.vek2p2ni-kek[data-position="ctama"] .cepufal,.vek2p2ni-kek[data-position="ptama"] .cepufal  {
+.vek2p2ni-kek[data-raqa="ctama"] .cepufal,.vek2p2ni-kek[data-raqa="ptama"] .cepufal  {
     flex-direction: column;
 }
-.vek2p2ni-kek[data-position="soza"] .cepufal, .vek2p2ni-kek[data-position="psaz"] .cepufal {
+.vek2p2ni-kek[data-raqa="soza"] .cepufal, .vek2p2ni-kek[data-raqa="psaz"] .cepufal {
     flex-direction: row-reverse; 
 }
 .vek2p2ni-kek ksaka.hate-nar2sa {
@@ -59,14 +59,14 @@
     justify-content: center;
 }
 
-.vek2p2ni-kek ksaka.hate-nar2sa[data-position="ctama"],
-.vek2p2ni-kek ksaka.hate-nar2sa[data-position="ptama"] {
+.vek2p2ni-kek ksaka.hate-nar2sa[data-raqa="ctama"],
+.vek2p2ni-kek ksaka.hate-nar2sa[data-raqa="ptama"] {
     writing-mode: sideways-lr;
     inline-size: auto;
     block-size: auto;
 }
-.vek2p2ni-kek ksaka.hate-nar2sa[data-position="soza"],
-.vek2p2ni-kek ksaka.hate-nar2sa[data-position="psaz"] {
+.vek2p2ni-kek ksaka.hate-nar2sa[data-raqa="soza"],
+.vek2p2ni-kek ksaka.hate-nar2sa[data-raqa="psaz"] {
     writing-mode: horizontal-tb;
     inline-size: auto;
     block-size: auto;
@@ -361,44 +361,44 @@
     writing-mode: horizontal-tb;
     align-items: center;
 }
-#caqaxak2p2[data-position="ctama"], #caqaxak2p2[data-position="ptama"] {
+#caqaxak2p2[data-raqa="ctama"], #caqaxak2p2[data-raqa="ptama"] {
     top: var(--អារេងព៏);
     bottom: var(--អារេងព៏);
     width: var(--caqaxak2p2-pal6) !important;
     flex-direction: column;
 }
-#caqaxak2p2[data-position="ctama"] { left: var(--អារេងព៏); }
-#caqaxak2p2[data-position="ptama"] { right: var(--អារេងព៏); }
-#caqaxak2p2[data-position="psaz"], #caqaxak2p2[data-position="soza"] {
+#caqaxak2p2[data-raqa="ctama"] { left: var(--អារេងព៏); }
+#caqaxak2p2[data-raqa="ptama"] { right: var(--អារេងព៏); }
+#caqaxak2p2[data-raqa="psaz"], #caqaxak2p2[data-raqa="soza"] {
     left: var(--អារេងព៏);
     right: var(--អារេងព៏);
     height: var(--caqaxak2p2-pal6) !important;
     flex-direction: row;
 }
-#caqaxak2p2[data-position="psaz"] { bottom: var(--អារេងព៏); }
-#caqaxak2p2[data-position="soza"] { top: var(--អារេងព៏); }
+#caqaxak2p2[data-raqa="psaz"] { bottom: var(--អារេងព៏); }
+#caqaxak2p2[data-raqa="soza"] { top: var(--អារេងព៏); }
 #caqaxak2p2 .caqaxak2p2-qaroxema {
     display: flex;
     gap: var(--អារេង);
 }
-#caqaxak2p2[data-position="ctama"] > *,
-#caqaxak2p2[data-position="ptama"] > * {
+#caqaxak2p2[data-raqa="ctama"] > *,
+#caqaxak2p2[data-raqa="ptama"] > * {
     inline-size: 100%;
 }
-#caqaxak2p2[data-position="psaz"] > *,
-#caqaxak2p2[data-position="soza"] > * {
+#caqaxak2p2[data-raqa="psaz"] > *,
+#caqaxak2p2[data-raqa="soza"] > * {
     block-size: 100%;
 }
-#caqaxak2p2[data-position="ctama"] .caqaxak2p2-qaroxema,
-#caqaxak2p2[data-position="ptama"] .caqaxak2p2-qaroxema {
+#caqaxak2p2[data-raqa="ctama"] .caqaxak2p2-qaroxema,
+#caqaxak2p2[data-raqa="ptama"] .caqaxak2p2-qaroxema {
     flex-direction: column;
 }
-#caqaxak2p2[data-position="psaz"] .caqaxak2p2-qaroxema,
-#caqaxak2p2[data-position="soza"] .caqaxak2p2-qaroxema {
+#caqaxak2p2[data-raqa="psaz"] .caqaxak2p2-qaroxema,
+#caqaxak2p2[data-raqa="soza"] .caqaxak2p2-qaroxema {
     flex-direction: row;
 }
-#caqaxak2p2[data-position="psaz"] .caqaxak2p2-qaroxema button,
-#caqaxak2p2[data-position="soza"] .caqaxak2p2-qaroxema button {
+#caqaxak2p2[data-raqa="psaz"] .caqaxak2p2-qaroxema button,
+#caqaxak2p2[data-raqa="soza"] .caqaxak2p2-qaroxema button {
     block-size: auto;
 }
 
@@ -413,7 +413,7 @@
     align-items: center;
     justify-content: center;
 }
-#caqaxak2p2[data-position="ctama"] .k2sa-nar2sa, #caqaxak2p2[data-position="ptama"] .k2sa-nar2sa {
+#caqaxak2p2[data-raqa="ctama"] .k2sa-nar2sa, #caqaxak2p2[data-raqa="ptama"] .k2sa-nar2sa {
     inline-size: 4px;
     block-size: 64px;
 }
@@ -427,12 +427,12 @@
     gap: var(--អារេង);
 }
 
-#caqaxak2p2[data-position="ctama"] .luj2-hakp6,
-#caqaxak2p2[data-position="ptama"] .luj2-hakp6 {
+#caqaxak2p2[data-raqa="ctama"] .luj2-hakp6,
+#caqaxak2p2[data-raqa="ptama"] .luj2-hakp6 {
     flex-direction: column;
 }
-#caqaxak2p2[data-position="psaz"] .luj2-hakp6,
-#caqaxak2p2[data-position="soza"] .luj2-hakp6 {
+#caqaxak2p2[data-raqa="psaz"] .luj2-hakp6,
+#caqaxak2p2[data-raqa="soza"] .luj2-hakp6 {
     flex-direction: row;
 }
 
@@ -527,22 +527,22 @@
     backdrop-filter: var(--ច្ហិនី);
 }
 
-#caqaxak2p2[data-position="ctama"] ~ #caqaxak2p2-kuba {
+#caqaxak2p2[data-raqa="ctama"] ~ #caqaxak2p2-kuba {
     right: var(--អារេងព៏);
     top: 50%;
     transform: translateY(-50%);
 }
-#caqaxak2p2[data-position="ptama"] ~ #caqaxak2p2-kuba {
+#caqaxak2p2[data-raqa="ptama"] ~ #caqaxak2p2-kuba {
     left: var(--អារេងព៏);
     top: 50%;
     transform: translateY(-50%);
 }
-#caqaxak2p2[data-position="soza"] ~ #caqaxak2p2-kuba {
+#caqaxak2p2[data-raqa="soza"] ~ #caqaxak2p2-kuba {
     bottom: var(--អារេងព៏);
     left: 50%;
     transform: translateX(-50%);
 }
-#caqaxak2p2[data-position="psaz"] ~ #caqaxak2p2-kuba {
+#caqaxak2p2[data-raqa="psaz"] ~ #caqaxak2p2-kuba {
     top: var(--អារេងព៏);
     left: 50%;
     transform: translateX(-50%);
@@ -600,39 +600,39 @@
         inline-size: 48px;
         block-size: 4px;
     }
-    #caqaxak2p2[data-position="ctama"] .k2sa-nar2sa,
-    #caqaxak2p2[data-position="ptama"] .k2sa-nar2sa {
+    #caqaxak2p2[data-raqa="ctama"] .k2sa-nar2sa,
+    #caqaxak2p2[data-raqa="ptama"] .k2sa-nar2sa {
         inline-size: 4px;
         block-size: 48px;
     }
     #caqaxak2p2 .k2sa-nar2sa-kp6 { display: none; }
     
     @media (orientation: portrait) {
-        #caqaxak2p2[data-position="psaz"] {
+        #caqaxak2p2[data-raqa="psaz"] {
             display: flex !important;
         }
-        #caqaxak2p2[data-position="ctama"],
-        #caqaxak2p2[data-position="ptama"],
-        #caqaxak2p2[data-position="soza"] {
+        #caqaxak2p2[data-raqa="ctama"],
+        #caqaxak2p2[data-raqa="ptama"],
+        #caqaxak2p2[data-raqa="soza"] {
             display: none !important;
         }
-        #caqaxak2p2[data-position="psaz"] .k2sa-nar2sa {
+        #caqaxak2p2[data-raqa="psaz"] .k2sa-nar2sa {
             inline-size: 48px;
             block-size: 4px;
         }
     }
     
     @media (orientation: landscape) {
-        #caqaxak2p2[data-position="ctama"],
-        #caqaxak2p2[data-position="ptama"] {
+        #caqaxak2p2[data-raqa="ctama"],
+        #caqaxak2p2[data-raqa="ptama"] {
             display: flex !important;
         }
-        #caqaxak2p2[data-position="psaz"],
-        #caqaxak2p2[data-position="soza"] {
+        #caqaxak2p2[data-raqa="psaz"],
+        #caqaxak2p2[data-raqa="soza"] {
             display: none !important;
         }
-        #caqaxak2p2[data-position="ctama"] .k2sa-nar2sa,
-        #caqaxak2p2[data-position="ptama"] .k2sa-nar2sa {
+        #caqaxak2p2[data-raqa="ctama"] .k2sa-nar2sa,
+        #caqaxak2p2[data-raqa="ptama"] .k2sa-nar2sa {
             inline-size: 4px;
             block-size: 48px;
         }
@@ -691,15 +691,15 @@
     .qakehek2p2.k2tahaq ksaka { display: none !important; }
 }
 
-.hate-nar2sa[data-position="soza"] {
+.hate-nar2sa[data-raqa="soza"] {
     order: -1; flex-direction: row-reverse;
 }
-.hate-nar2sa[data-position="psaz"] {
+.hate-nar2sa[data-raqa="psaz"] {
     order: 1; flex-direction: row-reverse;
 }
 
-.hate-nar2sa[data-position="soza"] .qakehek2p2-okano,
-.hate-nar2sa[data-position="psaz"] .qakehek2p2-okano {
+.hate-nar2sa[data-raqa="soza"] .qakehek2p2-okano,
+.hate-nar2sa[data-raqa="psaz"] .qakehek2p2-okano {
     flex-direction: row-reverse;
 }
 .qakehek2p2 .sefini-caqaxema {

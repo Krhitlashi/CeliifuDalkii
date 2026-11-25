@@ -111,8 +111,8 @@ class n2tasenu {
 // ⟪ ſ͕ɭᴜ ſɭɔƽ ʌ }ʃɹ ɭʃᴜ j͑ʃɔ ⟫
     static qakekigiN2taseon(n2tase: HTMLElement, ca12naId: string, cxuSefiniha: boolean = false, n2taseId: string | null = null): void {
         if ( !n2tase ) return;
-        const taskbar: HTMLElement | null = xk12naQavek2p2nion();
-        const raqa: string = taskbar ? (taskbar.dataset.position || "ctama") : "ctama";
+        const caqaxak2p2: HTMLElement | null = xk12naQavek2p2nion();
+        const raqa: string = caqaxak2p2 ? (caqaxak2p2.dataset.raqa || "ctama") : "ctama";
 
         const tbSize: number = xk12naQavek2p2nianpal6n();
         const tbBuffer: string = `${tbSize + HAKARANI.SYS.MARGIN * 2}px`;
@@ -137,7 +137,7 @@ class n2tasenu {
         const cxuPtama: boolean = ca12naId === "castih2-kfeni" || ca12naId === "qataxna-kfeni";
         const cxuSost2: boolean = !cxuCtama && !cxuPtama;
 
-        const ku1o = HAKARANI.TASKBAR_POSITIONS[raqa] || HAKARANI.TASKBAR_POSITIONS.bottom;
+        const ku1o = HAKARANI.CAQAXAK2P2_RAQA[raqa] || HAKARANI.CAQAXAK2P2_RAQA.bottom;
         const alignVop2 = cxuCtama ? rando : cxuPtama ? "auto" : "50%";
 
         return {

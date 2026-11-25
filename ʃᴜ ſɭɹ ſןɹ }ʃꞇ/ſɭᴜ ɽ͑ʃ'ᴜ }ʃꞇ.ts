@@ -74,15 +74,15 @@ function xk12naTahaqken2qaion(ca3aq: string): string {
 
 // ⟨ j͐ʃᴜ ʃɜ ɽ͑ʃ'ƨᴜ ʃͷ̗ɜ ʌ ɭʃᴜ ֭ſɭᴜ ſ͕ɭƽɔ }ʃɹ ſ͕ɭᴜꞇ ʌ ſ͕ɭᴜ ɽ͑ʃ'ɜ ı],ɔ ŋᷠᴜ ⟩
     DIM: {
-        DEFAULT_ROWS: 0o6,
-        DEFAULT_COLS: 0o10,
+        HASAK: 0o6,
+        HACEPUSAK: 0o10,
         MARGIN_COMPENSATION: 0o20,
         INTERACTIVE_TAGS: ["INPUT", "BUTTON", "LABEL"],
         GAP_SIZE: 0o10,
         KEK_MIN_L2HA: 0o100,
         KEK_MIN_L6DA: 0o100,
-        MOBILE_ROWS: 0o6,
-        MOBILE_COLS: 0o4,
+        VAXAFABLA_HASAK: 0o6,
+        VAXAFABLA_HACEPUSAK: 0o4,
         MOBILE_GRID_SEPARATE: true,
         DRAG_THRESHOLD: 0o10,
         LABEL_MODES: {
@@ -185,7 +185,7 @@ function xk12naTahaqken2qaion(ca3aq: string): string {
     },
 
 // ⟨ ſ͕ɭᴜ j͑ʃ'ɔ ſɭɹ ſןɹ }ʃꞇ ʌ ſ͕ɭᴜ ſɭɔƽ ⟩
-    TASKBAR_POSITIONS: {
+    CAQAXAK2P2_RAQA: {
         soza: {
             slide: "translateY(-100%)",
             n2taseOffset: "translateY(-{offset}px)",
@@ -269,7 +269,7 @@ function xk12naTahaqken2qaion(ca3aq: string): string {
 
 // ⟨ ſɟɔ˞ɔ˞ ʌ ſɭɔ˞ᴜ ſɭᴜ ʌ ſɭɔ˞ᴜ ſɭᴜ ⟩
     CSS_VARS: {
-        taskbarSize: "--caqaxak2p2-pal6",
+        caqaxak2p2Pal6: "--caqaxak2p2-pal6",
         n2taseInset: "--kuba-qaqun2",
         brightness: "--t6fani"
     },

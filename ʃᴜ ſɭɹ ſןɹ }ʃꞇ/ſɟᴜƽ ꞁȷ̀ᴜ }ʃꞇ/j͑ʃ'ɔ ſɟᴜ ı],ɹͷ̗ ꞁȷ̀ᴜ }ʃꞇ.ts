@@ -9,8 +9,8 @@ export function xk12na3aqnpal6jn( kemaSefini: number | null, kemaL6da: number | 
     };
 }
 
-export function cxuEnLimoj( x: number, y: number, limoj: DOMRect ): boolean {
-    return x >= limoj.left && x <= limoj.right && y >= limoj.top && y <= limoj.bottom;
+export function cxuEnTu5ekani( x: number, y: number, tu5ekani: DOMRect ): boolean {
+    return x >= tu5ekani.left && x <= tu5ekani.right && y >= tu5ekani.top && y <= tu5ekani.bottom;
 }
 
 export function knavek2feKekanpal6n( ujapal6: number, hacepuSak: number, qaqun2: number ): number {
@@ -25,10 +25,10 @@ function vahateCa12naPe( ca12na: string | HTMLElement, prk12nata: boolean ): voi
     }
 }
 
-function xk12naElementajnSpanojn( el: HTMLElement ): { colSpan: number; rowSpan: number } {
+function xk12naKfeajnTu5ekanojn( el: HTMLElement ): { cepuSakQun2: number; sakQun2: number } {
     return {
-        colSpan: parseInt( el.dataset.colSpan as string ) || 1,
-        rowSpan: parseInt( el.dataset.rowSpan as string ) || 1
+        cepuSakQun2: parseInt( el.dataset.cepuSakQun2 as string ) || 1,
+        sakQun2: parseInt( el.dataset.sakQun2 as string ) || 1
     };
 }
 
@@ -36,35 +36,35 @@ function vahateKubanVaxafadon( el: HTMLElement, vaxafanta: boolean ): void {
     el.classList.toggle( "b6teqta", vaxafanta );
 }
 
-export function xk12naElementanQakekn( el: HTMLElement ): { col: number; row: number; colSpan: number; rowSpan: number } {
+export function xk12naKfeanQakekn( el: HTMLElement ): { cepuSak: number; sak: number; cepuSakQun2: number; sakQun2: number } {
     return {
-        col: parseInt( el.dataset.col as string ) || 0,
-        row: parseInt( el.dataset.row as string ) || 0,
-        ...xk12naElementajnSpanojn( el )
+        cepuSak: parseInt( el.dataset.cepuSak as string ) || 0,
+        sak: parseInt( el.dataset.sak as string ) || 0,
+        ...xk12naKfeajnTu5ekanojn( el )
     };
 }
 
-function k3unakHaxe( el: HTMLElement | null | undefined, klasaNomo: string ): void {
-    el?.classList.add( klasaNomo );
+function k3unakHaxe( el: HTMLElement | null | undefined, luj2Ksaka: string ): void {
+    el?.classList.add( luj2Ksaka );
 }
 
-function ne3unakHaxe( el: HTMLElement | null | undefined, klasaNomo: string ): void {
-    el?.classList.remove( klasaNomo );
+function ne3unakHaxe( el: HTMLElement | null | undefined, luj2Ksaka: string ): void {
+    el?.classList.remove( luj2Ksaka );
 }
 
-function cxuHaxe( el: HTMLElement | null | undefined, klasaNomo: string ): boolean {
-    return el?.classList.contains( klasaNomo ) ?? false;
+function cxuHaxe( el: HTMLElement | null | undefined, luj2Ksaka: string ): boolean {
+    return el?.classList.contains( luj2Ksaka ) ?? false;
 }
 
 // ⟪ ſɭɔ ſɭɹ ʌ ֭ſɭᴜ ſ͕ɭᴜ ſɭɔ ֭ſɭɔ ſɭɹ ſןɹ ʌ ֭ſɭᴜ ı],ɔ ŋᷠᴜ ⟫
 Object.assign( window as any, {
     xk12na3aqnpal6jn,
-    cxuEnLimoj,
+    cxuEnTu5ekani,
     knavek2feKekanpal6n,
     vahateCa12naPe,
-    xk12naElementajnSpanojn,
+    xk12naKfeajnTu5ekanojn,
     vahateKubanVaxafadon,
-    xk12naElementanQakekn,
+    xk12naKfeanQakekn,
     k3unakHaxe,
     ne3unakHaxe,
     cxuHaxe,

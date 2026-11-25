@@ -31,8 +31,8 @@ function xk12naMalwoh6w6ajnhaQakehek2p2n(): NodeListOf<HTMLElement> {
 }
 
 function xk12naTaskbretonInfo(): Qavek2p2niaInformo {
-    const taskbar = xk12naQavek2p2nion();
-    const raqa = taskbar?.dataset.position || "ctama";
+    const caqaxak2p2 = xk12naQavek2p2nion();
+    const raqa = caqaxak2p2?.dataset.raqa || "ctama";
     return { raqa, kobek2: raqa === "ctama" || raqa === "ptama" };
 }
 

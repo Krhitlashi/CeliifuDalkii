@@ -7,7 +7,7 @@ declare const xk12naQavek2p2nianpal6n: any;
 const tahalaqaz: {
     apriorajxoj: { duration: number; easing: string };
     mildigoj: any;
-    _positionConfigCache: { [key: string]: any };
+    _raqaCak2p2: { [key: string]: any };
     _animacii: (
         element: HTMLElement,
         from: Keyframe,
@@ -28,7 +28,7 @@ const tahalaqaz: {
     mildigoj: HAKARANI.ANIM.EASINGS,
 
 // ⟪ ſ͕ɭᴜ ſɭɔƽ ʌ j͑ʃ'ᴜ ֭ſɭᴜ ɭʃɔ ʌ ſɭɜ ʃɔ j͑ʃ'ɜ ſןɹ ⟫
-    _positionConfigCache: {},
+    _raqaCak2p2: {},
 
 // ⟪ ſɭɔ ſɭɹ ʌ ʃэ ɭʃɔȝ ʌ ſɭɔ ſɭɹ ⟫
 
@@ -56,33 +56,31 @@ const tahalaqaz: {
 // ⟪ ſ͕ɭᴜ ſɭɔƽ ʌ ֭ſɭᴜ j͑ʃɹ ⟫
 
     xk12naQakekanKu1on(raqa: any = null): any {
-        const taskbar: HTMLElement | null = xk12naQavek2p2nion();
-        const position: string = raqa || taskbar?.dataset.position || "ctama";
+        const caqaxak2p2: HTMLElement | null = xk12naQavek2p2nion();
+        const raqaVop2: string = raqa || caqaxak2p2?.dataset.raqa || "ctama";
 
-        if (this._positionConfigCache[position]) {
-            return this._positionConfigCache[position];
+        if (this._raqaCak2p2[raqaVop2]) {
+            return this._raqaCak2p2[raqaVop2];
         }
 
-        const cfg: any = HAKARANI.TASKBAR_POSITIONS[ position ] || HAKARANI.TASKBAR_POSITIONS.bottom;
+        const cfg: any = HAKARANI.CAQAXAK2P2_RAQA[ raqaVop2 ] || HAKARANI.CAQAXAK2P2_RAQA.ctama;
 
         const result = {
-            position,
+            raqa: raqaVop2,
             slideTransform: cfg.slide,
             offsetTransform: cfg.n2taseOffset,
-            axis: position === "ctama" || position === "ptama" ? "X" : "Y",
-            invert: position === "ctama" || position === "ptama" ? 1 : -1,
-            insetProp: position
+            kanto: raqaVop2 === "ctama" || raqaVop2 === "ptama" ? "X" : "Y"
         };
 
-        this._positionConfigCache[position] = result;
+        this._raqaCak2p2[raqaVop2] = result;
         return result;
     },
 
 // ⟪ ı],ɔ ŋᷠᴜ ʌ }ʃɹ ɭʃᴜ j͑ʃɔ ʌ ʃэ ɭʃɔȝ ʌ ſɭɹ ʌ ı],ɹ ı],ɹȝ ʌ ſ͕ɭᴜ j͑ʃ'ɔ ſɭɹ ſןɹ }ʃꞇ ⟫
 
     xk12naN2taseanDirekton(n2taseId: string): { from: string; to: string } {
-        const { position } = this.xk12naQakekanKu1on();
-        return { from: position, to: position };
+        const { raqa: raqaVop2 } = this.xk12naQakekanKu1on();
+        return { from: raqaVop2, to: raqaVop2 };
     },
 
 // ⟪ ı],ɔ ŋᷠᴜ ʌ ſɟᴜ ı],ɜ ʌ ſɭɹ ⟫
@@ -100,11 +98,11 @@ const tahalaqaz: {
 
 // ⟪ ı],ɔ ŋᷠᴜ ʌ ſ͕ɭᴜ j͑ʃ'ɔ ſɭɹ ſןɹ }ʃꞇ ʌ j͑ʃɔ ſȷꞇ }ʃꞇ ʌ ſ͕ɭᴜ ſɭɔƽ ⟫
 
-    xk12naQavek2p2nianpal6nPorQakek(raqa: any = null, fraction: number = 1): { position: string; size: number; offset: number } {
-        const { position } = this.xk12naQakekanKu1on(raqa);
+    xk12naQavek2p2nianpal6nPorQakek(raqa: any = null, fraction: number = 1): { raqa: string; size: number; offset: number } {
+        const { raqa: raqaVop2 } = this.xk12naQakekanKu1on(raqa);
         const tbSize: number = xk12naQavek2p2nianpal6n();
         return {
-            position,
+            raqa: raqaVop2,
             size: tbSize,
             offset: tbSize * fraction
         };
@@ -161,10 +159,10 @@ const tahalaqaz: {
         if ( portebla ) {
             const frakcio: number = HAKARANI.ANIM.FRACTIONS.oneEighth;
             const skalo: number = HAKARANI.ANIM.FRACTIONS.sevenEighths;
-            const akso = this.xk12naQavek2p2nianpal6nPorQakek(null, frakcio);
-            const taskbretaTransformo = this._qakehek2p2aQavek2p2nioTransformo(akso.position, akso.offset, isEntering);
-            const startTransform = isEntering ? `${taskbretaTransformo} scale(${skalo})` : "scale(1)";
-            const endTransform = isEntering ? "scale(1)" : `${taskbretaTransformo} scale(${skalo})`;
+            const kanto = this.xk12naQavek2p2nianpal6nPorQakek(null, frakcio);
+            const caqaxak2p2Transformo = this._qakehek2p2aQavek2p2nioTransformo(kanto.raqa, kanto.offset, isEntering);
+            const startTransform = isEntering ? `${caqaxak2p2Transformo} scale(${skalo})` : "scale(1)";
+            const endTransform = isEntering ? "scale(1)" : `${caqaxak2p2Transformo} scale(${skalo})`;
 
             return this._animacii(
                 element,
@@ -267,8 +265,8 @@ const tahalaqaz: {
     qakehek2p2oMalwoh6w6(element: HTMLElement, options: any = {}): Promise<void> {
         const fraction: number = options.fraction ?? HAKARANI.ANIM.FRACTIONS.oneEighth;
         const scale: number = options.scale ?? HAKARANI.ANIM.FRACTIONS.sevenEighths;
-        const axis = this.xk12naQavek2p2nianpal6nPorQakek(null, fraction);
-        const startTransform: string = this._qakehek2p2aQavek2p2nioTransformo(axis.position, axis.offset, true);
+        const kanto = this.xk12naQavek2p2nianpal6nPorQakek(null, fraction);
+        const startTransform: string = this._qakehek2p2aQavek2p2nioTransformo(kanto.raqa, kanto.offset, true);
 
         return this._animacii(
             element,
@@ -292,8 +290,8 @@ const tahalaqaz: {
     qakehek2p2oFermi(element: HTMLElement, options: any = {}): Promise<void> {
         const fraction: number = options.fraction ?? HAKARANI.ANIM.FRACTIONS.oneEighth;
         const scale: number = options.scale ?? HAKARANI.ANIM.FRACTIONS.sevenEighths;
-        const axis = this.xk12naQavek2p2nianpal6nPorQakek(null, fraction);
-        const endTransform: string = this._qakehek2p2aQavek2p2nioTransformo(axis.position, axis.offset, false);
+        const kanto = this.xk12naQavek2p2nianpal6nPorQakek(null, fraction);
+        const endTransform: string = this._qakehek2p2aQavek2p2nioTransformo(kanto.raqa, kanto.offset, false);
 
         return this._animacii(
             element,
@@ -312,10 +310,10 @@ const tahalaqaz: {
 
 // ⟪ ſ͕ɭᴜ j͑ʃƨꞇ ֭ſɭɹ ʌ ſ͕ɭᴜ ſɭɔ ֭ſɭɔ ſɭɹ ſןɹ ⟫
 
-    _qakehek2p2aQavek2p2nioTransformo(position: string, offset: number, cxuPukxeo: boolean): string {
-        const cfg: any = HAKARANI.TASKBAR_POSITIONS[ position ] || HAKARANI.TASKBAR_POSITIONS.bottom;
+    _qakehek2p2aQavek2p2nioTransformo(raqa: string, offset: number, cxuPukxeo: boolean): string {
+        const cfg: any = HAKARANI.CAQAXAK2P2_RAQA[ raqa ] || HAKARANI.CAQAXAK2P2_RAQA.ctama;
         const baza: string = cfg.windowOffset.replace("{offset}", offset.toString());
-        if ( position === "ctama" || position === "ptama" ) {
+        if ( raqa === "ctama" || raqa === "ptama" ) {
             const etaY: string = cxuPukxeo ? HAKARANI.ANIM_SETTINGS.windowOpen.offsetY : HAKARANI.ANIM_SETTINGS.windowClose.offsetY;
             return baza + ` translateY(${etaY})`;
         }
@@ -327,16 +325,16 @@ const tahalaqaz: {
     caxoxeQakehek2p2on(element: HTMLElement, options: any = {}): Promise<void> {
         const scale: number = options.scale ?? HAKARANI.ANIM_SETTINGS.windowMinimize.scale;
 
-        const { position } = this.xk12naQakekanKu1on();
-        const taskbar: HTMLElement | null = xk12naQavek2p2nion();
-        const tbRect: DOMRect = taskbar?.getBoundingClientRect() || { left: 0, top: window.innerHeight, right: window.innerWidth, bottom: window.innerHeight, width: window.innerWidth, height: 0, x: 0, y: window.innerHeight, toJSON() { return {}; } };
+        const { raqa: raqaVop2 } = this.xk12naQakekanKu1on();
+        const caqaxak2p2: HTMLElement | null = xk12naQavek2p2nion();
+        const tbRect: DOMRect = caqaxak2p2?.getBoundingClientRect() || { left: 0, top: window.innerHeight, right: window.innerWidth, bottom: window.innerHeight, width: window.innerWidth, height: 0, x: 0, y: window.innerHeight, toJSON() { return {}; } };
         const winRect: DOMRect = element.getBoundingClientRect();
 
         const winCenterX: number = winRect.left + winRect.width / 2;
         const winCenterY: number = winRect.top + winRect.height / 2;
 
         let targetX: number, targetY: number;
-        switch (position) {
+        switch (raqaVop2) {
             case "ctama":
                 targetX = tbRect.right;
                 targetY = winCenterY;
