@@ -1,10 +1,10 @@
-// ≺⧼ Animacia Administranto ⧽≻ - Taskobret-direktaj animacioj kun okumaj frakcioj
+// ≺⧼ ɭʃᴜ ֭ſɭᴜ j͐ʃᴜ ſ͕ɭᴜƴ ✨ ⧽≻ - ſ͕ɭᴜ ſɭɔ ֭ſɭɔ ſɭɹ ſןɹ ʌ ɭʃᴜ ֭ſɭᴜ j͐ʃᴜ ſ͕ɭᴜƴ
 
-declare const CONSTANTS: any;
-declare const akiriTaskobreton: any;
-declare const akiriTaskobretanGrandecon: any;
+declare const HAKARANI: any;
+declare const xk12naQavek2p2nion: any;
+declare const xk12naQavek2p2nianpal6n: any;
 
-const AnimacioAdministranto: {
+const tahalaqaz: {
     apriorajxoj: { duration: number; easing: string };
     mildigoj: any;
     _positionConfigCache: { [key: string]: any };
@@ -18,19 +18,19 @@ const AnimacioAdministranto: {
     ) => Promise<void>;
     [key: string]: any;
 } = {
-    // ⟪ Aprioraj Animaciaj Agordoj ⟫
+// ⟪ j͑ʃɹ ı],ɹ ʌ ʃэ ɭʃɔȝ ʌ ſɭw ſᶘɜ ⟫
     apriorajxoj: {
-        duration: CONSTANTS.ANIM.DURATION_DEFAULT,
-        easing: CONSTANTS.ANIM.EASINGS.ease
+        duration: HAKARANI.ANIM.DURATION_DEFAULT,
+        easing: HAKARANI.ANIM.EASINGS.ease
     },
 
-    // ⟪ Mildigaj Funkcioj ⟫
-    mildigoj: CONSTANTS.ANIM.EASINGS,
+// ⟪ ſɟᴜ ı],ɜ ı],ɔ ⟫
+    mildigoj: HAKARANI.ANIM.EASINGS,
 
-    // ⟪ Pozicia Agorda Kaŝmemoro ⟫
+// ⟪ ſ͕ɭᴜ ſɭɔƽ ʌ j͑ʃ'ᴜ ֭ſɭᴜ ɭʃɔ ʌ ſɭɜ ʃɔ j͑ʃ'ɜ ſןɹ ⟫
     _positionConfigCache: {},
 
-    // ⟪ Unuigita Animacia Kerno ⟫
+// ⟪ ſɭɔ ſɭɹ ʌ ʃэ ɭʃɔȝ ʌ ſɭɔ ſɭɹ ⟫
 
     _animacii(
         element: HTMLElement,
@@ -53,26 +53,24 @@ const AnimacioAdministranto: {
         } );
     },
 
-    // ⟪ Poziciaj Utilaĵoj ⟫
+// ⟪ ſ͕ɭᴜ ſɭɔƽ ʌ ֭ſɭᴜ j͑ʃɹ ⟫
 
-    // Akiri kompletan pozician agordon por taskobreta pozicio ( el CONSTANTS.TASKBAR_POSITIONS )
-    akiriPozicianAgordon(pos: any = null): any {
-        const taskbar: HTMLElement | null = akiriTaskobreton();
-        const position: string = pos || taskbar?.dataset.position || "left";
+    xk12naQakekanKu1on(raqa: any = null): any {
+        const taskbar: HTMLElement | null = xk12naQavek2p2nion();
+        const position: string = raqa || taskbar?.dataset.position || "ctama";
 
-        // Redoni kaŝmemorigitan agordon se disponebla
         if (this._positionConfigCache[position]) {
             return this._positionConfigCache[position];
         }
 
-        const cfg: any = CONSTANTS.TASKBAR_POSITIONS[ position ] || CONSTANTS.TASKBAR_POSITIONS.bottom;
+        const cfg: any = HAKARANI.TASKBAR_POSITIONS[ position ] || HAKARANI.TASKBAR_POSITIONS.bottom;
 
         const result = {
             position,
             slideTransform: cfg.slide,
-            offsetTransform: cfg.panelOffset,
-            axis: position === "left" || position === "right" ? "X" : "Y",
-            invert: position === "left" || position === "right" ? 1 : -1,
+            offsetTransform: cfg.n2taseOffset,
+            axis: position === "ctama" || position === "ptama" ? "X" : "Y",
+            invert: position === "ctama" || position === "ptama" ? 1 : -1,
             insetProp: position
         };
 
@@ -80,18 +78,16 @@ const AnimacioAdministranto: {
         return result;
     },
 
-    // ⟪ Akiri Panelan Animacian Direkton Bazitan sur Taskobreto ⟫
+// ⟪ ı],ɔ ŋᷠᴜ ʌ }ʃɹ ɭʃᴜ j͑ʃɔ ʌ ʃэ ɭʃɔȝ ʌ ſɭɹ ʌ ı],ɹ ı],ɹȝ ʌ ſ͕ɭᴜ j͑ʃ'ɔ ſɭɹ ſןɹ }ʃꞇ ⟫
 
-    // Ĉiuj paneloj glitas el la taskobreta rando
-    akiriPanelanDirekton(panelId: string): { from: string; to: string } {
-        const { position } = this.akiriPozicianAgordon();
-        // Ĉiuj paneloj kunhavas la saman direktan logikon — gliti el taskobreta rando
+    xk12naN2taseanDirekton(n2taseId: string): { from: string; to: string } {
+        const { position } = this.xk12naQakekanKu1on();
         return { from: position, to: position };
     },
 
-    // ⟪ Akiri Transformon por Direkto ⟫
+// ⟪ ı],ɔ ŋᷠᴜ ʌ ſɟᴜ ı],ɜ ʌ ſɭɹ ⟫
 
-    akiriDirektanTransformon(direction: string, fraction: number = 1): string {
+    xk12naRaqanTransformon(direction: string, fraction: number = 1): string {
         const percentage: number = fraction * 100;
         const transforms: { [key: string]: string } = {
             top: `translateY(-${percentage}%)`,
@@ -102,11 +98,11 @@ const AnimacioAdministranto: {
         return transforms[direction] || transforms.bottom;
     },
 
-    // ⟪ Akiri Taskobretan Grandecon por Pozicio ⟫
+// ⟪ ı],ɔ ŋᷠᴜ ʌ ſ͕ɭᴜ j͑ʃ'ɔ ſɭɹ ſןɹ }ʃꞇ ʌ j͑ʃɔ ſȷꞇ }ʃꞇ ʌ ſ͕ɭᴜ ſɭɔƽ ⟫
 
-    akiriTaskobretanGrandonPorPozicio(pos: any = null, fraction: number = 1): { position: string; size: number; offset: number } {
-        const { position } = this.akiriPozicianAgordon(pos);
-        const tbSize: number = akiriTaskobretanGrandecon();
+    xk12naQavek2p2nianpal6nPorQakek(raqa: any = null, fraction: number = 1): { position: string; size: number; offset: number } {
+        const { position } = this.xk12naQakekanKu1on(raqa);
+        const tbSize: number = xk12naQavek2p2nianpal6n();
         return {
             position,
             size: tbSize,
@@ -114,7 +110,7 @@ const AnimacioAdministranto: {
         };
     },
 
-    // ⟪ Malaperi En ⟫
+// ⟪ ſɭɜ ʃɔ ⟫
 
     malaperiEn(element: HTMLElement, options: any = {}): Promise<void> {
         return this._animacii(
@@ -134,7 +130,7 @@ const AnimacioAdministranto: {
         );
     },
 
-    // ⟪ Malaperi El ⟫
+// ⟪ ſɭɜ ʃɔ ⟫
 
     malaperiEl(element: HTMLElement, options: any = {}): Promise<void> {
         return this._animacii(
@@ -151,24 +147,22 @@ const AnimacioAdministranto: {
         );
     },
 
-    // ⟪ Gliti Panelon ( Unuigita Interna Metodo ) ⟫
+// ⟪ ʃэ ɭʃɔȝ ʌ }ʃɹ ɭʃᴜ j͑ʃɔ ⟫
 
-    glitiPanelon(
+    b6teqN2tanu(
         element: HTMLElement,
-        panelId: string,
+        n2taseId: string,
         isEntering: boolean,
         options: any = {}
     ): Promise<void> {
-        if (!element) return Promise.resolve();
+        if ( !element ) return Promise.resolve();
 
-        // Ĉe porteblaj ekranoj paneloj animacias kiel plenekranaj fenestroj:
-        // glito el la taskobreta rando + skalo + malaperi ( sama kiel fenestroMalfermi/Fermi )
-        const portebla = window.innerWidth < CONSTANTS.BREAKPOINTS.MOBILE || window.innerHeight < CONSTANTS.BREAKPOINTS.MOBILE;
+        const portebla = window.innerWidth < HAKARANI.BREAKPOINTS.MOBILE || window.innerHeight < HAKARANI.BREAKPOINTS.MOBILE;
         if ( portebla ) {
-            const frakcio: number = CONSTANTS.ANIM.FRACTIONS.oneEighth;
-            const skalo: number = CONSTANTS.ANIM.FRACTIONS.sevenEighths;
-            const akso = this.akiriTaskobretanGrandonPorPozicio(null, frakcio);
-            const taskbretaTransformo = this._fenestraTaskobretoTransformo(akso.position, akso.offset, isEntering);
+            const frakcio: number = HAKARANI.ANIM.FRACTIONS.oneEighth;
+            const skalo: number = HAKARANI.ANIM.FRACTIONS.sevenEighths;
+            const akso = this.xk12naQavek2p2nianpal6nPorQakek(null, frakcio);
+            const taskbretaTransformo = this._qakehek2p2aQavek2p2nioTransformo(akso.position, akso.offset, isEntering);
             const startTransform = isEntering ? `${taskbretaTransformo} scale(${skalo})` : "scale(1)";
             const endTransform = isEntering ? "scale(1)" : `${taskbretaTransformo} scale(${skalo})`;
 
@@ -187,17 +181,17 @@ const AnimacioAdministranto: {
                     el.style.transform = "";
                     el.style.opacity = "";
                     el.style.pointerEvents = "";
-                    if (!isEntering) el.style.display = "none";
+                    if ( !isEntering ) el.style.display = "none";
                 }
             );
         }
 
         const fraction: number = options.fraction ?? 1;
-        const direction = this.akiriPanelanDirekton(panelId);
+        const direction = this.xk12naN2taseanDirekton(n2taseId);
         const edge = isEntering ? direction.from : direction.to;
 
         const baseTransform: string = element.style.transform && element.style.transform !== "none" ? element.style.transform : "";
-        const slideTransform: string = this.akiriDirektanTransformon(edge, fraction);
+        const slideTransform: string = this.xk12naRaqanTransformon(edge, fraction);
         
         const startTransform: string = isEntering ? `${baseTransform} ${slideTransform}`.trim() : (baseTransform || "translate(0, 0)");
         const endTransform: string = isEntering ? (baseTransform || "translate(0, 0)") : `${baseTransform} ${slideTransform}`.trim();
@@ -217,70 +211,70 @@ const AnimacioAdministranto: {
                 el.style.transform = baseTransform;
                 el.style.opacity = "";
                 el.style.pointerEvents = "";
-                if (!isEntering) el.style.display = "none";
+                if ( !isEntering ) el.style.display = "none";
             }
         );
     },
 
-    // ⟪ Gliti En el Taskobreta Rando ⟫
+// ⟪ ʃэ ɭʃɔȝ ʌ ſ͕ɭᴜ j͑ʃ'ɔ ſɭɹ ſןɹ }ʃꞇ ʌ ſɭɔ ſɭᴜ ſȷɹ ⟫
 
-    glitiEnElTaskobreto(element: HTMLElement, panelId: string, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
+    b6teqEnElQavek2p2nio(element: HTMLElement, n2taseId: string, options: any = {}): Promise<void> {
+        if ( !element ) return Promise.resolve();
 
         const duration: number = options.duration ?? this.apriorajxoj.duration;
         const easing: string = options.easing ?? this.mildigoj.easeOut;
         const fraction: number = options.fraction ?? 1;
 
-        return this.glitiPanelon(element, panelId, true, { duration, easing, fraction, display: options.display });
+        return this.b6teqN2tanu(element, n2taseId, true, { duration, easing, fraction, display: options.display });
     },
 
-    // ⟪ Gliti El al Taskobreta Rando ⟫
+// ⟪ ʃэ ɭʃɔȝ ʌ ſ͕ɭᴜ j͑ʃ'ɔ ſɭɹ ſןɹ }ʃꞇ ʌ ſɭɔ ſɭᴜ ſȷɹ ⟫
 
-    glitiElAlTaskobreto(element: HTMLElement, panelId: string, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
+    b6teqElAlQavek2p2nio(element: HTMLElement, n2taseId: string, options: any = {}): Promise<void> {
+        if ( !element ) return Promise.resolve();
 
         const duration: number = options.duration ?? this.apriorajxoj.duration;
         const easing: string = options.easing ?? this.mildigoj.easeIn;
         const fraction: number = options.fraction ?? 1;
 
-        return this.glitiPanelon(element, panelId, false, { duration, easing, fraction, display: options.display });
+        return this.b6teqN2tanu(element, n2taseId, false, { duration, easing, fraction, display: options.display });
     },
 
-    // ⟪ Animacii Panelan Malfermon ( el taskobreta rando ) ⟫
+// ⟪ j͑ʃɹ ɽ͑ʃ'ɜ ʌ }ʃɹ ɭʃᴜ j͑ʃɔ ⟫
 
-    malfermiPanelon(element: HTMLElement, panelId: string, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
+    h6w6N2taseon(element: HTMLElement, n2taseId: string, options: any = {}): Promise<void> {
+        if ( !element ) return Promise.resolve();
 
         const duration: number = options.duration ?? this.apriorajxoj.duration;
         const easing: string = options.easing ?? this.mildigoj.easeOut;
 
-        return this.glitiEnElTaskobreto(element, panelId, { duration, easing, fraction: options.fraction, display: options.display });
+        return this.b6teqEnElQavek2p2nio(element, n2taseId, { duration, easing, fraction: options.fraction, display: options.display });
     },
 
-    // ⟪ Animacii Panelan Fermon ( al taskobreta rando ) ⟫
+// ⟪ ſןw ſɭᶗ‹ɔ ʌ }ʃɹ ɭʃᴜ j͑ʃɔ ⟫
 
-    fermiPanelon(element: HTMLElement, panelId: string, options: any = {}): Promise<void> {
-        if (!element) return Promise.resolve();
+    woh6w6N2taseon(element: HTMLElement, n2taseId: string, options: any = {}): Promise<void> {
+        if ( !element ) return Promise.resolve();
 
         const duration: number = options.duration ?? this.apriorajxoj.duration;
         const easing: string = options.easing ?? this.mildigoj.easeIn;
 
-        return this.glitiElAlTaskobreto(element, panelId, { duration, easing, fraction: options.fraction, display: options.display });
+        return this.b6teqElAlQavek2p2nio(element, n2taseId, { duration, easing, fraction: options.fraction, display: options.display });
     },
 
-    // ⟪ Fenestro Malferma Animacio ( gliti + malaperi el taskobreto ) ⟫
+// ⟪ j͑ʃɹ ɽ͑ʃ'ɜ ʌ ſ͕ɭᴜ ſɭɔ ֭ſɭɔ ſɭɹ ſןɹ ⟫
 
-    fenestroMalfermi(element: HTMLElement, options: any = {}): Promise<void> {
-        const fraction: number = options.fraction ?? CONSTANTS.ANIM.FRACTIONS.oneEighth;
-        const scale: number = options.scale ?? CONSTANTS.ANIM.FRACTIONS.sevenEighths;
-        const axis = this.akiriTaskobretanGrandonPorPozicio(null, fraction);
-        const startTransform: string = this._fenestraTaskobretoTransformo(axis.position, axis.offset, true);
+    qakehek2p2oMalwoh6w6(element: HTMLElement, options: any = {}): Promise<void> {
+        const fraction: number = options.fraction ?? HAKARANI.ANIM.FRACTIONS.oneEighth;
+        const scale: number = options.scale ?? HAKARANI.ANIM.FRACTIONS.sevenEighths;
+        const axis = this.xk12naQavek2p2nianpal6nPorQakek(null, fraction);
+        const startTransform: string = this._qakehek2p2aQavek2p2nioTransformo(axis.position, axis.offset, true);
 
         return this._animacii(
             element,
             { transform: startTransform + ` scale(${scale})`, opacity: 0 },
             { transform: "scale(1)", opacity: 1 },
-            { ...options, duration: options.duration ?? CONSTANTS.ANIM.DURATION_LONG, easing: options.easing ?? this.mildigoj.easeOut },
+            { ...options, duration: options.duration ?? HAKARANI.ANIM.DURATION_LONG, easing: options.easing ?? this.mildigoj.easeOut },
             ( el ) => {
                 el.style.display = "block";
                 el.style.transform = startTransform + ` scale(${scale})`;
@@ -293,19 +287,19 @@ const AnimacioAdministranto: {
         );
     },
 
-    // ⟪ Fenestro Ferma Animacio ( skali malsupren + malaperi al taskobreto ) ⟫
+// ⟪ ſןw ſɭᶗ‹ɔ ʌ ſ͕ɭᴜ ſɭɔ ֭ſɭɔ ſɭɹ ſןɹ ⟫
 
-    fenestroFermi(element: HTMLElement, options: any = {}): Promise<void> {
-        const fraction: number = options.fraction ?? CONSTANTS.ANIM.FRACTIONS.oneEighth;
-        const scale: number = options.scale ?? CONSTANTS.ANIM.FRACTIONS.sevenEighths;
-        const axis = this.akiriTaskobretanGrandonPorPozicio(null, fraction);
-        const endTransform: string = this._fenestraTaskobretoTransformo(axis.position, axis.offset, false);
+    qakehek2p2oFermi(element: HTMLElement, options: any = {}): Promise<void> {
+        const fraction: number = options.fraction ?? HAKARANI.ANIM.FRACTIONS.oneEighth;
+        const scale: number = options.scale ?? HAKARANI.ANIM.FRACTIONS.sevenEighths;
+        const axis = this.xk12naQavek2p2nianpal6nPorQakek(null, fraction);
+        const endTransform: string = this._qakehek2p2aQavek2p2nioTransformo(axis.position, axis.offset, false);
 
         return this._animacii(
             element,
             { transform: "scale(1)", opacity: 1 },
             { transform: endTransform + ` scale(${scale})`, opacity: 0 },
-            { ...options, duration: options.duration ?? CONSTANTS.ANIM.DURATION_SHORT, easing: options.easing ?? this.mildigoj.easeIn },
+            { ...options, duration: options.duration ?? HAKARANI.ANIM.DURATION_SHORT, easing: options.easing ?? this.mildigoj.easeIn },
             ( el ) => { el.style.pointerEvents = "none"; },
             ( el ) => {
                 el.style.display = "none";
@@ -316,56 +310,52 @@ const AnimacioAdministranto: {
         );
     },
 
-    // ⟪ Unuigita Fenestra Taskobreto-Transformo ( malfermo kaj fermo ) ⟫
+// ⟪ ſ͕ɭᴜ j͑ʃƨꞇ ֭ſɭɹ ʌ ſ͕ɭᴜ ſɭɔ ֭ſɭɔ ſɭɹ ſןɹ ⟫
 
-    _fenestraTaskobretoTransformo(position: string, offset: number, estasMalfermo: boolean): string {
-        const cfg: any = CONSTANTS.TASKBAR_POSITIONS[ position ] || CONSTANTS.TASKBAR_POSITIONS.bottom;
+    _qakehek2p2aQavek2p2nioTransformo(position: string, offset: number, cxuPukxeo: boolean): string {
+        const cfg: any = HAKARANI.TASKBAR_POSITIONS[ position ] || HAKARANI.TASKBAR_POSITIONS.bottom;
         const baza: string = cfg.windowOffset.replace("{offset}", offset.toString());
-        if ( position === "left" || position === "right" ) {
-            const etaY: string = estasMalfermo ? CONSTANTS.ANIM_SETTINGS.windowOpen.offsetY : CONSTANTS.ANIM_SETTINGS.windowClose.offsetY;
+        if ( position === "ctama" || position === "ptama" ) {
+            const etaY: string = cxuPukxeo ? HAKARANI.ANIM_SETTINGS.windowOpen.offsetY : HAKARANI.ANIM_SETTINGS.windowClose.offsetY;
             return baza + ` translateY(${etaY})`;
         }
         return baza;
     },
 
-    // ⟪ Minimumigi Fenestran Animacion ( skali en taskobreton ) ⟫
+// ⟪ ſɟᴜ ı],ɜ ı],ɔ ɭʃᴜ ʌ ſ͕ɭᴜ ſɭɔ ֭ſɭɔ ſɭɹ ſןɹ ⟫
 
-    minimumigiFenestron(element: HTMLElement, options: any = {}): Promise<void> {
-        const scale: number = options.scale ?? CONSTANTS.ANIM_SETTINGS.windowMinimize.scale;
+    caxoxeQakehek2p2on(element: HTMLElement, options: any = {}): Promise<void> {
+        const scale: number = options.scale ?? HAKARANI.ANIM_SETTINGS.windowMinimize.scale;
 
-        // Akiri taskobretan pozicion kaj grandecon
-        const { position } = this.akiriPozicianAgordon();
-        const taskbar: HTMLElement | null = akiriTaskobreton();
+        const { position } = this.xk12naQakekanKu1on();
+        const taskbar: HTMLElement | null = xk12naQavek2p2nion();
         const tbRect: DOMRect = taskbar?.getBoundingClientRect() || { left: 0, top: window.innerHeight, right: window.innerWidth, bottom: window.innerHeight, width: window.innerWidth, height: 0, x: 0, y: window.innerHeight, toJSON() { return {}; } };
         const winRect: DOMRect = element.getBoundingClientRect();
 
-        // Kalkuli la centran punkton de la fenestro
         const winCenterX: number = winRect.left + winRect.width / 2;
         const winCenterY: number = winRect.top + winRect.height / 2;
 
-        // Kalkuli celpunkton sur taskobreto
         let targetX: number, targetY: number;
         switch (position) {
-            case "left":
+            case "ctama":
                 targetX = tbRect.right;
                 targetY = winCenterY;
                 break;
-            case "right":
+            case "ptama":
                 targetX = tbRect.left;
                 targetY = winCenterY;
                 break;
-            case "top":
+            case "soza":
                 targetX = winCenterX;
                 targetY = tbRect.bottom;
                 break;
-            case "bottom":
+            case "psaz":
             default:
                 targetX = winCenterX;
                 targetY = tbRect.top;
                 break;
         }
 
-        // Kalkuli tradukan distancon
         const translateX: number = targetX - winCenterX;
         const translateY: number = targetY - winCenterY;
 
@@ -373,7 +363,7 @@ const AnimacioAdministranto: {
             element,
             { transform: "scale(1)", opacity: 1 },
             { transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`, opacity: 0 },
-            { ...options, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.windowMinimize.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.windowMinimize.easing },
+            { ...options, duration: options.duration ?? HAKARANI.ANIM_SETTINGS.windowMinimize.duration, easing: options.easing ?? HAKARANI.ANIM_SETTINGS.windowMinimize.easing },
             ( el ) => { el.style.pointerEvents = "none"; },
             ( el ) => {
                 el.style.transform = "";
@@ -383,117 +373,111 @@ const AnimacioAdministranto: {
         );
     },
 
-    // ⟪ Maksimumigi Fenestran Animacion ⟫
+// ⟪ ſɟᴜ ı],ɜ ſןw ſȷɹ ʌ ſ͕ɭᴜ ſɭɔ ֭ſɭɔ ſɭɹ ſןɹ ʌ ʃэ ɭʃɔȝ ⟫
 
-    maksimumigiFenestron(element: HTMLElement, options: any = {}): Promise<void> {
+    caxopuf2Qakehek2p2on(element: HTMLElement, options: any = {}): Promise<void> {
         return this._skaliKerno(
             element,
-            options.fromScale ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.scale,
+            options.fromScale ?? HAKARANI.ANIM_SETTINGS.windowMaximize.scale,
             true,
-            { ...options, startOpacity: CONSTANTS.ANIM.FRACTIONS.sixEighths, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.easing }
+            { ...options, startOpacity: HAKARANI.ANIM.FRACTIONS.sixEighths, duration: options.duration ?? HAKARANI.ANIM_SETTINGS.windowMaximize.duration, easing: options.easing ?? HAKARANI.ANIM_SETTINGS.windowMaximize.easing }
         );
     },
 
-    // ⟪ Restarigi el Maksimumiga Animacio ⟫
+// ⟪ }ʃɔ ſɭᴜ ʌ ſɟᴜ ı],ɜ ſןw ſȷɹ ʌ ʃэ ɭʃɔȝ ⟫
 
-    malmaksimumigiFenestron(element: HTMLElement, options: any = {}): Promise<void> {
+    malcaxopuf2Qakehek2p2on(element: HTMLElement, options: any = {}): Promise<void> {
         return this._skaliKerno(
             element,
-            options.toScale ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.scale,
+            options.toScale ?? HAKARANI.ANIM_SETTINGS.windowMaximize.scale,
             false,
-            { ...options, endOpacity: CONSTANTS.ANIM.FRACTIONS.sixEighths, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.windowMaximize.easing }
+            { ...options, endOpacity: HAKARANI.ANIM.FRACTIONS.sixEighths, duration: options.duration ?? HAKARANI.ANIM_SETTINGS.windowMaximize.duration, easing: options.easing ?? HAKARANI.ANIM_SETTINGS.windowMaximize.easing }
         );
     },
 
-    // ⟪ Restarigi Fenestran Animacion ( el minimumigita ) ⟫
+// ⟪ }ʃɔ ſɭᴜ ʌ ſ͕ɭᴜ ſɭɔ ֭ſɭɔ ſɭɹ ſןɹ ⟫
 
-    restaŭriFenestron(element: HTMLElement, options: any = {}): Promise<void> {
-        const fraction: number = options.fraction ?? CONSTANTS.ANIM.FRACTIONS.oneEighth;
+    nekaQakehek2p2on(element: HTMLElement, options: any = {}): Promise<void> {
+        const fraction: number = options.fraction ?? HAKARANI.ANIM.FRACTIONS.oneEighth;
 
         return this._skaliKerno(element, fraction, true, {
             ...options,
-            duration: options.duration ?? CONSTANTS.ANIM.DURATION_DEFAULT,
+            duration: options.duration ?? HAKARANI.ANIM.DURATION_DEFAULT,
             easing: options.easing ?? this.mildigoj.spring,
-            agordiEkrano: true,
+            vahateTahaq: true,
             display: "block"
         });
     },
 
-    // ⟪ Skali En ( ŝprucaĵo ) ⟫
+// ⟪ ɭʃᴜ ſᶘɜ ſɭɜ ʌ ı],ᴜ̭ᴜ }ʃᴜ ⟫
 
     skaliEn(element: HTMLElement, options: any = {}): Promise<void> {
         return this._skaliKerno(
             element,
-            options.fromScale ?? CONSTANTS.ANIM.FRACTIONS.sevenEighths,
+            options.fromScale ?? HAKARANI.ANIM.FRACTIONS.sevenEighths,
             true,
-            { ...options, easing: options.easing ?? this.mildigoj.spring, agordiEkrano: true, blokiEventojn: true }
+            { ...options, easing: options.easing ?? this.mildigoj.spring, vahateTahaq: true, bloki12najn: true }
         );
     },
 
-    // ⟪ Skali El ( ŝrumpa efiko ) ⟫
+// ⟪ ɭʃᴜ ſᶘɜ ſɭɜ ʌ ſɭɜ ʃɔ ⟫
 
     skaliEl(element: HTMLElement, options: any = {}): Promise<void> {
         return this._skaliKerno(
             element,
-            options.toScale ?? CONSTANTS.ANIM.FRACTIONS.sevenEighths,
+            options.toScale ?? HAKARANI.ANIM.FRACTIONS.sevenEighths,
             false,
-            { ...options, easing: options.easing ?? this.mildigoj.easeIn, blokiEventojn: true, finoKaŝi: true }
+            { ...options, easing: options.easing ?? this.mildigoj.easeIn, bloki12najn: true, finoKobe: true }
         );
     },
 
-    // ⟪ Ŝpruca Animacio ( por kunteksta menuo ) ⟫
+// ⟪ j͑ʃ'ᴜ ֭ſɭᴜ ɭʃɔ ʌ ı],ᴜ̭ᴜ }ʃᴜ ⟫
 
-    sxprucEn(element: HTMLElement, options: any = {}): Promise<void> {
-        const scale: number = options.scale ?? CONSTANTS.ANIM_SETTINGS.popup.scale;
+    kuplaJ6se(element: HTMLElement, options: any = {}): Promise<void> {
+        const scale: number = options.scale ?? HAKARANI.ANIM_SETTINGS.popup.scale;
 
         return this._skaliKerno(
             element,
             scale,
             true,
-            { ...options, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.popup.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.popup.easing }
+            { ...options, duration: options.duration ?? HAKARANI.ANIM_SETTINGS.popup.duration, easing: options.easing ?? HAKARANI.ANIM_SETTINGS.popup.easing }
         );
     },
 
-    // ⟪ Ŝpruca Ferma Animacio ( malaperi el ) ⟫
+// ⟪ j͑ʃ'ᴜ ֭ſɭɜ ɭʃɔ ʌ ſɭɜ ʃɔ ⟫
 
-    sxprucEl(element: HTMLElement, options: any = {}): Promise<void> {
-        const scale: number = options.scale ?? CONSTANTS.ANIM_SETTINGS.popup.scale;
+    kuplaP6sca(element: HTMLElement, options: any = {}): Promise<void> {
+        const scale: number = options.scale ?? HAKARANI.ANIM_SETTINGS.popup.scale;
 
         return this._skaliKerno(
             element,
             scale,
             false,
-            { ...options, duration: options.duration ?? CONSTANTS.ANIM_SETTINGS.popup.duration, easing: options.easing ?? CONSTANTS.ANIM_SETTINGS.popup.easing, blokiEventojn: true, finoKaŝi: true }
+            { ...options, duration: options.duration ?? HAKARANI.ANIM_SETTINGS.popup.duration, easing: options.easing ?? HAKARANI.ANIM_SETTINGS.popup.easing, bloki12najn: true, finoKobe: true }
         );
     },
 
-    // ⟪ Unuigita Skala Kerno ( eniro kaj eliro ) ⟫
-    // options:
-    //   agordiEkrano - ĉu la eniro difinas el.style.display ( fenestroj jes, menuoj ne )
-    //   display - la display-valoro uzata kiam agordiEkrano ( defaŭlte "flex" )
-    //   blokiEventojn - ĉu pointer-events estas malŝaltita dum la animacio
-    //   finoKaŝi - ĉu la eliro kaŝas la elementon post la animacio
-    //   startOpacity / endOpacity - laŭvolaj opakecaj ekstremoj ( defaŭlte 0 kaj 1 )
+// ⟪ ɭʃᴜ ſᶘɜ ſɭɜ ʌ ſɭᴜ ɽ͑ʃ'ᴜ }ʃꞇ ⟫
 
-    _skaliKerno(element: HTMLElement, scale: number, estasEniro: boolean, options: any = {}): Promise<void> {
-        const startTransform: string = estasEniro ? `scale(${scale})` : "scale(1)";
-        const endTransform: string = estasEniro ? "scale(1)" : `scale(${scale})`;
+    _skaliKerno(element: HTMLElement, scale: number, cxuK4cak2: boolean, options: any = {}): Promise<void> {
+        const startTransform: string = cxuK4cak2 ? `scale(${scale})` : "scale(1)";
+        const endTransform: string = cxuK4cak2 ? "scale(1)" : `scale(${scale})`;
         const startOpacity: number = options.startOpacity ?? 0;
         const endOpacity: number = options.endOpacity ?? 1;
 
         return this._animacii(
             element,
-            { transform: startTransform, opacity: estasEniro ? startOpacity : 1 },
-            { transform: endTransform, opacity: estasEniro ? 1 : endOpacity },
+            { transform: startTransform, opacity: cxuK4cak2 ? startOpacity : 1 },
+            { transform: endTransform, opacity: cxuK4cak2 ? 1 : endOpacity },
             options,
             ( el ) => {
-                if ( estasEniro && options.agordiEkrano ) el.style.display = options.display || "flex";
+                if ( cxuK4cak2 && options.vahateTahaq ) el.style.display = options.display || "flex";
                 el.style.transform = startTransform;
-                el.style.opacity = estasEniro ? startOpacity.toString() : "1";
-                if ( options.blokiEventojn ) el.style.pointerEvents = "none";
+                el.style.opacity = cxuK4cak2 ? startOpacity.toString() : "1";
+                if ( options.bloki12najn ) el.style.pointerEvents = "none";
             },
             ( el ) => {
-                if ( options.finoKaŝi ) el.style.display = "none";
+                if ( options.finoKobe ) el.style.display = "none";
                 el.style.transform = "";
                 el.style.opacity = "";
                 el.style.pointerEvents = "";
@@ -502,5 +486,4 @@ const AnimacioAdministranto: {
     }
 };
 
-// Aldoni al fenestro por tutmonda aliro
-(window as any).AnimacioAdministranto = AnimacioAdministranto;
+(window as any).tahalaqaz = tahalaqaz;

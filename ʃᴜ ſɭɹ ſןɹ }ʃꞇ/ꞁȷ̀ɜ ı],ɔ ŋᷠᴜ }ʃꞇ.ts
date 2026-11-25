@@ -1,8 +1,6 @@
-// ≺⧼ Tipaj Difinoj ⧽≻
+// ≺⧼ ꞁȷ̀ɜ ı],ɔ ŋᷠᴜ }ʃꞇ 📐 ⧽≻
 
-// ⟨ Tutmondaĵoj ŝargitaj el eksteraj skriptoj ĉe krhitlashi.github.io ⟩
-// Ĉi tiuj funkcioj estas agorditaj sur fenestro per la gastigita skripta pakaĵo el la originala
-// projekto ( ſɟᴜ ſɭɔ j͑ʃ'ɔ/ ), ŝargita rultempe per <script> etikedoj en la HTML.
+// ⟨ ſɭᴜ ɽ͑ʃ'ᴜ }ʃꞇ ⟩
 declare global {
     interface Window {
         vab6caja: (n: number) => string;
@@ -13,14 +11,14 @@ declare global {
 }
 
 export interface CustomHTMLElement extends HTMLElement {
-    _estasRegrandiganta?: boolean;
+    _kobecaxopuf2?: boolean;
 }
 
-export interface AppData {
-    name: string;
-    icon: string;
-    koloro: string;
-    app: string;
+export interface S2k2p2niVop2 {
+    s2k2p2niKsaka: string;
+    kp6: string;
+    weh2: string;
+    s2k2p2ni: string;
 }
 
 export interface IconGridConfig {

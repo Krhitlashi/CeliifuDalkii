@@ -5,67 +5,67 @@
     <meta charset="utf-8">
     <meta name="viewport" content="inline-size=device-inline-size, initial-scale=1">
 
-    <title data-oskakefani="app_notetaker">ſɟᴜ ſᶘᴜ j͐ʃɹ 📝</title>
+    <title data-oskakefani="kfeni-1al2">ſɟᴜ ſᶘᴜ j͐ʃɹ 📝</title>
     <link rel="icon" type="image/x-icon" href="../../../j͑ʃɹ ɭʃᴜɔ˞ ɭl̀ɔ j͑ʃᴜꞇ.ico">
 
-    <link rel="manifest" href="../../../ſɟᴜ ſɭɹ ſɟɔ j͐ʃɹʞ ꞁȷ̀ᴜꞇ.json">
+    <link rel="manifest" href="../ſɟᴜ ſɭɹ ſɟɔ j͐ʃɹʞ ꞁȷ̀ᴜꞇ.json">
     <link rel="stylesheet" href="https://krhitlashi.github.io/%D6%AD%C5%BF%C9%AD%E1%B4%9C%20%C4%B1__%C9%94.css">
 </head>
 
 <body class="cepufal">
     <thala>
         <maxema class="c2w2qkuba">
-            <button onclick="wrapText('≺⧼ ',' ⧽≻')">≺⧼ ⧽≻</button>
-            <button onclick="wrapText('⟪ ',' ⟫')">⟪ ⟫</button>
-            <button onclick="wrapText('⟨ ',' ⟩')">⟨ ⟩</button>
+            <button onclick='envolviTekston("≺⧼ "," ⧽≻")'>≺⧼ ⧽≻</button>
+            <button onclick='envolviTekston("⟪ "," ⟫")'>⟪ ⟫</button>
+            <button onclick='envolviTekston("⟨ "," ⟩")'>⟨ ⟩</button>
             <sak></sak>
-            <button onclick="wrapText('≺ ',' ≻')">≺ ≻</button>
-            <button onclick="wrapText('• ',' •')">• •</button>
+            <button onclick='envolviTekston("≺ "," ≻")'>≺ ≻</button>
+            <button onclick='envolviTekston("• "," •")'>• •</button>
         </maxema>
     </thala>
-    <textarea id="notepad" data-oskakefani="ph_start_typing"></textarea>
-    <button onclick="saveNotes()" data-oskakefani="cmd_save"></button>
-    <p id="status" style="opacity: 0; transition: opacity 0.25s;" data-oskakefani="msg_saved"></p>
+    <textarea id="k1al2" data-oskakefani="k4cak2-saxe"></textarea>
+    <button onclick="konserviNoton()" data-oskakefani="ca12na-fezi"></button>
+    <p id="c2ksak" style="opacity: 0; transition: opacity 0.25s;" data-oskakefani="k61e-3akak"></p>
 </body>
 <script>
-    const pad = document.getElementById("notepad");
-    const status = document.getElementById("status");
-    pad.value = localStorage.getItem("notetaker-notes") || "";
-    function saveNotes() {
-        const blob = new Blob([pad.value], { type: "text/plain" });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = "ſᶘᴜ j͐ʃɹ.txt";
-        a.click();
-        URL.revokeObjectURL(a.href);
-        status.style.opacity = "1";
-        setTimeout(() => status.style.opacity = '0', 0o3000);
+    const notoTeksto = document.getElementById("k1al2");
+    const stato = document.getElementById("c2ksak");
+    notoTeksto.value = localStorage.getItem("notetaker-notes") || "";
+    function konserviNoton() {
+        const blob = new Blob([notoTeksto.value], { type: "text/plain" });
+        const ligilo = document.createElement("a");
+        ligilo.href = URL.createObjectURL( blobo );
+        ligilo.download = "ſᶘᴜ j͐ʃɹ.txt";
+        ligilo.click();
+        URL.revokeObjectURL( ligilo.href );
+        stato.style.opacity = "1";
+        setTimeout( () => stato.style.opacity = "0", 0o3000 );
     }
-    function wrapText(before, after) {
-        const start = pad.selectionStart;
-        const end = pad.selectionEnd;
-        const selected = pad.value.substring(start, end);
-        const wrapped = before + selected + after;
-        pad.setRangeText(wrapped, start, end, "select");
-        pad.focus();
-        if ( selected.length === 0 ) {
-            const cursorPos = start + before.length;
-            pad.setSelectionRange(cursorPos, cursorPos);
+    function envolviTekston( antaux, post ) {
+        const komenco = notoTeksto.selectionStart;
+        const fino = notoTeksto.selectionEnd;
+        const elektita = notoTeksto.value.substring( komenco, fino );
+        const envolvita = antaux + elektita + post;
+        notoTeksto.setRangeText( envolvita, komenco, fino, "select" );
+        notoTeksto.focus();
+        if ( elektita.length === 0 ) {
+            const kursoPozicio = komenco + antaux.length;
+            notoTeksto.setSelectionRange( kursoPozicio, kursoPozicio );
         }
     }
 
     const skakefani = {
         aih: {
-            "app_notetaker": "ſɟᴜ ſᶘᴜ j͐ʃɹ 📝",
-            "ph_start_typing": "ʃᴜ }ʃᴜ",
-            "cmd_save": "j͑ʃ'ɔ ſ̀ȷᴜȝ 💾",
-            "msg_saved": "ſ̀ȷᴜ ſɭᴜƽ ✅"
+            "kfeni-1al2": "ſɟᴜ ſᶘᴜ j͐ʃɹ 📝",
+            "k4cak2-saxe": "ʃᴜ }ʃᴜ",
+            "ca12na-fezi": "j͑ʃ'ɔ ſ̀ȷᴜȝ 💾",
+            "k61e-3akak": "ſ̀ȷᴜ ſɭᴜƽ ✅"
         },
         en: {
-            "app_notetaker": "NoteTaker 📝",
-            "ph_start_typing": "Type",
-            "cmd_save": "Save 💾",
-            "msg_saved": "Saved ✅"
+            "kfeni-1al2": "NoteTaker 📝",
+            "k4cak2-saxe": "Type",
+            "ca12na-fezi": "Save 💾",
+            "k61e-3akak": "Saved ✅"
         }
     };
 </script>

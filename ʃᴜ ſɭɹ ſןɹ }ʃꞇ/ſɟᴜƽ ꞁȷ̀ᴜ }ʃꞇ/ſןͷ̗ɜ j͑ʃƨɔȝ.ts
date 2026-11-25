@@ -1,11 +1,5 @@
-// ≺⧼ Matematikaj Utilaĵoj ⧽≻
+// ≺⧼ ſןͷ̗ɜ j͑ʃƨɔȝ 🛠️ ⧽≻
 
-/**
- * Throttle-funkcio
- * @param {Function} funkcio
- * @param {number} limo
- * @returns {Function}
- */
 function limkurzo<T extends ( ...args: any[] ) => void>( func: T, limit: number ): ( ...args: Parameters<T> ) => void {
     let inThrottle: any;
     return function ( this: any, ...args: Parameters<T> ) {
@@ -17,5 +11,4 @@ function limkurzo<T extends ( ...args: any[] ) => void>( func: T, limit: number 
     };
 }
 
-// Alkroĉi al fenestro por tutmonda aliro
 ( window as any ).limkurzo = limkurzo;

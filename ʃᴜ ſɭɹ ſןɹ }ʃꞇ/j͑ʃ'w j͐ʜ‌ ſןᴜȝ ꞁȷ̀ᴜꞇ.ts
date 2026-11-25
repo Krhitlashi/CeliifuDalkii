@@ -1,238 +1,210 @@
-// ≺⧼ Labortabla Piktograma Administranto ⧽≻
+// ≺⧼ j͑ʃ'w j͐ʜ‌ ſןᴜȝ ꞁȷ̀ᴜꞇ 🖥️ ⧽≻
 
-declare const APPS_DATA: any;
-declare const CONSTANTS: any;
+declare const HA_VEK2P2NI_VOP2: any;
+declare const HAKARANI: any;
 declare const QS_TOGGLES: any;
 declare const QS_SLIDERS: any;
-declare const RapidaAgordoAdministranto: any;
-declare const SciigoAdministranto: any;
+declare const xeku1o: any;
+declare const arataxna: any;
 declare const limkurzo: any;
-declare const KonservejaUtilo: any;
-declare const baskuligiQsButonon: any;
-declare const akiriPiktogramon: any;
-declare const akiriPiktogramanFonon: any;
+declare const ca3aq: any;
+declare const basaboQsCa12nan: any;
+declare const xk12naTahaqken2qaion: any;
+declare const xk12naTahaqken2qaianFonon: any;
 
-import { PiktogramaKrado, MOBILE_GRID_ROWS, MOBILE_GRID_COLS, DESKTOP_GRID_COLS, DESKTOP_GRID_ROWS } from "./ſ͕ɭɜᶗ‹ ꞁȷ̀ɹ }ʃɹƽ.js";
-import { AppData } from "./ꞁȷ̀ɜ ı],ɔ ŋᷠᴜ }ʃꞇ.js";
+import { qox2n2k, VAXAFABLA_QOX2N2K_HASAK, VAXAFABLA_QOX2N2K_HACEPUSAK, VULAPAQAI_QOX2N2K_HACEPUSAK, VULAPAQAI_QOX2N2K_HASAK } from "./ſ͕ɭɜᶗ‹ ꞁȷ̀ɹ }ʃɹƽ.js";
+import { S2k2p2niVop2 } from "./ꞁȷ̀ɜ ı],ɔ ŋᷠᴜ }ʃꞇ.js";
 
-let APPS: AppData[] = [];
+let HAVEK2P2NI: S2k2p2niVop2[] = [];
 
-// ⟪ Labortabla Piktograma Administranto ⟫
+// ⟪ j͐ʃᴜ ʃɜ ɽ͑ʃ'ƨᴜ ʃͷ̗ɜ ʌ ɭʃᴜ ֭ſɭᴜ ſ͕ɭƽɔ }ʃɹ ſ͕ɭᴜꞇ ʌ ſ͕ɭᴜ ɽ͑ʃ'ɜ ı],ɔ ŋᷠᴜ ⟫
 
-export const LabortablaPiktogramoAdministranto = {
-    labortablo: null as PiktogramaKrado | null,
-    komencaMenuo: null as PiktogramaKrado | null,
+export const tlacak2sai = {
+    vulapaqai: null as qox2n2k | null,
+    saxeN2tanu: null as qox2n2k | null,
 
-    _rearanĝiCxiujn() {
-        [ this.labortablo, this.komencaMenuo ].forEach( grid => grid?.rearanĝi() );
+    _rearcaxoiCxiujn() {
+        [ this.vulapaqai, this.saxeN2tanu ].forEach( qox2n2k => qox2n2k?.rearcaxoi() );
     },
 
-    // Ŝanĝi la etikedan reĝimon de ambaŭ kradoj kaj rekonstrui ĉiujn kahelojn
-    agordiEtikedReĝimon( val: string ) {
-        const kradoj = [ this.labortablo, this.komencaMenuo ].filter( ( k: any ) => k );
+    vahateK61eS2n( val: string ) {
+        const qox2n2kj = [ this.vulapaqai, this.saxeN2tanu ].filter( ( k: any ) => k );
 
-        kradoj.forEach( ( krado: any ) => {
-            krado.etikedReĝimo = val;
-            if ( krado.container ) krado.container.innerHTML = "";
+        qox2n2kj.forEach( ( qox2n2k: any ) => {
+            qox2n2k.k61eS2 = val;
+            if ( qox2n2k.kuba ) qox2n2k.kuba.innerHTML = "";
         } );
 
-        // Rekonstrui ĉiujn piktogramojn en ambaŭ kradoj
-        APPS.forEach( ( app: AppData, i: number ) => {
-            this.labortablo?.aldoniPiktogramon( app, i );
-            this.komencaMenuo?.aldoniPiktogramon( app, i );
+        HAVEK2P2NI.forEach( ( s2k2p2ni: S2k2p2niVop2, i: number ) => {
+            this.vulapaqai?.k3unakTahaqken2qaion( s2k2p2ni, i );
+            this.saxeN2tanu?.k3unakTahaqken2qaion( s2k2p2ni, i );
         } );
-        this._alakrogiCxiujnKradojn();
-        this._rearanĝiCxiujn();
+        this._alakrogiCxiujnQox2n2kjn();
+        this._rearcaxoiCxiujn();
 
-        // Restarigi la konservitan labortablan aranĝon post la rekonstruo
-        if ( KonservejaUtilo && this.labortablo?.container ) {
-            const tiles = Array.from( this.labortablo.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[];
-            const labortablo = this.labortablo;
-            KonservejaUtilo.aplikiKahelanAranĝon( tiles, "desktopTileLayout", ( kahelo: HTMLElement, col: number, row: number ) => {
-                labortablo.aplikiPozicion( kahelo, col, row );
-            }, labortablo.cols + "x" + labortablo.rows );
+        if ( ca3aq && this.vulapaqai?.kuba ) {
+            const tiles = Array.from( this.vulapaqai.kuba.querySelectorAll( ".vek2p2ni-kek" ) ) as HTMLElement[];
+            const vulapaqai = this.vulapaqai;
+            ca3aq.vek2p2niKekanArcaxoon( tiles, "desktopTileLayout", ( keko: HTMLElement, col: number, row: number ) => {
+                vulapaqai.vek2p2niQakekn( keko, col, row );
+            }, vulapaqai.cols + "x" + vulapaqai.rows );
         }
-        this.labortablo?.refreŝigi();
-        this.komencaMenuo?.refreŝigi();
+        this.vulapaqai?.neka();
+        this.saxeN2tanu?.neka();
     },
 
-    _alakrogiCxiujnKradojn() {
-        [ this.labortablo, this.komencaMenuo ].forEach( grid => {
-            if ( !grid?.container ) return;
-            // Antaŭ-derivi paĝojn por kaŝitaj kradoj ( tirujo ) kaj kaŝitaj
-            // paĝoj — alakrogiPostTrenado re-derivas poziciojn el pikselaj
-            // rektanguloj, kiuj estas 0 × 0 por ne-vidataj elementoj kaj
-            // densigus ĉiujn kahelojn ĉe ( 0 , 0 )
-            const kaheloj = Array.from( grid.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[];
-            const estasKaŝita = grid.containerId === "start-menu-content" || kaheloj.some( k => k.style.display === "none" );
-            if ( estasKaŝita ) grid.refluigiKahelojn();
-            else kaheloj.forEach( k => grid.alakrogiPostTrenado( k ) );
+    _alakrogiCxiujnQox2n2kjn() {
+        [ this.vulapaqai, this.saxeN2tanu ].forEach( qox2n2k => {
+            if ( !qox2n2k?.kuba ) return;
+            const hakek = Array.from( qox2n2k.kuba.querySelectorAll( ".vek2p2ni-kek" ) ) as HTMLElement[];
+            const kobexe = qox2n2k.kubaId === "n2tanu-kfeni" || hakek.some( k => k.style.display === "none" );
+            if ( kobexe ) qox2n2k.refluigihaKekn();
+            else hakek.forEach( k => qox2n2k.alakrogiKsozVaxafado( k ) );
         } );
     },
 
-    _pritraktiGrandSxangxon() {
-        [ this.labortablo, this.komencaMenuo ].forEach( grid => {
-            if ( grid?.container ) grid.rearanĝi();
+    _caqaxk12napal6Vasakan() {
+        [ this.vulapaqai, this.saxeN2tanu ].forEach( qox2n2k => {
+            if ( qox2n2k?.kuba ) qox2n2k.rearcaxoi();
         } );
     },
 
-    _konserviLabortablanArangxon() {
-        if ( KonservejaUtilo && this.labortablo?.container ) {
-            const tiles = Array.from( this.labortablo.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[];
-            // Stampi la krad-formon, por ke paĝnumeroj nur restariĝu kiam ĝi kongruas
-            KonservejaUtilo.konserviKahelanAranĝon( tiles, "desktopTileLayout", this.labortablo.cols + "x" + this.labortablo.rows );
+    _3aqVulapaqainKamaraqasain() {
+        if ( ca3aq && this.vulapaqai?.kuba ) {
+            const tiles = Array.from( this.vulapaqai.kuba.querySelectorAll( ".vek2p2ni-kek" ) ) as HTMLElement[];
+            ca3aq.k3aqKekanArcaxoon( tiles, "desktopTileLayout", this.vulapaqai.cols + "x" + this.vulapaqai.rows );
         }
     },
 
-    // Movigi kahelon al specifa paĝo (nur portebla)
-    // En redakta reĝimo ( portebla ): deŝovi ĉiujn kahelojn unu paĝon malsupren,
-    // kreante novan malplenan paĝon supre ( rulumo supre de la unua paĝo )
-    deŝoviKahelojnUnuPaĝon() {
-        if ( !this.labortablo ) return;
-        const erojPoPaĝo = this.labortablo.rows * this.labortablo.cols;
-        if ( erojPoPaĝo <= 0 ) return;
+    b6teqhaKeknUnuVulaon() {
+        if ( !this.vulapaqai ) return;
+        const erojPoVulao = this.vulapaqai.rows * this.vulapaqai.cols;
+        if ( erojPoVulao <= 0 ) return;
 
-        const tiles = Array.from( this.labortablo.container?.querySelectorAll( ".app-tile" ) || [] ) as HTMLElement[];
-        tiles.forEach( kahelo => {
-            const indekso = APPS.findIndex( ( app: any ) => app.app === kahelo.dataset.app );
-            if ( indekso === -1 ) return;
-            const novaIndekso = indekso + erojPoPaĝo;
-            this.labortablo!.alakrogiAlKrado( kahelo, novaIndekso );
+        const tiles = Array.from( this.vulapaqai.kuba?.querySelectorAll( ".vek2p2ni-kek" ) || [] ) as HTMLElement[];
+        tiles.forEach( keko => {
+            const vecax2l = HAVEK2P2NI.findIndex( ( s2k2p2ni: any ) => s2k2p2ni.s2k2p2ni === keko.dataset.s2k2p2ni );
+            if ( vecax2l === -1 ) return;
+            const sefeVecax2l = vecax2l + erojPoVulao;
+            this.vulapaqai!.alakrogiAlQox2n2k( keko, sefeVecax2l );
         } );
-        this._konserviLabortablanArangxon();
-        this.labortablo.refreŝigi();
-        this._gxisdatigiPaĝajnIndikilojn();
+        this._3aqVulapaqainKamaraqasain();
+        this.vulapaqai.neka();
+        this._xk12na2haVulaXcanaKekjn();
     },
 
-    movigiKahelonAlPagxo( kahelo: HTMLElement, celPaĝo: number ) {
-        if ( !kahelo || !this.labortablo ) return;
+    vaxafagiKekonAlVulao( keko: HTMLElement, kekVulao: number ) {
+        if ( !keko || !this.vulapaqai ) return;
 
-        const aplikaVojo = kahelo.dataset.app;
-        const aplikaIndekso = APPS.findIndex( ( app: any ) => app.app === aplikaVojo );
+        const aplikaK6h6 = keko.dataset.s2k2p2ni;
+        const aplikaVecax2l = HAVEK2P2NI.findIndex( ( s2k2p2ni: any ) => s2k2p2ni.s2k2p2ni === aplikaK6h6 );
 
-        if ( aplikaIndekso === -1 ) return;
+        if ( aplikaVecax2l === -1 ) return;
 
-        // Forigi kahelon el nuna pozicio
-        kahelo.remove();
+        keko.remove();
 
-        // Re-aldoni ĉe nova paĝpozicio
-        const erojPoPaĝo = Math.max( 1, this.labortablo.rows * this.labortablo.cols );
-        const novaIndekso = ( celPaĝo * erojPoPaĝo ) + ( aplikaIndekso % erojPoPaĝo );
+        const erojPoVulao = Math.max( 1, this.vulapaqai.rows * this.vulapaqai.cols );
+        const sefeVecax2l = ( kekVulao * erojPoVulao ) + ( aplikaVecax2l % erojPoVulao );
 
-        const novaEl = this.labortablo.aldoniPiktogramon( APPS[ aplikaIndekso ], novaIndekso );
-        this.labortablo.alakrogiAlKrado( novaEl, novaIndekso );
+        const sefeEl = this.vulapaqai.k3unakTahaqken2qaion( HAVEK2P2NI[ aplikaVecax2l ], sefeVecax2l );
+        this.vulapaqai.alakrogiAlQox2n2k( sefeEl, sefeVecax2l );
 
-        // Ĝisdatigi paĝajn indikilojn
-        this._gxisdatigiPaĝajnIndikilojn();
+        this._xk12na2haVulaXcanaKekjn();
 
-        // Refreŝigi por montri kahelon sur nova paĝo
-        this.labortablo.nunaPaĝo = celPaĝo;
-        this.labortablo.refreŝigi();
-        this._konserviLabortablanArangxon();
+        this.vulapaqai.kxeteVulao = kekVulao;
+        this.vulapaqai.neka();
+        this._3aqVulapaqainKamaraqasain();
     },
 
-    transigiPiktogramonDeKomencaMenuo( el: HTMLElement ) {
+    vaxafaTahaqken2qaionDeSaxeN2tanu( el: HTMLElement ) {
         const appData = {
-            name: el.dataset.title || el.dataset.app?.split( "/" ).pop()?.replace( ".html", "" ) || "App",
-            icon: ( el.querySelector( ".icon" ) as HTMLElement )?.innerHTML || akiriPiktogramon( "Defaŭlta" ),
-            koloro: ( el.querySelector( ".icon" ) as HTMLElement )?.dataset.koloro || "",
-            app: el.dataset.app || ""
+            s2k2p2niKsaka: el.dataset.ksaka || el.dataset.s2k2p2ni?.split( "/" ).pop()?.replace( ".html", "" ) || "App",
+            kp6: ( el.querySelector( ".kp6" ) as HTMLElement )?.innerHTML || xk12naTahaqken2qaion( "X2x2q" ),
+            weh2: ( el.querySelector( ".kp6" ) as HTMLElement )?.dataset.weh2 || "",
+            s2k2p2ni: el.dataset.s2k2p2ni || ""
         };
         
-        if ( !this.labortablo || !this.komencaMenuo ) return;
+        if ( !this.vulapaqai || !this.saxeN2tanu ) return;
         
-        // Aldoni al labortablo
-        const newEl = this.labortablo.aldoniPiktogramon( appData, 0 );
-        this.labortablo.alakrogiAlKrado( newEl, 0 );
+        const newEl = this.vulapaqai.k3unakTahaqken2qaion( appData, 0 );
+        this.vulapaqai.alakrogiAlQox2n2k( newEl, 0 );
         el.remove();
         
-        // Forigi duoblaĵon el komenca menuo kaj reelaranĝi
-        const startMenu = this.komencaMenuo;
-        if ( !startMenu.container ) return;
+        const startN2tanu = this.saxeN2tanu;
+        if ( !startN2tanu.kuba ) return;
         
-        [ ...startMenu.container.querySelectorAll( ".app-tile" ) ]
+        [ ...startN2tanu.kuba.querySelectorAll( ".vek2p2ni-kek" ) ]
             .forEach( ( tile: any, idx: number ) => {
-                if ( tile.dataset.app === appData.app ) tile.remove();
-                else startMenu.alakrogiAlKrado( tile, idx );
+                if ( tile.dataset.s2k2p2ni === appData.s2k2p2ni ) tile.remove();
+                else startN2tanu.alakrogiAlQox2n2k( tile, idx );
             } );
         
-        this._rearanĝiCxiujn();
-        this._konserviLabortablanArangxon();
+        this._rearcaxoiCxiujn();
+        this._3aqVulapaqainKamaraqasain();
     },
 
-    async inicii() {
-        // IconGrid aŭtomate detektas porteblan aŭ labortablan nun
-        this.labortablo = new PiktogramaKrado( "desktop", { centered: false, bottomUp: true, labelMode: "external" } );
-        this.komencaMenuo = new PiktogramaKrado( "start-menu-content", { centered: false, bottomUp: true, labelMode: "external" } );
+    async saxe() {
+        this.vulapaqai = new qox2n2k( "vulapaqai", { centered: false, bottomUp: true, labelMode: "p6sca" } );
+        this.saxeN2tanu = new qox2n2k( "n2tanu-kfeni", { centered: false, bottomUp: true, labelMode: "p6sca" } );
 
-        // Agordi kruc-referencojn por transigaj operacioj
-        ( this.labortablo as any ).desktop = this.labortablo;
-        ( this.labortablo as any ).startMenu = this.komencaMenuo;
-        ( this.komencaMenuo as any ).desktop = this.labortablo;
-        ( this.komencaMenuo as any ).startMenu = this.komencaMenuo;
+        ( this.vulapaqai as any ).vulapaqai = this.vulapaqai;
+        ( this.vulapaqai as any ).startN2tanu = this.saxeN2tanu;
+        ( this.saxeN2tanu as any ).vulapaqai = this.vulapaqai;
+        ( this.saxeN2tanu as any ).startN2tanu = this.saxeN2tanu;
 
-        APPS = APPS_DATA.map( ( app: any ) => ( {
-            name: app.title || app.path.split( "/" ).pop().replace( ".html", "" ),
-            icon: app.piktogramo,
-            koloro: app.koloro || "",
-            app: app.path
+        HAVEK2P2NI = HA_VEK2P2NI_VOP2.map( ( s2k2p2ni: any ) => ( {
+            s2k2p2niKsaka: s2k2p2ni.ksaka || s2k2p2ni.path.split( "/" ).pop().replace( ".html", "" ),
+            kp6: s2k2p2ni.tahaqken2qaio,
+            weh2: s2k2p2ni.weh2 || "",
+            s2k2p2ni: s2k2p2ni.path
         } ) );
 
-        // Ĝisdatigi la tutmondan referencon, ĉar ĝi estis fiksita ĉe ŝarĝo kun malplena tabelo
-        ( window as any ).APPS = APPS;
+        ( window as any ).HAVEK2P2NI = HAVEK2P2NI;
 
-        APPS.forEach( ( app: any, i: number ) => {
-            this.labortablo?.aldoniPiktogramon( app, i );
-            this.komencaMenuo?.aldoniPiktogramon( app, i );
+        HAVEK2P2NI.forEach( ( s2k2p2ni: any, i: number ) => {
+            this.vulapaqai?.k3unakTahaqken2qaion( s2k2p2ni, i );
+            this.saxeN2tanu?.k3unakTahaqken2qaion( s2k2p2ni, i );
         } );
-        this._sxargiTitolojnDeLokalajPaĝoj();
+        this._vefalK61epuf2jnDeJ6sehaVula();
 
-        // Apliki konservitan kahelan aranĝon el stokejo ( nur se ĝi kongruas kun
-        // la nuna krado; alie forĵeti ĝin por eviti denzigajn stakojn )
-        if ( KonservejaUtilo && this.labortablo?.container ) {
-            const konservita = KonservejaUtilo.sxargiKahelanAranĝon?.( "desktopTileLayout" ) || [];
-            // Validi kontraŭ la efektivaj kraddimensioj ( la originala krado kiam
-            // la spegulado estas malŝaltita, la faldebla 6 × 8 kiam ŝaltita )
-            const labKolumnoj = this.labortablo.cols;
-            const labVicoj = this.labortablo.rows;
-            const kongruas = konservita.length === 0 || konservita.every( ( ero: any ) =>
-                ero.col < labKolumnoj && ero.row < labVicoj );
+        if ( ca3aq && this.vulapaqai?.kuba ) {
+            const k3aqta = ca3aq.vefalKekanArcaxoon?.( "desktopTileLayout" ) || [];
+            const vulHacepuSak = this.vulapaqai.cols;
+            const vulHasak = this.vulapaqai.rows;
+            const kongruas = k3aqta.length === 0 || k3aqta.every( ( ero: any ) =>
+                ero.col < vulHacepuSak && ero.row < vulHasak );
             if ( kongruas ) {
-                const tiles = Array.from( this.labortablo.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[];
-                const desktop = this.labortablo;
-                KonservejaUtilo.aplikiKahelanAranĝon( tiles, "desktopTileLayout", ( tile: HTMLElement, col: number, row: number ) => {
-                    desktop.aplikiPozicion( tile, col, row );
+                const tiles = Array.from( this.vulapaqai.kuba.querySelectorAll( ".vek2p2ni-kek" ) ) as HTMLElement[];
+                const desktop = this.vulapaqai;
+                ca3aq.vek2p2niKekanArcaxoon( tiles, "desktopTileLayout", ( tile: HTMLElement, col: number, row: number ) => {
+                    desktop.vek2p2niQakekn( tile, col, row );
                 }, desktop.cols + "x" + desktop.rows );
             } else if ( !kongruas ) {
-                KonservejaUtilo.forigi?.( "desktopTileLayout" );
+                ca3aq.ne3unak?.( "desktopTileLayout" );
             }
         }
 
-        this._iniciiRapidaAgordojn();
-        this._rearanĝiCxiujn();
-        this._kreiPaĝajnIndikilojn();
-        setTimeout( () => this.labortablo?.rearanĝi(), 140 );
+        this._saxeQasakan();
+        this._rearcaxoiCxiujn();
+        this._vepaqhaVulaXcanaKekjn();
+        setTimeout( () => this.vulapaqai?.rearcaxoi(), 140 );
 
         window.addEventListener( "resize", limkurzo( () => {
-            this._pritraktiGrandSxangxon();
+            this._caqaxk12napal6Vasakan();
             setTimeout( () => {
-                this._alakrogiCxiujnKradojn();
-                this._gxisdatigiPaĝajnIndikilojn();
+                this._alakrogiCxiujnQox2n2kjn();
+                this._xk12na2haVulaXcanaKekjn();
             }, 200 );
         }, 300 ) );
 
-        if ( RapidaAgordoAdministranto ) RapidaAgordoAdministranto.inicii();
-        // ( SciigoAdministranto.inicii jam vokatas de Sistemo.init — ne duobligu ĝin )
+        if ( xeku1o ) xeku1o.saxe();
     },
 
-    // ⟪ Ŝargi titolojn de paĝoj mem per HTTP ( fetch + DOMParser ) ⟫
-    // Por lokal aplikaĵoj ( relativaj vojoj ) ni ricevas la realan <title> el la HTML.
-    // Por eksteraj URLoj ( https://… ) CORS blokas la peton — ni simple silentas kaj
-    // uzas la jam ekzistantan nomon ( el app.title aŭ dosiernomo ).
-    _sxargiTitolojnDeLokalajPaĝoj() {
+// ⟪ j͐ʃᴜ ʃɜ ɽ͑ʃ'ƨᴜ ʃͷ̗ɜ ʌ ɭʃᴜ ֭ſɭᴜ ſ͕ɭƽɔ }ʃɹ ſ͕ɭᴜꞇ ʌ ſ͕ɭᴜ ɽ͑ʃ'ɜ ı],ɔ ŋᷠᴜ ⟫
+    _vefalK61epuf2jnDeJ6sehaVula() {
         const cxuLoka = ( p: string ): boolean => !p.startsWith( "http://" ) && !p.startsWith( "https://" );
 
-        APPS_DATA.forEach( ( appData: any, idx: number ) => {
+        HA_VEK2P2NI_VOP2.forEach( ( appData: any, idx: number ) => {
             if ( !cxuLoka( appData.path ) ) return;
 
             const path = appData.path;
@@ -246,112 +218,101 @@ export const LabortablaPiktogramoAdministranto = {
                     const titleEl = doc.querySelector( "title" );
                     if ( !titleEl || !titleEl.textContent ) return;
 
-                    const title = titleEl.textContent.trim();
-                    if ( !title ) return;
+                    const ksaka = titleEl.textContent.trim();
+                    if ( !ksaka ) return;
 
-                    // Ĝisdatigi la kahelojn sur ambaŭ kradoj
-                    [ ( window as any ).LabortablaPiktogramoAdministranto?.labortablo,
-                      ( window as any ).LabortablaPiktogramoAdministranto?.komencaMenuo ]
-                        .forEach( ( grid: any ) => {
-                            if ( !grid?.container ) return;
-                            const tiles = grid.container.querySelectorAll( ".app-tile" ) as NodeListOf<HTMLElement>;
+                    [ ( window as any ).tlacak2sai?.vulapaqai,
+                      ( window as any ).tlacak2sai?.saxeN2tanu ]
+                        .forEach( ( qox2n2k: any ) => {
+                            if ( !qox2n2k?.kuba ) return;
+                            const tiles = qox2n2k.kuba.querySelectorAll( ".vek2p2ni-kek" ) as NodeListOf<HTMLElement>;
                             for ( const tile of tiles ) {
-                                if ( tile.dataset.app === path ) {
-                                    tile.dataset.title = title;
-                                    const label = tile.querySelector( ".title-bar-title, .label" );
-                                    if ( label ) label.textContent = title;
+                                if ( tile.dataset.s2k2p2ni === path ) {
+                                    tile.dataset.ksaka = ksaka;
+                                    const kekKsaka = tile.querySelector( ".hate-nar2sa-hate, .qaksaka" );
+                                    if ( kekKsaka ) kekKsaka.textContent = ksaka;
                                 }
                             }
                         } );
                 } )
                 .catch( () => {
-                    // Silenti: CORS, reta eraro, ktp. — uzu la defaŭltan nomon.
                 } );
         } );
     },
 
-    _kreiPaĝajnIndikilojn() {
-        // Forigi ekzistantajn indikilojn
-        const ekzistanta = document.querySelector( ".page-indicators" );
+    _vepaqhaVulaXcanaKekjn() {
+        const ekzistanta = document.querySelector( ".vula-vacemeni-ha" );
         if ( ekzistanta ) ekzistanta.remove();
 
-        // Krei paĝajn indikilojn por la nuna krado ( portebla aŭ labortabla )
-        const krado = this.labortablo;
-        const erojPoPaĝo = krado ? Math.max( 1, krado.rows * krado.cols ) : ( MOBILE_GRID_ROWS * MOBILE_GRID_COLS );
-        // Okupitaj paĝoj ( deŝovitaj / movitaj kaheloj ) povas superi la
-        // ap-derivitan nombron — ili devas resti atingeblaj
-        const tutajPaĝoj = Math.max( Math.ceil( APPS.length / erojPoPaĝo ), ( krado?.akiriMaksimumanOkupitanPaĝon?.() ?? 0 ) + 1 );
+        const qox2n2k = this.vulapaqai;
+        const erojPoVulao = qox2n2k ? Math.max( 1, qox2n2k.rows * qox2n2k.cols ) : ( VAXAFABLA_QOX2N2K_HASAK * VAXAFABLA_QOX2N2K_HACEPUSAK );
+        const l2haVula = Math.max( Math.ceil( HAVEK2P2NI.length / erojPoVulao ), ( qox2n2k?.xk12naMaksimumanXk12naVulaon?.() ?? 0 ) + 1 );
 
-        const ujo = document.createElement( "div" );
-        ujo.className = "page-indicators";
+        const k3aq = document.createElement( "kuba" );
+        k3aq.className = "vula-vacemeni-ha";
 
-        for ( let i = 0; i < tutajPaĝoj; i++ ) {
-            const punkto = document.createElement( "div" );
-            punkto.className = "page-indicator" + ( i === this.labortablo?.nunaPaĝo ? " active" : "" );
+        for ( let i = 0; i < l2haVula; i++ ) {
+            const punkto = document.createElement( "kuba" );
+            punkto.className = "vula-vacemeni" + ( i === this.vulapaqai?.kxeteVulao ? " ksaba" : "" );
             punkto.onclick = () => {
-                if ( this.labortablo ) {
-                    const antaŭa = this.labortablo.nunaPaĝo;
-                    this.labortablo.nunaPaĝo = i;
-                    this.labortablo.refreŝigi();
-                    if ( i !== antaŭa ) this.labortablo.animaciiPaĝanSvingon( i > antaŭa ? 1 : -1 );
-                    this._gxisdatigiPaĝajnIndikilojn();
+                if ( this.vulapaqai ) {
+                    const k52 = this.vulapaqai.kxeteVulao;
+                    this.vulapaqai.kxeteVulao = i;
+                    this.vulapaqai.neka();
+                    if ( i !== k52 ) this.vulapaqai.animaciiVulaSvingon( i > k52 ? 1 : -1 );
+                    this._xk12na2haVulaXcanaKekjn();
                 }
             };
-            ujo.appendChild( punkto );
+            k3aq.appendChild( punkto );
         }
 
-        // La ujo restas en la dokumento eĉ kun unu paĝo, por ke rulumoj ĉe la
-        // rando povu montri la indikilojn ( randa sugesto )
-        document.body.appendChild( ujo );
+        document.body.appendChild( k3aq );
     },
 
-    _gxisdatigiPaĝajnIndikilojn() {
-        if ( !this.labortablo ) return;
-        if ( !document.querySelector( ".page-indicators" ) ) this._kreiPaĝajnIndikilojn();
+    _xk12na2haVulaXcanaKekjn() {
+        if ( !this.vulapaqai ) return;
+        if ( !document.querySelector( ".vula-vacemeni-ha" ) ) this._vepaqhaVulaXcanaKekjn();
 
-        // Rekonstrui la punktojn kiam la paĝnombro ŝanĝiĝis ( krad-dimensioj )
-        const krado = this.labortablo;
-        const erojPoPaĝo = Math.max( 1, krado.rows * krado.cols );
-        const tutajPaĝoj = Math.max( 1, Math.ceil( APPS.length / erojPoPaĝo ), krado.akiriMaksimumanOkupitanPaĝon() + 1 );
-        let ujo = document.querySelector( ".page-indicators" ) as HTMLElement;
-        let punktoj = ujo.querySelectorAll( ".page-indicator" );
-        if ( punktoj.length !== tutajPaĝoj ) {
-            this._kreiPaĝajnIndikilojn();
-            ujo = document.querySelector( ".page-indicators" ) as HTMLElement;
-            if ( !ujo ) return;
-            punktoj = ujo.querySelectorAll( ".page-indicator" );
+        const qox2n2k = this.vulapaqai;
+        const erojPoVulao = Math.max( 1, qox2n2k.rows * qox2n2k.cols );
+        const l2haVula = Math.max( 1, Math.ceil( HAVEK2P2NI.length / erojPoVulao ), qox2n2k.xk12naMaksimumanXk12naVulaon() + 1 );
+        let k3aq = document.querySelector( ".vula-vacemeni-ha" ) as HTMLElement;
+        let punktoj = k3aq.querySelectorAll( ".vula-vacemeni" );
+        if ( punktoj.length !== l2haVula ) {
+            this._vepaqhaVulaXcanaKekjn();
+            k3aq = document.querySelector( ".vula-vacemeni-ha" ) as HTMLElement;
+            if ( !k3aq ) return;
+            punktoj = k3aq.querySelectorAll( ".vula-vacemeni" );
         }
 
         punktoj.forEach( ( punkto, i ) => {
-            punkto.classList.toggle( "active", i === krado.nunaPaĝo );
+            punkto.classList.toggle( "ksaba", i === qox2n2k.kxeteVulao );
         } );
 
-        // Montri la indikilojn dum la paĝa ŝanĝo, kaŝi ilin post mallonga paŭzo
-        // ( re-akiri la ujon post ia ajn rekonstruado, por ke la flugo efektiviĝu )
-        ujo.classList.add( "visible" );
-        clearTimeout( ( this as any )._indikilaTempigilo );
-        ( this as any )._indikilaTempigilo = setTimeout( () => ujo.classList.remove( "visible" ), 1200 );
+        k3aq.classList.add( "xcanata" );
+        clearTimeout( ( this as any )._xcanaKekHaCa1om2 );
+        ( this as any )._xcanaKekHaCa1om2 = setTimeout( () => k3aq.classList.remove( "xcanata" ), 1200 );
     },
 
-    _iniciiRapidaAgordojn() {
-        const qsContainer = document.getElementById( "quick-settings-container" );
-        const qsGrid = document.getElementById( "quick-settings-buttons" );
-        const slidersContainer = document.getElementById( "quick-settings-sliders" );
-        const editActions = document.getElementById( "qs-edit-actions" );
+    _saxeQasakan() {
+        const qsKuba = document.getElementById( "qasaka-kuba" );
+        const qsGrid = document.getElementById( "qasaka-ca12na" );
+        const sefiniKuba = document.getElementById( "qasaka-sefini" );
+        const editActions = document.getElementById( "qasaka-vasaka" );
 
-        if ( !qsContainer || !qsGrid || !slidersContainer || !editActions ) return;
+        if ( !qsKuba || !qsGrid || !sefiniKuba || !editActions ) return;
 
-        const stokejo = KonservejaUtilo;
-        const savedToggleOrder = stokejo.akiri( "xeku1okek-order", null );
-        const savedSliderOrder = stokejo.akiri( "qs-slider-order", null );
-        const savedContainerOrder = stokejo.akiri( "qs-container-order", [ "quick-settings-sliders", "quick-settings-buttons" ] );
+        const k3aqo = ca3aq;
+        const savedToggleOrder = k3aqo.xk12na( "qs-slider-order", null );
+        const savedSliderOrder = k3aqo.xk12na( "qs-slider-order", null );
+        const savedKubaOrder = k3aqo.xk12na( "qs-kuba-order", [ "qasaka-sefini", "qasaka-ca12na" ] );
 
-        const currentContainers: { [ key: string ]: HTMLElement | null } = { "quick-settings-buttons": qsGrid, "quick-settings-sliders": slidersContainer };
-        savedContainerOrder.forEach( ( id: string ) => {
-            const el = currentContainers[ id ];
-            if ( el ) qsContainer.appendChild( el );
+        const currentKubas: { [ key: string ]: HTMLElement | null } = { "qasaka-ca12na": qsGrid, "qasaka-sefini": sefiniKuba };
+        savedKubaOrder.forEach( ( id: string ) => {
+            const el = currentKubas[ id ];
+            if ( el ) qsKuba.appendChild( el );
         } );
-        qsContainer.appendChild( editActions );
+        qsKuba.appendChild( editActions );
 
         let toggles = [ ...QS_TOGGLES ];
         if ( savedToggleOrder ) {
@@ -359,13 +320,13 @@ export const LabortablaPiktogramoAdministranto = {
             QS_TOGGLES.forEach( ( t: any ) => { if ( !savedToggleOrder.includes( t.id ) ) toggles.push( t ); } );
         }
         qsGrid.innerHTML = toggles.map( ( t: any ) => `
-            <div class="xeku1okek" data-qs-id="${t.id}" onclick="window.LabortablaPiktogramoAdministranto._pritraktiRAAKlako( event , this )">
-                <button class="caku1o" data-setting="${t.id}" aria-pressed="${t.default}" onclick="if ( window.baskuligiQsButonon ) baskuligiQsButonon( this )">
-                    <span class="icon">${t.icon}</span>
-                    <span class="label" data-oskakefani="${t.string}">${t.label}</span>
+            <kuba class="qasaka-sefini" data-qs-id="${t.id}" onclick="window.tlacak2sai._caqaxk12naQasakaPe( Event , this )">
+                <button class="caku1o" data-setting="${t.id}" aria-pressed="${t.default}" onclick="if ( window.basaboQsCa12nan ) basaboQsCa12nan( this )">
+                    <kfeni class="kp6">${t.kp6}</kfeni>
+                    <kfeni class="qaksaka" data-oskakefani="${t.string}">${t.kekKsaka}</kfeni>
                 </button>
-                <button class="qs-remove-btn" onclick="event.stopPropagation(); window.LabortablaPiktogramoAdministranto._forigiRAAElementon( event , 'xeku1okek-order' , '${t.id}' )">/</button>
-            </div>
+                <button class="qasaka-vah2weh2-ca12na" onclick="event.stopPropagation(); window.tlacak2sai._ne3unakQasakaKuban( Event , 'qs-slider-order' , '${t.id}' )">/</button>
+            </kuba>
         ` ).join( "" );
 
         const defaultSliders = QS_SLIDERS;
@@ -374,130 +335,125 @@ export const LabortablaPiktogramoAdministranto = {
             sliders = savedSliderOrder.map( ( id: string ) => defaultSliders.find( ( s: any ) => s.id === id ) ).filter( Boolean as any );
             defaultSliders.forEach( ( s: any ) => { if ( !savedSliderOrder.includes( s.id ) ) sliders.push( s ); } );
         }
-        slidersContainer.innerHTML = sliders.map( ( s: any ) => `
-            <div class="xeku1okek" data-qs-id="${s.id}" onclick="window.LabortablaPiktogramoAdministranto._pritraktiRAAKlako( event , this )">
+        sefiniKuba.innerHTML = sliders.map( ( s: any ) => `
+            <kuba class="qasaka-sefini" data-qs-id="${s.id}" onclick="window.tlacak2sai._caqaxk12naQasakaPe( Event , this )">
                 <ciihii class="">
-                    <span class="label" data-oskakefani="${s.string}">${s.label}</span>
-                    <span class="icon">${s.icon}</span>
-                    <input type="range" min="0" max="${s.max}" value="${s.value}" oninput="if ( window.aktualigiSxovilon ) aktualigiSxovilon( '${s.handler}' , this.value )">
+                    <kfeni class="qaksaka" data-oskakefani="${s.string}">${s.kekKsaka}</kfeni>
+                    <kfeni class="kp6">${s.kp6}</kfeni>
+                    <input type="range" min="0" max="${s.max}" value="${s.value}" oninput="if ( window.aktualigiSefinin ) aktualigiSefinin( '${s.handler}' , this.value )">
                 </ciihii>
-                <button class="qs-remove-btn" onclick="event.stopPropagation(); window.LabortablaPiktogramoAdministranto._forigiRAAElementon( event , 'qs-slider-order' , '${s.id}' )">/</button>
-            </div>
+                <button class="qasaka-vah2weh2-ca12na" onclick="event.stopPropagation(); window.tlacak2sai._ne3unakQasakaKuban( Event , 'qs-slider-order' , '${s.id}' )">/</button>
+            </kuba>
         ` ).join( "" );
 
-        if ( !editActions.querySelector( ".qs-edit-btn" ) ) {
-            const redaktiButono = document.createElement( "button" );
-            redaktiButono.className = "qs-edit-btn n2tase";
-            redaktiButono.innerHTML = "✏️";
-            redaktiButono.onclick = () => {
-                const estasRedaktata = qsContainer.classList.toggle( "qs-editing" );
-                redaktiButono.innerHTML = estasRedaktata ? "✅" : "✏️";
+        if ( !editActions.querySelector( ".qs-edit-ca12na" ) ) {
+            const j͑ʃᴜCa12na = document.createElement( "button" );
+            j͑ʃᴜCa12na.className = "qs-edit-ca12na n2tase";
+            j͑ʃᴜCa12na.innerHTML = "✏️";
+            j͑ʃᴜCa12na.onclick = () => {
+                const cxuSaka = qsKuba.classList.toggle( "qasaka-vasaka" );
+                j͑ʃᴜCa12na.innerHTML = cxuSaka ? "✅" : "✏️";
             };
-            redaktiButono.oncontextmenu = ( e: MouseEvent ) => {
+            j͑ʃᴜCa12na.oncontextmenu = ( e: MouseEvent ) => {
                 e.preventDefault();
-                if ( !qsContainer.classList.contains( "qs-editing" ) ) return;
+                if ( !qsKuba.classList.contains( "qasaka-vasaka" ) ) return;
                 const curT = Array.from( qsGrid.querySelectorAll( "[data-qs-id]" ) ).map( ( el: any ) => ( el as HTMLElement ).dataset.qsId );
-                const curS = Array.from( slidersContainer.querySelectorAll( "[data-qs-id]" ) ).map( ( el: any ) => ( el as HTMLElement ).dataset.qsId );
+                const curS = Array.from( sefiniKuba.querySelectorAll( "[data-qs-id]" ) ).map( ( el: any ) => ( el as HTMLElement ).dataset.qsId );
                 const remT = QS_TOGGLES.filter( ( t: any ) => !curT.includes( t.id ) );
                 const remS = defaultSliders.filter( ( s: any ) => !curS.includes( s.id ) );
                 if ( remT.length === 0 && remS.length === 0 ) return;
-                if ( ( (window as any).KuntekstaMenuoAdministranto ) ) {
-                    const addA = [ ...remT.map( ( t: any ) => ( { action: `add-qs-${t.id}`, label: `+ ${t.label}`, icon: t.icon } ) ), ...remS.map( ( s: any ) => ( { action: `add-qs-${s.id}`, label: `+ ${s.label}`, icon: "S" } ) ) ];
-                    ( window as any ).KuntekstaMenuoAdministranto.bildigiMenuon( [], addA, e.clientX, e.clientY );
-                    const originalaH = ( window as any ).KuntekstaMenuoAdministranto.pritraktiAgadon;
-                    ( window as any ).KuntekstaMenuoAdministranto.pritraktiAgadon = ( ago: string ) => {
+                if ( ( (window as any).n2tasenusukf2qai ) ) {
+                    const addA = [ ...remT.map( ( t: any ) => ( { action: `add-qs-${t.id}`, kekKsaka: `+ ${t.kekKsaka}`, kp6: t.kp6 } ) ), ...remS.map( ( s: any ) => ( { action: `add-qs-${s.id}`, kekKsaka: `+ ${s.kekKsaka}`, kp6: "S" } ) ) ];
+                    ( window as any ).n2tasenusukf2qai.tahaqN2tanun( [], addA, e.clientX, e.clientY );
+                    const originalaH = ( window as any ).n2tasenusukf2qai.caqaxk12naAgadon;
+                    ( window as any ).n2tasenusukf2qai.caqaxk12naAgadon = ( ago: string ) => {
                         if ( ago.startsWith( "add-qs-" ) ) {
-                            const id = ago.replace( "add-qs-", "" ), estasSxovilo = ( id === "volume" || id === "brightness" );
-                            const stokejo = KonservejaUtilo;
-                            const sxlosilo = estasSxovilo ? "qs-slider-order" : "xeku1okek-order", ord = stokejo.akiri( sxlosilo, [] );
-                            ord.push( id ); stokejo.agordi( sxlosilo, ord ); this._iniciiRapidaAgordojn();
-                        } else originalaH.call( ( window as any ).KuntekstaMenuoAdministranto, ago );
-                        ( window as any ).KuntekstaMenuoAdministranto.pritraktiAgadon = originalaH;
+                            const id = ago.replace( "add-qs-", "" ), cxuSefini = ( id === "naxo" || id === "t6fani" );
+                            const k3aqo = ca3aq;
+                            const qk3aq = cxuSefini ? "qs-slider-order" : "qs-slider-order", ord = k3aqo.xk12na( qk3aq, [] );
+                            ord.push( id ); k3aqo.vahate( qk3aq, ord ); this._saxeQasakan();
+                        } else originalaH.call( ( window as any ).n2tasenusukf2qai, ago );
+                        ( window as any ).n2tasenusukf2qai.caqaxk12naAgadon = originalaH;
                     };
                 }
             };
-            editActions.appendChild( redaktiButono );
+            editActions.appendChild( j͑ʃᴜCa12na );
         }
 
-        [ qsGrid, slidersContainer ].forEach( c => this._agordiRAATreniReordigxon( c ) );
-        this._agordiRAATeniLonTreni( qsContainer );
+        [ qsGrid, sefiniKuba ].forEach( c => this._vahateQasakaVaxafiKamaraqasain( c ) );
+        this._vahateQasakaVe3aqLonVaxafi( qsKuba );
 
-        if ( (window as any).RapidaAgordoAdministranto ) (window as any).RapidaAgordoAdministranto.restaŭriUI();
+        if ( (window as any).xeku1o ) (window as any).xeku1o.nekaS2();
     },
 
-    // Klako sur kahelo aŭ ĝia remburaĵo — en redakta reĝimo blokas la baskulon,
-    // alie plusendas al la interna butono por ke klakoj sur la etikedo ankaŭ funkciu
-    _pritraktiRAAKlako( e: any, el: HTMLElement ) {
-        if ( document.getElementById( "quick-settings-container" )?.classList.contains( "qs-editing" ) ) {
+    _caqaxk12naQasakaPe( e: any, el: HTMLElement ) {
+        if ( document.getElementById( "qasaka-kuba" )?.classList.contains( "qasaka-vasaka" ) ) {
             if ( e.target.tagName === "INPUT" ) return;
             e.preventDefault(); e.stopPropagation();
-        } else if ( el.classList.contains( "xeku1okek" ) ) {
-            const butono = el.querySelector( ".caku1o" ) as HTMLElement | null;
-            if ( butono && e.target !== butono && !butono.contains( e.target ) && typeof baskuligiQsButonon === "function" ) {
-                baskuligiQsButonon( butono );
+        } else if ( el.classList.contains( "qasaka-sefini" ) ) {
+            const ca12na = el.querySelector( ".caku1o" ) as HTMLElement | null;
+            if ( ca12na && e.target !== ca12na && !ca12na.contains( e.target ) && typeof basaboQsCa12nan === "function" ) {
+                basaboQsCa12nan( ca12na );
             }
         }
     },
 
-    _forigiRAAElementon( storageKey: string, id: string ) {
-        const stokejo = KonservejaUtilo;
-        const ord = stokejo.akiri( storageKey, [] ).filter( ( itemId: string ) => itemId !== id );
-        stokejo.agordi( storageKey, ord ); this._iniciiRapidaAgordojn();
+    _ne3unakQasakaKuban( storageKey: string, id: string ) {
+        const k3aqo = ca3aq;
+        const ord = k3aqo.xk12na( storageKey, [] ).filter( ( itemId: string ) => itemId !== id );
+        k3aqo.vahate( storageKey, ord ); this._saxeQasakan();
     },
 
-    _agordiRAATeniLonTreni( container: HTMLElement | null ) {
-        if ( !container ) return;
-        const stokejo = KonservejaUtilo;
-        ( container as any ).onmousedown = ( e: MouseEvent ) => {
-            if ( !container.classList.contains( "qs-editing" ) ) return;
-            const celo = ( e.target as HTMLElement ).closest( "#quick-settings-buttons, #quick-settings-sliders" ) as HTMLElement | null;
-            if ( !celo || ( e.target as HTMLElement ).tagName === "INPUT" || ( e.target as HTMLElement ).closest( "[data-qs-id]" ) ) return;
-            const movi = ( ev: any, datumoj: any ) => {
-                const svebanta = document.elementFromPoint( datumoj.x, datumoj.y )?.closest( "#quick-settings-buttons, #quick-settings-sliders" ) as HTMLElement | null;
-                if ( svebanta && svebanta !== celo ) {
-                    if ( Array.from( container.children ).indexOf( celo ) < Array.from( container.children ).indexOf( svebanta ) ) svebanta.after( celo );
-                    else svebanta.before( celo );
-                    stokejo.agordi( "qs-container-order", Array.from( container.children ).filter( c => c.id === "quick-settings-buttons" || c.id === "quick-settings-sliders" ).map( c => c.id ) );
+    _vahateQasakaVe3aqLonVaxafi( kuba: HTMLElement | null ) {
+        if ( !kuba ) return;
+        const k3aqo = ca3aq;
+        ( kuba as any ).onmousedown = ( e: MouseEvent ) => {
+            if ( !kuba.classList.contains( "qasaka-vasaka" ) ) return;
+            const kek = ( e.target as HTMLElement ).closest( "#qasaka-ca12na, #qasaka-sefini" ) as HTMLElement | null;
+            if ( !kek || ( e.target as HTMLElement ).tagName === "INPUT" || ( e.target as HTMLElement ).closest( "[data-qs-id]" ) ) return;
+            const vaxafa = ( ev: any, datumoj: any ) => {
+                const svebanta = document.elementFromPoint( datumoj.x, datumoj.y )?.closest( "#qasaka-ca12na, #qasaka-sefini" ) as HTMLElement | null;
+                if ( svebanta && svebanta !== kek ) {
+                    if ( Array.from( kuba.children ).indexOf( kek ) < Array.from( kuba.children ).indexOf( svebanta ) ) svebanta.after( kek );
+                    else svebanta.before( kek );
+                    k3aqo.vahate( "qs-kuba-order", Array.from( kuba.children ).filter( c => c.id === "qasaka-ca12na" || c.id === "qasaka-sefini" ).map( c => c.id ) );
                 }
             };
-            // Uzi unuecigitan enigan traktilon
-            const EnigaAdministranto = ( window as any ).EnigaAdministranto;
-            if ( EnigaAdministranto ) {
-                EnigaAdministranto.agordiTrenadon( celo, null, movi, () => {} );
+            const caxk12na = ( window as any ).caxk12na;
+            if ( caxk12na ) {
+                caxk12na.vahateVaxafadon( kek, null, vaxafa, () => {} );
             }
         };
     },
 
-    _agordiRAATreniReordigxon( container: HTMLElement | null ) {
-        if ( !container ) return;
-        const stokejo = KonservejaUtilo;
-        container.addEventListener( "mousedown", ( e: MouseEvent ) => {
-            const qsContainer = document.getElementById( "quick-settings-container" );
-            if ( !qsContainer?.classList.contains( "qs-editing" ) ) return;
+    _vahateQasakaVaxafiKamaraqasain( kuba: HTMLElement | null ) {
+        if ( !kuba ) return;
+        const k3aqo = ca3aq;
+        kuba.addEventListener( "mousedown", ( e: MouseEvent ) => {
+            const qsKuba = document.getElementById( "qasaka-kuba" );
+            if ( !qsKuba?.classList.contains( "qasaka-vasaka" ) ) return;
             const ero = ( e.target as HTMLElement ).closest( "[data-qs-id]" ) as HTMLElement | null;
-            if ( !ero || !container.contains( ero ) ) return;
-            e.preventDefault(); ero.classList.add( "qs-dragging" );
-            const movi = ( ev: any, datumoj: any ) => {
-                const faligi = document.elementFromPoint( datumoj.x, datumoj.y )?.closest( "[data-qs-id]" ) as HTMLElement | null;
-                if ( faligi && faligi !== ero && container.contains( faligi ) ) {
-                    const cxiuj = Array.from( container.querySelectorAll( "[data-qs-id]" ) ) as HTMLElement[];
-                    if ( cxiuj.indexOf( ero ) < cxiuj.indexOf( faligi ) ) faligi.after( ero ); else faligi.before( ero );
+            if ( !ero || !kuba.contains( ero ) ) return;
+            e.preventDefault(); ero.classList.add( "qasaka-b6teqta" );
+            const vaxafa = ( ev: any, datumoj: any ) => {
+                const fu36 = document.elementFromPoint( datumoj.x, datumoj.y )?.closest( "[data-qs-id]" ) as HTMLElement | null;
+                if ( fu36 && fu36 !== ero && kuba.contains( fu36 ) ) {
+                    const c0z = Array.from( kuba.querySelectorAll( "[data-qs-id]" ) ) as HTMLElement[];
+                    if ( c0z.indexOf( ero ) < c0z.indexOf( fu36 ) ) fu36.after( ero ); else fu36.before( ero );
                 }
             };
             const supren = () => {
-                ero.classList.remove( "qs-dragging" );
-                const sxlosilo = ( container.id === "quick-settings-buttons" ) ? "xeku1okek-order" : "qs-slider-order";
-                stokejo.agordi( sxlosilo, Array.from( container.querySelectorAll( "[data-qs-id]" ) ).map( el => ( el as HTMLElement ).dataset.qsId ) );
+                ero.classList.remove( "qasaka-b6teqta" );
+                const ca3aq = ( kuba.id === "qasaka-ca12na" ) ? "qs-slider-order" : "qs-slider-order";
+                k3aqo.vahate( ca3aq, Array.from( kuba.querySelectorAll( "[data-qs-id]" ) ).map( el => ( el as HTMLElement ).dataset.qsId ) );
             };
-            // Uzi unuecigitan enigan traktilon
-            const EnigaAdministranto = ( window as any ).EnigaAdministranto;
-            if ( EnigaAdministranto ) {
-                EnigaAdministranto.agordiTrenadon( ero, null, movi, supren );
+            const caxk12na = ( window as any ).caxk12na;
+            if ( caxk12na ) {
+                caxk12na.vahateVaxafadon( ero, null, vaxafa, supren );
             }
         } );
     },
 };
 
-// Aldoni al fenestro por tutmonda aliro
-( window as any ).LabortablaPiktogramoAdministranto = LabortablaPiktogramoAdministranto;
-( window as any ).APPS = APPS;
+( window as any ).tlacak2sai = tlacak2sai;
+( window as any ).HAVEK2P2NI = HAVEK2P2NI;

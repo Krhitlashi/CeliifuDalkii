@@ -1,7 +1,7 @@
-// ≺⧼ Sistemo ⧽≻ - Ĉefa OS-Kunordigo
+// ≺⧼ ſɟᴜ ſɭɹ ſןɹ 🖥️ ⧽≻ - ſɟᴜ ſɭɹ ſןɹ }ʃꞇ ʌ j͑ʃ'ɔ ſɭɹ ſןɹ }ʃꞇ
 
-const Sistemo = {
-    // ⟪ Utilaĵoj ⟫
+const cak2p2 = {
+// ⟪ ֭ſɭᴜ j͑ʃɹ ⟫
 
     alOktalaCxeno( str: any ) {
         if ( !str || typeof window.vab6caja !== "function" ) return str;
@@ -9,69 +9,65 @@ const Sistemo = {
         return window.vab6caja( parseInt( str, 0o10 ) ) || str;
     },
 
-    // ⟪ Inicii ⟫
+// ⟪ j͑ʃᴜ ı],ɔ ⟫
 
     init() {
-        // 1. ⟨ Esencaj Administrantoj ⟩
-        if ( (window as any).FenestraAdministranto ) (window as any).FenestraAdministranto.inicii();
-        if ( (window as any).KuntekstaMenuoAdministranto ) (window as any).KuntekstaMenuoAdministranto.inicii();
-        if ( (window as any).PanelaAdministranto ) (window as any).PanelaAdministranto.iniciiEksterklakanTraktilon();
-        if ( (window as any).SciigoAdministranto ) (window as any).SciigoAdministranto.inicii();
-        if ( (window as any).HorlogxoAdministranto ) (window as any).HorlogxoAdministranto.inicii();
-        if ( (window as any).StatusaAdministranto ) (window as any).StatusaAdministranto.inicii();
+// 1. ⟨ ſɭɔ ſɭɹ ʌ ֭ſɭᴜ ſ͕ɭᴜ ɽ͑ʃ'ɜ ı],ɔ ŋᷠᴜ ⟩
+        if ( (window as any).arakehek2p2 ) (window as any).arakehek2p2.saxe();
+        if ( (window as any).n2tasenusukf2qai ) (window as any).n2tasenusukf2qai.saxe();
+        if ( (window as any).n2tasenu ) (window as any).n2tasenu.saxeEksterklakanTraktilon();
+        if ( (window as any).arataxna ) (window as any).arataxna.saxe();
+        if ( (window as any).aracastifeh2 ) (window as any).aracastifeh2.saxe();
+        if ( (window as any).xecacexa ) (window as any).xecacexa.saxe();
 
-        // 2. ⟨ Eventoj ⟩
-        this.agordiEventojn();
+// 2. ⟨ ſᶘɹ }ʃᴜ ⟩
+        this.vahate12najn();
 
-        // 3. ⟨ Fina Bildigo ⟩
-        if ( (window as any).LabortablaPiktogramoAdministranto ) {
-            requestAnimationFrame( () => (window as any).LabortablaPiktogramoAdministranto.inicii() );
+// 3. ⟨ ſɭɹȝ ʌ ı],ᴜ̭ᴜ }ʃᴜ ⟩
+        if ( (window as any).tlacak2sai ) {
+            requestAnimationFrame( () => (window as any).tlacak2sai.saxe() );
         }
     },
 
-    agordiEventojn() {
-        const hb = document.getElementById( "home-bar" );
+    vahate12najn() {
+        const hb = document.getElementById( "kap2-kek" );
         if ( hb ) hb.onclick = () => {
-            const paneloj = (window as any).PanelaAdministranto;
-            const ekranTiro = document.querySelector( "#quick-settings-container.visible, #notifications-panel.visible, #recents-panel.visible, #clock-panel.visible, #taskbar-dock.visible, #start-menu.open" );
+            const han2tase = (window as any).n2tasenu;
+            const tahaqTiro = document.querySelector( "#qasaka-kuba.xcanata, #notifications-n2tase.xcanata, #recents-n2tase.xcanata, #castih2-n2tase.xcanata, #caqaxak2p2-kuba.xcanata, #saxe-n2tanu.h6w6" );
 
-            // Unue fermi malfermitajn panelojn/ombrejojn ( hejmbreto = hejmen )
-            if ( ekranTiro ) {
-                paneloj.fermiCxiujnPanelojn();
+            if ( tahaqTiro ) {
+                han2tase.woh6w6CxiujnhaN2tasen();
                 return;
             }
 
-            // Ĉe porteblaj ekranoj premo sur la hejmbreto minimumigas la fokusitan aplikaĵon
-            // al la taskobreto ( hejmo ) anstataŭ plene fermi ĝin
-            const wm = (window as any).FenestraAdministranto;
-            if ( wm?.estasPortebla?.() ) {
-                wm.minimumigiFokusitanFenestron();
+            const wm = (window as any).arakehek2p2;
+            if ( wm?.catama?.() ) {
+                wm.caxoxeFokusitanQakehek2p2on();
                 return;
             }
-            if ( document.body.classList.contains( "start-menu-open" ) ) paneloj.fermiCxiujnPanelojn();
-            else paneloj.baskuligiKomencaMenuo();
+            if ( document.body.classList.contains( "saxe-h6w6" ) ) han2tase.woh6w6CxiujnhaN2tasen();
+            else han2tase.basaboSaxeN2tanu();
         };
 
-        const tb = document.getElementById( "taskbar" );
+        const tb = document.getElementById( "caqaxak2p2" );
         if ( tb ) tb.onclick = ( e: any ) => {
-            const btn = (e.target as HTMLElement).closest( "button" );
-            if ( !btn ) return;
-            const actions: { [key: string]: string } = { "status-area": "baskuligiRapidaAgordoj", "notification-btn": "baskuligiSciigojn", "recents-btn": "montriLastatempajn", "clock-area": "baskuligiHorlogxoElsxovo" };
-            if ( actions[ btn.id ] ) ((window as any).PanelaAdministranto as any)[ actions[ btn.id ] ]();
+            const ca12na = (e.target as HTMLElement).closest( "button" );
+            if ( !ca12na ) return;
+            const actions: { [key: string]: string } = { "c2ksak-t6ksek": "basaboQasaka", "qataxna-kfeni": "basabohaQataxnan", "b6kxe-kfeni": "xcanaB6kxeVek2p2ni", "castih2-kfeni": "basaboCastih2oElSefini" };
+            if ( actions[ ca12na.id ] ) ((window as any).n2tasenu as any)[ actions[ ca12na.id ] ]();
         };
     }
 };
 
-// ⟪ Tutmondaj Aliajnimoj ⟫
+// ⟪ ſɭɹ ʌ ֭ſɭᴜ ſɭɔ˞ᴜ ſɭᴜ ⟫
 
-function baskuligiQsButonon( btn: any ) { if ( (window as any).RapidaAgordoAdministranto ) (window as any).RapidaAgordoAdministranto.pritraktiBaskulon( btn ); }
-function aktualigiSxovilon( type: any, val: any ) {
-    if ( !(window as any).RapidaAgordoAdministranto ) return;
-    if ( type === "brightness" ) (window as any).RapidaAgordoAdministranto.agordiHelecon( parseInt( val ) );
-    else if ( type === "volume" ) (window as any).RapidaAgordoAdministranto.agordiLaŭtecon( parseInt( val ) );
+function basaboQsCa12nan( ca12na: any ) { if ( (window as any).xeku1o ) (window as any).xeku1o.caqaxk12naBaskulon( ca12na ); }
+function aktualigiSefinin( type: any, val: any ) {
+    if ( !(window as any).xeku1o ) return;
+    if ( type === "t6fani" ) (window as any).xeku1o.xk12naT6fani( parseInt( val ) );
+    else if ( type === "naxo" ) (window as any).xeku1o.xk12naNaxo( parseInt( val ) );
 }
 
-// Aldoni al fenestro por tutmonda aliro
-(window as any).baskuligiQsButonon = baskuligiQsButonon;
-(window as any).aktualigiSxovilon = aktualigiSxovilon;
-(window as any).Sistemo = Sistemo;
+(window as any).basaboQsCa12nan = basaboQsCa12nan;
+(window as any).aktualigiSefinin = aktualigiSefinin;
+(window as any).cak2p2 = cak2p2;

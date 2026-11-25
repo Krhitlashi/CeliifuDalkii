@@ -1,132 +1,129 @@
-// ≺⧼ Rapida Agordo Administranto ⧽≻ - Centralizita ŝtata administrado de rapidaj agordoj
+// ≺⧼ ı],ɔ ſɭw ſᶘɜ ⚙️ ⧽≻ - j͑ʃɹ ʌ ı],ɔ ſɭw ſᶘɜ ʌ j͑ʃ'ɔ ſɭɹ ſןɹ }ʃꞇ
 
-declare const CONSTANTS: any;
-declare const KonservejaUtilo: any;
+declare const HAKARANI: any;
+declare const ca3aq: any;
 
 interface QSState {
     [ key: string ]: any;
 }
 
-const RapidaAgordoAdministranto = ( function() {
-    let state: QSState = { ...CONSTANTS.QS.DEFAULTS };
+const xeku1o = ( function() {
+    let state: QSState = { ...HAKARANI.QS.DEFAULTS };
 
-    // ⟪ Ŝargi el Stokejo ⟫
-    function sxargiElStokejo(): void {
-        state = KonservejaUtilo.sxargiKunDefaŭltoj( CONSTANTS.STORAGE_KEYS.qsState, CONSTANTS.QS.DEFAULTS );
+// ⟪ j͑ʃ'ɔ ſȷᴜͷ̗ ʌ ſɭŋᴜȝ ⟫
+    function vefalEl3aqo(): void {
+        state = ca3aq.vefalKunhaX2x2q( HAKARANI.STORAGE_KEYS.qsState, HAKARANI.QS.DEFAULTS );
     }
 
-    // ⟪ Konservi al Stokejo ⟫
-    function konserviAlStokejo(): void {
-        KonservejaUtilo.agordi( CONSTANTS.STORAGE_KEYS.qsState, state );
+// ⟪ ſɭŋᴜȝ ʌ ſɭŋᴜȝ ⟫
+    function k3aqAl3aqo(): void {
+        ca3aq.vahate( HAKARANI.STORAGE_KEYS.qsState, state );
     }
 
-    // ⟪ Sendi Ŝanĝan Eventon ⟫
+// ⟪ ſɟᴜ ſ͕ɭᴜ ı],ɔ ŋᷠᴜ ʌ j͑ʃɹ ʌ ſᶘɹ }ʃᴜ ⟫
 
-    function sendiSxangxon( key: string, value: any ): void {
-        const event = new CustomEvent( CONSTANTS.EVENT_NAMES.settingsChange, {
-            detail: { key, value }
+    function sendiVasakan( key: string, skek2: any ): void {
+        const Event = new CustomEvent( HAKARANI.EVENT_NAMES.settingsChange, {
+            detail: { key, skek2 }
         } );
-        document.dispatchEvent( event );
+        document.dispatchEvent( Event );
     }
 
     return {
-        // ⟪ Akiri Ŝtaton ⟫
+// ⟪ ı],ɔ ŋᷠᴜ ʌ j͑ʃɹ ⟫
 
-        akiri( key: string ): any {
+        xk12na( key: string ): any {
             return state[ key ];
         },
 
-        // ⟪ Agordi Ŝtaton ⟫
+// ⟪ j͑ʃ'ᴜ ֭ſɭᴜ ɭʃɔ ʌ j͑ʃɹ ⟫
 
-        agordi( key: string, value: any ): void {
-            state[ key ] = value;
-            konserviAlStokejo();
-            sendiSxangxon( key, value );
+        vahate( key: string, skek2: any ): void {
+            state[ key ] = skek2;
+            k3aqAl3aqo();
+            sendiVasakan( key, skek2 );
         },
 
-        // ⟪ Baskuli Ŝtaton ⟫
+// ⟪ ʃᴜ j͑ʃᴜ ʃɜ ʌ j͑ʃɹ ⟫
 
-        baskuligi( key: string ): boolean {
+        basabo( key: string ): boolean {
             const newValue = !state[ key ];
-            this.agordi( key, newValue );
+            this.vahate( key, newValue );
             return newValue;
         },
 
-        // ⟪ Akiri Ĉiujn Ŝtatojn ⟫
+// ⟪ ı],ɔ ŋᷠᴜ ʌ ſɟɔⅎƴ ʌ j͑ʃɹ ⟫
 
-        akiriCxiujn(): QSState {
+        xk12naCxiujn(): QSState {
             return { ...state };
         },
 
-        // ⟪ Agordi Ĉiujn Ŝtatojn ⟫
+// ⟪ j͑ʃ'ᴜ ֭ſɭᴜ ɭʃɔ ʌ ſɟɔⅎƴ ʌ j͑ʃɹ ⟫
 
-        agordiCxiujn( newState: QSState ): void {
+        vahateCxiujn( newState: QSState ): void {
             state = { ...state, ...newState };
-            konserviAlStokejo();
+            k3aqAl3aqo();
         },
 
-        // ⟪ Agordi Helecan Nivelon ⟫
+// ⟪ j͑ʃ'ᴜ ֭ſɭᴜ ɭʃɔ ʌ ɭʃэ ſȷᴜ }ʃꞇ ʌ ſɭɜ ſɭ,w }ʃw ⟫
 
-        agordiHelecon( value: number ): void {
-            this.agordi( "brightness", value );
-            document.documentElement.style.setProperty( CONSTANTS.CSS_VARS.brightness, ( value / CONSTANTS.SYS.BRIGHTNESS_MAX ).toString() );
-            const osRoot = document.getElementById( "os-root" );
+        xk12naT6fani( skek2: number ): void {
+            this.vahate( "t6fani", skek2 );
+            document.documentElement.style.setProperty( HAKARANI.CSS_VARS.brightness, ( skek2 / HAKARANI.SYS.BRIGHTNESS_MAX ).toString() );
+            const osRoot = document.getElementById( "cak2p2-kuba" );
             if ( osRoot ) {
-                osRoot.style.filter = `brightness(${CONSTANTS.ANIM.FRACTIONS.fourEighths + ( value / CONSTANTS.SYS.BRIGHTNESS_BUFFER )})`;
+                osRoot.style.filter = `brightness(${HAKARANI.ANIM.FRACTIONS.fourEighths + ( skek2 / HAKARANI.SYS.BRIGHTNESS_BUFFER )})`;
             }
         },
 
-        // ⟪ Agordi Laŭtecan Nivelon ⟫
+// ⟪ j͑ʃ'ᴜ ֭ſɭᴜ ɭʃɔ ʌ }ʃᴜ ı],ɜ ʌ ſɭɜ ſɭ,w }ʃw ⟫
 
-        agordiLaŭtecon( value: number ): void {
-            this.agordi( "volume", value );
-            // Eblus integriĝi kun Web Audio API ĉi tie
+        xk12naNaxo( skek2: number ): void {
+            this.vahate( "naxo", skek2 );
         },
 
-        // ⟪ Baskula Butona Traktilo ⟫
+// ⟪ ʃᴜ j͑ʃᴜ ʃɜ ʌ ſɟᴜ ſᶘɹ }ʃᴜ ʌ ſɟᴜ ſ͕ɭᴜ ı],ɔ ŋᷠᴜ ⟫
 
-        pritraktiBaskulon( btn: HTMLElement ): void {
-            const isPressed = btn.getAttribute( "aria-pressed" ) === "true";
+        caqaxk12naBaskulon( ca12na: HTMLElement ): void {
+            const isPressed = ca12na.getAttribute( "aria-pressed" ) === "true";
             const newState = !isPressed;
-            btn.setAttribute( "aria-pressed", newState.toString() );
+            ca12na.setAttribute( "aria-pressed", newState.toString() );
 
-            const setting = btn.getAttribute( "data-setting" );
+            const setting = ca12na.getAttribute( "data-setting" );
             if ( setting ) {
-                this.agordi( setting, newState );
+                this.vahate( setting, newState );
             }
         },
 
-        // ⟪ Inicii ⟫
+// ⟪ j͑ʃᴜ ı],ɔ ⟫
 
-        inicii(): void {
-            sxargiElStokejo();
-            this.restaŭriUI();
+        saxe(): void {
+            vefalEl3aqo();
+            this.nekaS2();
         },
 
-        // ⟪ Restarigi UI-Ŝtaton ⟫
+// ⟪ }ʃɔ ſɭᴜ ʌ ꞁȷ̀w ꞁȷ̀ꞇ ɔ˞c̗ ⟫
 
-        restaŭriUI(): void {
-            // Restarigi baskulajn butonajn statojn
-            document.querySelectorAll( ".xeku1okek" ).forEach( ( btn: Element ) => {
-                const setting = ( btn as HTMLElement ).getAttribute( "data-setting" );
+        nekaS2(): void {
+            document.querySelectorAll( ".qasaka-sefini" ).forEach( ( ca12na: Element ) => {
+                const setting = ( ca12na as HTMLElement ).getAttribute( "data-setting" );
                 if ( setting ) {
-                    const value = this.akiri( setting );
-                    ( btn as HTMLElement ).setAttribute( "aria-pressed", value?.toString() || "false" );
+                    const skek2 = this.xk12na( setting );
+                    ( ca12na as HTMLElement ).setAttribute( "aria-pressed", skek2?.toString() || "false" );
                 }
             } );
 
-            // Restarigi ŝovilaĵajn valorojn
-            document.querySelectorAll( "#quick-settings-sliders input[type='range']" ).forEach( ( slider: Element ) => {
+            document.querySelectorAll( "#qasaka-sefini input[type='range']" ).forEach( ( slider: Element ) => {
                 const parent = slider.closest( "[data-qs-id]" );
                 const id = parent?.getAttribute( "data-qs-id" );
                 if ( id ) {
-                    ( slider as HTMLInputElement ).value = this.akiri( id ) || 0;
+                    ( slider as HTMLInputElement ).value = this.xk12na( id ) || 0;
                 }
             } );
         }
     };
 } )();
 
-// ⟪ Tutmondaj Aliajnimoj ⟫
+// ⟪ ſɭɹ ʌ ֭ſɭᴜ ſɭɔ˞ᴜ ſɭᴜ ⟫
 
-( window as any ).RapidaAgordoAdministranto = RapidaAgordoAdministranto;
+( window as any ).xeku1o = xeku1o;

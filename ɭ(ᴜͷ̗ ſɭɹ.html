@@ -6,115 +6,140 @@
     <meta name="viewport" content="inline-size=device-inline-size, initial-scale=1">
     <title data-oskakefani="ɭ(ᴜͷ̗ ſɭɹ">ɭ(ᴜͷ̗ ſɭɹ 🖥️</title>
     <link rel="icon" type="image/x-icon" href="../../j͑ʃɹ ɭʃᴜɔ˞ ɭl̀ɔ j͑ʃᴜꞇ.ico">
-    <link rel="manifest" href="../../ſɟᴜ ſɭɹ ſɟɔ j͐ʃɹʞ ꞁȷ̀ᴜꞇ.json">
+    <link rel="manifest" href="ſɟᴜ ſɭɹ ſɟɔ j͐ʃɹʞ ꞁȷ̀ᴜꞇ.json">
 
     <link rel="stylesheet" href="https://krhitlashi.github.io/%D6%AD%C5%BF%C9%AD%E1%B4%9C%20%C4%B1__%C9%94.css">
     <link rel="stylesheet" href="֭ſɭᴜ ı],ɔ.css">
+    <script>
+        ( function () {
+            const haCa3aq = [
+            [ "os-settings", "ku1o" ],
+            [ "os-qs-state", "qasaka" ],
+            [ "os-dismissed-notifs", "qataxna-pukxe" ],
+            [ "os-theme", "tom6nu" ],
+            [ "os-language", "gawe" ],
+            [ "os-taskbar-size", "caqaxak2p2-pal6" ],
+            [ "os-taskbar-position", "caqaxak2p2-raqa" ],
+            [ "os-wallpaper", "tahaq-cafas" ],
+            [ "os-wallpaper-gradient", "tahaq-cafas-weh2" ],
+            [ "os-label-display", "ksaka-cafas" ],
+            [ "os-mobile-grid-separate", "catama-ca1ara-p6sca" ],
+            [ "os-slider-order", "qasaka-ca1ara" ],
+            [ "os-kuba-order", "qasaka-kuba-ca1ara" ]
+            ];
+            const haVop2 = {
+                "tom6nu": { detect: "cak2p2", light: "quni", dark: "huna" },
+                "ksaka-cafas": { "vertical-pill": "cepu", inside: "j6se", off: "qun2" },
+                "caqaxak2p2-raqa": { left: "ctama", right: "ptama", top: "soza", bottom: "psaz" },
+                "catama-ca1ara-p6sca": { on: "h6w6", off: "qun2" }
+            };
+            const neka = ( saxe, vop2 ) => {
+                const mapo = haVop2[ saxe ];
+                return mapo && mapo[ vop2 ] ? mapo[ vop2 ] : vop2;
+            };
+            try {
+                for ( const [ saxe, ara3akak ] of haCa3aq ) {
+                    const vop2 = localStorage.getItem( saxe );
+                    if ( vop2 !== null && localStorage.getItem( ara3akak ) === null ) {
+                        localStorage.setItem( ara3akak, neka( ara3akak, vop2 ) );
+                    }
+                    localStorage.removeItem( saxe );
+                }
+                for ( const saxe of Object.keys( haVop2 ) ) {
+                    const vop2 = localStorage.getItem( saxe );
+                    if ( vop2 !== null ) localStorage.setItem( saxe, neka( saxe, vop2 ) );
+                }
+            } catch ( e ) {}
+        } )();
+    </script>
 </head>
 
 <body class="cepufal">
-    <div id="os-root">
-        <!-- Desktop Icons Area -->
-        <div id="desktop">
-            <!-- Icons will be injected by DesktopIconManager.js -->
+    <div id="cak2p2-kuba">
+        <div id="vulapaqai">
         </div>
 
-        <!-- Start Menu (All Apps / Folders) -->
-        <thala id="start-menu" class="n2tase">
-            <div id="start-menu-content"></div>
+        <thala id="n2tanu" class="n2tase">
+            <div id="n2tanu-kfeni"></div>
         </thala>
 
-        <!-- Window Container -->
-        <div id="window-container">
-            <!-- Windows will be injected here -->
+        <div id="qakehek2p2-kuba">
         </div>
 
-        <!-- Taskbar -->
-        <thala id="taskbar" class="n2tase" data-position="left">
-            <div class="taskbar-section taskbar-left">
-                <button id="status-area">
-                    <span class="status-icons" id="status-icons">📶 🔋</span>
+        <thala id="caqaxak2p2" class="n2tase" data-position="ctama">
+            <div class="caqaxak2p2-qaroxema caqaxak2p2-k2q">
+                <button id="c2ksak-t6ksek">
+                    <span class="luj2-hakp6" id="c2ksak-t6ksek-kfeni">📶 🔋</span>
                 </button>
-                <button id="recents-btn">
-                    <span class="active-apps-count">ɔ</span>
+                <button id="b6kxe-kfeni">
+                    <span class="ksaba-vek2p2ni-k2fe">ɔ</span>
                 </button>
             </div>
 
-            <button class="taskbar-center" id="home-area">
-                <!-- Home Bar / Start Button -->
-                <div class="home-bar" id="home-bar" aria-label="Home">
-                    <span class="home-bar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 14.5 6-6 6 6"/></svg></span>
+            <button class="caqaxak2p2-kek" id="kap2-kfeni">
+                <div class="k2sa-nar2sa" id="kap2-kek" aria-label="ſɭᴜ ſןɹ">
+                    <span class="k2sa-nar2sa-kp6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 14.5 6-6 6 6"/></svg></span>
                 </div>
-                <!-- App buttons injected here by WindowManager when taskbar is large -->
             </button>
 
-            <div class="taskbar-section taskbar-right">
-                <button id="notification-btn">
-                    <span class="notification-count">ɔ</span>
+            <div class="caqaxak2p2-qaroxema caqaxak2p2-q2">
+                <button id="qataxna-kfeni">
+                    <span class="qataxna-k2fe">ɔ</span>
                 </button>
-                <button id="clock-area">
-                    <span id="clock">ıɿ.ɔɔ</span>
+                <button id="castih2-kfeni">
+                    <span id="castih2">ıɿ.ɔɔ</span>
                 </button>
             </div>
         </thala>
 
-        <!-- Docko de Minimumigitaj Fenestroj -->
-        <thala id="taskbar-dock" class="n2tase"></thala>
+        <thala id="caqaxak2p2-kuba" class="n2tase"></thala>
 
-        <div id="quick-settings-container">
-            <thala id="quick-settings-sliders" class="system-panel n2tase"></thala>
-            <thala id="quick-settings-buttons" class="system-panel n2tase"></thala>
-            <div id="qs-edit-actions" class="qs-edit-actions"></div>
+        <div id="qasaka-kuba">
+            <thala id="qasaka-sefini" class="kna-n2tase n2tase"></thala>
+            <thala id="qasaka-ca12na" class="kna-n2tase n2tase"></thala>
+            <div id="qasaka-vasaka" class="qasaka-vasaka-saq"></div>
         </div>
 
-        <!-- Notifications Flyout -->
-        <thala id="notifications-panel" class="system-panel n2tase">
-            <div class="panel-header">
-                <h3 data-oskakefani="notif_title">Notifications 🔔</h3>
-                <button class="control-btn" onclick="malplenigiSciigojn()" data-oskakefani="cmd_clear">🗑️</button>
+        <thala id="qataxna" class="kna-n2tase n2tase">
+            <div class="n2tase-puf2">
+                <h3 data-oskakefani="qataxna-ksaka">ſ͕ɭᴜ ɭʃᴜ ı],c̗ᴜ 🔔</h3>
+                <button class="okano-ca12na" onclick="malplenigiSciigojn()" data-oskakefani="ca12na-qun2">🗑️</button>
             </div>
-            <ariiba class="notif-list" id="notif-list">
-                <!-- Dynamically injected by System.js -->
+            <ariiba class="qataxna-ca1ara" id="qataxna-ca1ara">
             </ariiba>
         </thala>
 
-        <!-- Recent Apps Panel -->
-        <thala id="recents-panel" class="system-panel n2tase">
-            <ariiba class="recents-list" id="recents-list">
-                <!-- Dynamically injected by showRecents() -->
+        <thala id="b6kxe" class="kna-n2tase n2tase">
+            <ariiba class="cizai-ca1ara" id="b6kxe-ca1ara">
             </ariiba>
         </thala>
 
-        <!-- Clock Flyout -->
-        <thala id="clock-panel" class="system-panel n2tase">
+        <thala id="castih2-kuba" class="kna-n2tase n2tase">
             <div>
-                <div class="clock-details">
-                    <div id="full-clock-time" class="large-clock"></div>
-                    <div id="full-clock-date" class="date-details"></div>
+                <div class="castih2-s2bana">
+                    <div id="puf2-castih2" class="caxopuf2-castih2"></div>
+                    <div id="karani-castih2" class="j͑ʃƨᴜʞ-s2bana"></div>
                 </div>
             </div>
         </thala>
 
-        <!-- Context Menu -->
-        <thala id="context-menu" class="n2tase">
-            <button data-action="edit-mode">
-                <span data-oskakefani="ctx_edit_mode">Edit Mode</span>
+        <thala id="n2tanusukf2qꞁiai" class="n2tase">
+            <button data-action="saka">
+                <span data-oskakefani="n2q-saka">j͑ʃᴜ ſɭᴜ</span>
                 <span>✏️</span>
             </button>
-            <button data-action="refresh" title="Refresh" >🔄</button>
-            <button data-action="new-note" title="New Note">📝</button>
-            <button data-action="terminal" title="Terminal">💻</button>
+            <button data-action="tosax" title="ɭʃɜ j͑ʃᴜᶗ‹" >🔄</button>
+            <button data-action="sef4wel2" title="j͑ʃɔ ſȷэⅎ ſᶘᴜ j͐ʃɹ">📝</button>
+            <button data-action="pekfi" title="ſןɔ ſɭʞꞇ">💻</button>
         </thala>
     </div>
 </body>
 
-<script src="j͑ʃƽᴜ ſɭɔʞ ꞁȷ̀ᴜ }ʃꞇ.js"></script>
+<script src="ʃᴜ j͑ʃƽᴜ ſɭɔʞ ꞁȷ̀ᴜ }ʃꞇ.js"></script>
 
-<!-- Global Library Dependencies ( Must load first ) -->
 <script src="https://krhitlashi.github.io/%C5%BF%C9%9F%E1%B4%9C%20%C5%BF%C9%AD%C9%94%20j%CD%91%CA%83'%C9%94/j%CD%91%CA%83%C6%BD%E1%B4%9C%20%C5%BF%C9%AD%C9%94%CA%9E.js"></script>
 <script src="https://krhitlashi.github.io/%C5%BF%C9%9F%E1%B4%9C%20%C5%BF%C9%AD%C9%94%20j%CD%91%CA%83'%C9%94/%C5%BF%C9%9F%E1%B4%9C%20%C4%B1],%C9%B9%CD%B7%CC%97.js"></script>
 <script src="https://krhitlashi.github.io/%C5%BF%C9%9F%E1%B4%9C%20%C5%BF%C9%AD%C9%94%20j%CD%91%CA%83'%C9%94/%C5%BF%C9%AD%C9%94%20j%CD%91%CA%83'%C9%94%20%7D%CA%83%EA%9E%87.js"></script>
 
-<!-- OS Main Entry Point ( Loads all modules in order ) -->
-<script type="module" src="ſɟᴜ ſɭɔ j͑ʃ'ɔ/ſɭɔ j͑ʃ'ɔ }ʃꞇ.ts"></script>
+<script type="module" src="ʃᴜ ſɭɹ ſןɹ }ʃꞇ/ſɭɔ j͑ʃ'ɔ }ʃꞇ.ts"></script>
 </html>

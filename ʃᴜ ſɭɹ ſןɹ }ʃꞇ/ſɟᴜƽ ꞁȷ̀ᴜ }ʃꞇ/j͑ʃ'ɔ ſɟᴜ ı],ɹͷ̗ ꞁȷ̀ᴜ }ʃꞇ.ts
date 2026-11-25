@@ -1,128 +1,71 @@
-// ≺⧼ Elementaj Utilajoj ⧽≻
+// ≺⧼ j͑ʃ'ɔ ſɟᴜ ı],ɹͷ̗ ꞁȷ̀ᴜ }ʃꞇ 📏 ⧽≻
 
-declare const CONSTANTS: any;
+declare const HAKARANI: any;
 
-/**
- * Akiri ujajn dimensiojn ( fiksitaj aŭ el elemento )
- * @param {number|null} fiksaLarĝo - Fiksita larĝo aŭ null
- * @param {number|null} fiksaAlto - Fiksita alto aŭ null
- * @param {HTMLElement|null} ujo - Uja elemento
- * @returns {{width: number, height: number}}
- */
-export function akiriUjonGrandecojn( fiksaLarĝo: number | null, fiksaAlto: number | null, ujo: HTMLElement | null ): { width: number; height: number } {
+export function xk12na3aqnpal6jn( kemaSefini: number | null, kemaL6da: number | null, k3aq: HTMLElement | null ): { width: number; height: number } {
     return {
-        width: fiksaLarĝo ?? ( ujo?.clientWidth || window.innerWidth ),
-        height: fiksaAlto ?? ( ujo?.clientHeight || window.innerHeight )
+        width: kemaSefini ?? ( k3aq?.clientWidth || window.innerWidth ),
+        height: kemaL6da ?? ( k3aq?.clientHeight || window.innerHeight )
     };
 }
 
-/**
- * Kontroli ĉu punkto estas ene de limoj
- * @param {number} x
- * @param {number} y
- * @param {DOMRect} limoj
- * @returns {boolean}
- */
 export function cxuEnLimoj( x: number, y: number, limoj: DOMRect ): boolean {
     return x >= limoj.left && x <= limoj.right && y >= limoj.top && y <= limoj.bottom;
 }
 
-/**
- * Kalkuli ĉelan grandecon laŭ uja grando, kolumna nombro kaj interspaco
- * @param {number} ujaGrando - Uja grando ( larĝo aŭ alto )
- * @param {number} kolumnoj - Nombro da kolumnoj ( aŭ vicoj )
- * @param {number} interspaco - Interspaco inter ĉeloj
- * @returns {number}
- */
-export function kalkuliĈelanGrandecon( ujaGrando: number, kolumnoj: number, interspaco: number ): number {
-    return ( ujaGrando - ( kolumnoj - 1 ) * interspaco ) / kolumnoj;
+export function knavek2feKekanpal6n( ujapal6: number, hacepuSak: number, qaqun2: number ): number {
+    return ( ujapal6 - ( hacepuSak - 1 ) * qaqun2 ) / hacepuSak;
 }
 
-/**
- * Agordi aria-pressed staton sur butono
- * @param {string|HTMLElement} btn - Butona ID aŭ elemento
- * @param {boolean} premata
- */
-function agordiButonPremita( btn: string | HTMLElement, premata: boolean ): void {
-    const el = typeof btn === "string" ? document.getElementById( btn ) : btn;
+function vahateCa12naPe( ca12na: string | HTMLElement, prk12nata: boolean ): void {
+    const el = typeof ca12na === "string" ? document.getElementById( ca12na ) : ca12na;
     if ( el ) {
-        if ( premata ) el.setAttribute( "aria-pressed", "true" );
+        if ( prk12nata ) el.setAttribute( "aria-pressed", "true" );
         else el.removeAttribute( "aria-pressed" );
     }
 }
 
-/**
- * Akiri elementajn span-valorojn el datumaro
- * @param {HTMLElement} el
- * @returns {{colSpan: number, rowSpan: number}}
- */
-function akiriElementajnSpanojn( el: HTMLElement ): { colSpan: number; rowSpan: number } {
+function xk12naElementajnSpanojn( el: HTMLElement ): { colSpan: number; rowSpan: number } {
     return {
         colSpan: parseInt( el.dataset.colSpan as string ) || 1,
         rowSpan: parseInt( el.dataset.rowSpan as string ) || 1
     };
 }
 
-/**
- * Agordi elementan tren-statatributon ( klaso )
- * @param {HTMLElement} el
- * @param {boolean} trenanta
- */
-function agordiElementanTrenadon( el: HTMLElement, trenanta: boolean ): void {
-    el.classList.toggle( "dragging", trenanta );
+function vahateKubanVaxafadon( el: HTMLElement, vaxafanta: boolean ): void {
+    el.classList.toggle( "b6teqta", vaxafanta );
 }
 
-/**
- * Akiri elementan pozicion kaj span-valorojn el datumaro ( spanoj delegas al akiriElementajnSpanojn )
- * @param {HTMLElement} el
- * @returns {{col: number, row: number, colSpan: number, rowSpan: number}}
- */
-export function akiriElementanPozicion( el: HTMLElement ): { col: number; row: number; colSpan: number; rowSpan: number } {
+export function xk12naElementanQakekn( el: HTMLElement ): { col: number; row: number; colSpan: number; rowSpan: number } {
     return {
         col: parseInt( el.dataset.col as string ) || 0,
         row: parseInt( el.dataset.row as string ) || 0,
-        ...akiriElementajnSpanojn( el )
+        ...xk12naElementajnSpanojn( el )
     };
 }
 
-/**
- * Aldoni klason al elemento
- * @param {HTMLElement} el
- * @param {string} klasaNomo
- */
-function aldoniKlason( el: HTMLElement | null | undefined, klasaNomo: string ): void {
+function k3unakHaxe( el: HTMLElement | null | undefined, klasaNomo: string ): void {
     el?.classList.add( klasaNomo );
 }
 
-/**
- * Forigi klason el elemento
- * @param {HTMLElement} el
- * @param {string} klasaNomo
- */
-function forigiKlason( el: HTMLElement | null | undefined, klasaNomo: string ): void {
+function ne3unakHaxe( el: HTMLElement | null | undefined, klasaNomo: string ): void {
     el?.classList.remove( klasaNomo );
 }
 
-/**
- * Kontroli ĉu elemento havas klason
- * @param {HTMLElement} el
- * @param {string} klasaNomo
- * @returns {boolean}
- */
-function cxuKlaso( el: HTMLElement | null | undefined, klasaNomo: string ): boolean {
+function cxuHaxe( el: HTMLElement | null | undefined, klasaNomo: string ): boolean {
     return el?.classList.contains( klasaNomo ) ?? false;
 }
 
-// ⟪ Konsoliditaj Fenestraj Eksportoj ⟫
+// ⟪ ſɭɔ ſɭɹ ʌ ֭ſɭᴜ ſ͕ɭᴜ ſɭɔ ֭ſɭɔ ſɭɹ ſןɹ ʌ ֭ſɭᴜ ı],ɔ ŋᷠᴜ ⟫
 Object.assign( window as any, {
-    akiriUjonGrandecojn,
+    xk12na3aqnpal6jn,
     cxuEnLimoj,
-    kalkuliĈelanGrandecon,
-    agordiButonPremita,
-    akiriElementajnSpanojn,
-    agordiElementanTrenadon,
-    akiriElementanPozicion,
-    aldoniKlason,
-    forigiKlason,
-    cxuKlaso,
+    knavek2feKekanpal6n,
+    vahateCa12naPe,
+    xk12naElementajnSpanojn,
+    vahateKubanVaxafadon,
+    xk12naElementanQakekn,
+    k3unakHaxe,
+    ne3unakHaxe,
+    cxuHaxe,
 } );

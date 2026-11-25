@@ -1,109 +1,96 @@
-// ≺⧼ Kahelaj Trenaj kaj Regrandigaj Traktiloj ⧽≻
+// ≺⧼ ʃэ ɭʃɔȝ ꞁȷ̀ᴜ }ʃꞇ 🖱️ ⧽≻
 
-declare const CONSTANTS: any;
-declare const EnigaAdministranto: any;
-declare const akiriKomencanMenuon: any;
-declare const akiriUjonGrandecojn: any;
+declare const HAKARANI: any;
+declare const caxk12na: any;
+declare const xk12naSaxenN2tanun: any;
+declare const xk12na3aqnpal6jn: any;
 declare const cxuEnLimoj: any;
-declare const agordiElementanTrenadon: any;
+declare const vahateKubanVaxafadon: any;
 
 import { CustomHTMLElement } from "./ꞁȷ̀ɜ ı],ɔ ŋᷠᴜ }ʃꞇ.js";
-import { setupMontrajnEventojn, akiriMontranPunkton } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ŋᷠᴜ ſȷɔ ſɭ,ꞇ.js";
-import { kalkuliĈelanGrandecon } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ſɟᴜ ſɭɔƽ.js";
+import { setupVaxafaTraktilojn, xk12naXcanaT6ksekn } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ŋᷠᴜ ſȷɔ ſɭ,ꞇ.js";
+import { knavek2feKekanpal6n } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/j͑ʃ'ɔ ſɟᴜ ı],ɹͷ̗ ꞁȷ̀ᴜ }ʃꞇ.js";
 
-// Antaŭen referenco por eviti cirklan dependecon
-interface PiktogramaKradaInterfaco {
-    containerId: string;
-    container: HTMLElement | null;
+interface Kp6Qox2n2k {
+    kubaId: string;
+    kuba: HTMLElement | null;
     rows: number;
     cols: number;
-    fiksaLarĝo: number | null;
-    fiksaAlto: number | null;
-    estasPortebla: boolean;
-    nunaPaĝo: number;
-    pasxiPagxon( direkto: number ): void;
-    alakrogiPostTrenado( el: HTMLElement ): void;
+    kemaSefini: number | null;
+    kemaL6da: number | null;
+    catama: boolean;
+    kxeteVulao: number;
+    pasxiVulaon( direkto: number ): void;
+    alakrogiKsozVaxafado( el: HTMLElement ): void;
     cxuAreoOkupita( c: number, r: number, kolSpan: number, vicSpan: number, ekskludiEl: HTMLElement | null ): boolean;
-    aplikiPozicion( el: HTMLElement, c: number, r: number, xOffset?: number ): void;
-    gxisdatigiAdaptanOrientigon( el: HTMLElement ): void;
+    vek2p2niQakekn( el: HTMLElement, c: number, r: number, xOffset?: number ): void;
+    xk12na2AdaptanOrientigon( el: HTMLElement ): void;
 }
 
-/**
- * Agordi unuecigitan tren-traktadon por kahelo
- * @param {PiktogramaKradaInterfaco} krado - La krada instanco
- * @param {HTMLElement} el - Elemento trenata
- * @param {number} komencoX - Komenca X-pozicio
- * @param {number} komencoY - Komenca Y-pozicio
- * @param {Function} postTrenFino - Revoko kiam trenado finiĝas
- */
-export function agordiKaheloTreni( krado: PiktogramaKradaInterfaco, el: HTMLElement, komencoX: number, komencoY: number, postTrenFino: (() => void) | null ): void {
-    const komencaMaldekstro = el.offsetLeft;
-    const komencaSupro = el.offsetTop;
-    let komencaMenuoFermita = false;
-    const komencaMenuo = krado.containerId === "start-menu-content" ? akiriKomencanMenuon() : null;
+export function vahateKekoVaxafi( qox2n2k: Kp6Qox2n2k, el: HTMLElement, saxeoX: number, saxeoY: number, ksozVaxafaK3akak: (() => void) | null ): void {
+    const saxeMalq2 = el.offsetLeft;
+    const saxeSupro = el.offsetTop;
+    let saxeN2tanuFermita = false;
+    const saxeN2tanu = qox2n2k.kubaId === "n2tanu-kfeni" ? xk12naSaxenN2tanun() : null;
     const originalaPatro = el.parentElement;
-    const originalaSekvaGefrato = el.nextSibling;
-    let estisTrenita = false;
-    let randaDirekto = 0;
-    let paĝajŜanĝoj = 0;
+    const originalaKsozGefrato = el.nextSibling;
+    let kxuVaxafa = false;
+    let k12taniRaqa = 0;
+    let vulaajCaxooj = 0;
 
-    agordiElementanTrenadon( el, true );
-    el.style.zIndex = ( CONSTANTS.WM.BASE_Z_INDEX + 0o100 ).toString();
+    vahateKubanVaxafadon( el, true );
+    el.style.zIndex = ( HAKARANI.WM.BASE_Z_INDEX + 0o100 ).toString();
 
-    if ( krado.containerId === "start-menu-content" ) {
+    if ( qox2n2k.kubaId === "n2tanu-kfeni" ) {
         document.body.appendChild( el );
         el.style.position = "fixed";
     }
 
-    const movi = ( klientoX: number, klientoY: number ) => {
-        const deltoX = klientoX - komencoX;
-        const deltoY = klientoY - komencoY;
-        const trenDistanco = Math.abs( deltoX ) + Math.abs( deltoY );
+    const vaxafa = ( klientoX: number, klientoY: number ) => {
+        const deltoX = klientoX - saxeoX;
+        const deltoY = klientoY - saxeoY;
+        const b6teqQ2 = Math.abs( deltoX ) + Math.abs( deltoY );
 
-        // Agordi estasTrenanta nur post movado preter sojlo
-        if ( !estisTrenita && trenDistanco > CONSTANTS.DIM.DRAG_THRESHOLD ) {
-            estisTrenita = true;
+        if ( !kxuVaxafa && b6teqQ2 > HAKARANI.DIM.DRAG_THRESHOLD ) {
+            kxuVaxafa = true;
         }
 
-        // Rulumi al apuda paĝo when the tile is dragged past the top/bottom edge
-        if ( estisTrenita && krado.containerId === "desktop" ) {
-            const erojPoPaĝo = Math.max( 1, krado.rows * krado.cols );
-            const tutajPaĝoj = Math.ceil( ( ( window as any ).APPS || [] ).length / erojPoPaĝo );
-            if ( tutajPaĝoj > 1 ) {
-                // La paĝoj ŝanĝiĝas vertikale, do la randoj estas supro/malsupro
+        if ( kxuVaxafa && qox2n2k.kubaId === "vulapaqai" ) {
+            const erojPoVulao = Math.max( 1, qox2n2k.rows * qox2n2k.cols );
+            const l2haVula = Math.ceil( ( ( window as any ).HAVEK2P2NI || [] ).length / erojPoVulao );
+            if ( l2haVula > 1 ) {
                 const rando = 40;
                 if ( klientoY > window.innerHeight - rando ) {
-                    if ( randaDirekto !== 1 ) { randaDirekto = 1; paĝajŜanĝoj++; krado.pasxiPagxon( 1 ); }
+                    if ( k12taniRaqa !== 1 ) { k12taniRaqa = 1; vulaajCaxooj++; qox2n2k.pasxiVulaon( 1 ); }
                 } else if ( klientoY < rando ) {
-                    if ( randaDirekto !== -1 ) { randaDirekto = -1; paĝajŜanĝoj++; krado.pasxiPagxon( -1 ); }
-                } else if ( randaDirekto !== 0 ) {
-                    randaDirekto = 0;
+                    if ( k12taniRaqa !== -1 ) { k12taniRaqa = -1; vulaajCaxooj++; qox2n2k.pasxiVulaon( -1 ); }
+                } else if ( k12taniRaqa !== 0 ) {
+                    k12taniRaqa = 0;
                 }
             }
         }
 
-        // Fermi komencan menuon se treno sufiĉe malproksima
-        if ( !komencaMenuoFermita && komencaMenuo && krado.containerId === "start-menu-content" && trenDistanco > CONSTANTS.DIM.DRAG_THRESHOLD ) {
-            komencaMenuo.classList.remove( "open" );
-            document.body.classList.remove( "start-menu-open" );
-            if ( ( window as any ).PanelaAdministranto ) ( window as any ).PanelaAdministranto.fermiCxiujnPanelojn();
-            komencaMenuoFermita = true;
+        if ( !saxeN2tanuFermita && saxeN2tanu && qox2n2k.kubaId === "n2tanu-kfeni" && b6teqQ2 > HAKARANI.DIM.DRAG_THRESHOLD ) {
+            saxeN2tanu.classList.remove( "h6w6" );
+            document.body.classList.remove( "saxe-h6w6" );
+            if ( ( window as any ).n2tasenu ) ( window as any ).n2tasenu.woh6w6CxiujnhaN2tasen();
+            saxeN2tanuFermita = true;
         }
 
         if ( el.style.position === "fixed" ) {
             el.style.left = klientoX - el.offsetWidth / 2 + "px";
             el.style.top = klientoY - el.offsetHeight / 2 + "px";
         } else {
-            const { width: ujoL, height: ujoA } = akiriUjonGrandecojn( krado.fiksaLarĝo, krado.fiksaAlto, krado.container );
-            const interspaco = CONSTANTS.DIM.GAP_SIZE;
-            const cxeL = kalkuliĈelanGrandecon( ujoL, krado.cols, interspaco );
-            const cxeA = kalkuliĈelanGrandecon( ujoA, krado.rows, interspaco );
+            const { width: k3aqL, height: k3aqA } = xk12na3aqnpal6jn( qox2n2k.kemaSefini, qox2n2k.kemaL6da, qox2n2k.kuba );
+            const qaqun2 = HAKARANI.DIM.GAP_SIZE;
+            const oj6L = knavek2feKekanpal6n( k3aqL, qox2n2k.cols, qaqun2 );
+            const oj6A = knavek2feKekanpal6n( k3aqA, qox2n2k.rows, qaqun2 );
 
-            const krudaMaldekstro = komencaMaldekstro + deltoX;
-            const krudaSupro = komencaSupro + deltoY;
+            const krudaMalq2 = saxeMalq2 + deltoX;
+            const krudaSupro = saxeSupro + deltoY;
 
-            const alkX = Math.round( krudaMaldekstro / ( cxeL + interspaco ) ) * ( cxeL + interspaco );
-            const alkY = Math.round( krudaSupro / ( cxeA + interspaco ) ) * ( cxeA + interspaco );
+            const alkX = Math.round( krudaMalq2 / ( oj6L + qaqun2 ) ) * ( oj6L + qaqun2 );
+            const alkY = Math.round( krudaSupro / ( oj6A + qaqun2 ) ) * ( oj6A + qaqun2 );
 
             el.style.left = alkX + "px";
             el.style.top = alkY + "px";
@@ -111,124 +98,112 @@ export function agordiKaheloTreni( krado: PiktogramaKradaInterfaco, el: HTMLElem
     };
 
     const supren = () => {
-        agordiElementanTrenadon( el, false );
+        vahateKubanVaxafadon( el, false );
         el.style.zIndex = "";
 
-        // Trakti transigon de komenca menuo al labortablo
-        if ( krado.containerId === "start-menu-content" && ( window as any ).LabortablaPiktogramoAdministranto?.labortablo ) {
-            const labortablo = ( window as any ).LabortablaPiktogramoAdministranto.labortablo.container;
-            const labortablaRekt = labortablo.getBoundingClientRect();
+        if ( qox2n2k.kubaId === "n2tanu-kfeni" && ( window as any ).tlacak2sai?.vulapaqai ) {
+            const vulapaqai = ( window as any ).tlacak2sai.vulapaqai.kuba;
+            const vulapaqaiKuba = vulapaqai.getBoundingClientRect();
             const elRekt = el.getBoundingClientRect();
             const elCentroX = elRekt.left + elRekt.width / 2;
             const elCentroY = elRekt.top + elRekt.height / 2;
 
-            if ( cxuEnLimoj( elCentroX, elCentroY, labortablaRekt ) ) {
+            if ( cxuEnLimoj( elCentroX, elCentroY, vulapaqaiKuba ) ) {
                 el.style.position = "";
-                if ( postTrenFino ) postTrenFino();
-                ( krado as any ).transigiPiktogramonDeKomencaMenuo( el );
+                if ( ksozVaxafaK3akak ) ksozVaxafaK3akak();
+                ( qox2n2k as any ).vaxafaTahaqken2qaionDeSaxeN2tanu( el );
                 return;
             }
         }
 
-        // Se la trenado transiris paĝojn, asigni la kahelon al la nuna paĝo
-        if ( paĝajŜanĝoj > 0 && typeof ( krado as any ).nunaPaĝo === "number" ) {
-            el.dataset.page = ( krado as any ).nunaPaĝo.toString();
+        if ( vulaajCaxooj > 0 && typeof ( qox2n2k as any ).kxeteVulao === "number" ) {
+            el.dataset.page = ( qox2n2k as any ).kxeteVulao.toString();
         }
 
-        // Restarigi pozicion aŭ alklaki
-        if ( krado.containerId === "start-menu-content" && originalaPatro ) {
+        if ( qox2n2k.kubaId === "n2tanu-kfeni" && originalaPatro ) {
             el.style.position = "";
-            if ( postTrenFino ) postTrenFino();
-            if ( originalaSekvaGefrato ) originalaPatro.insertBefore( el, originalaSekvaGefrato );
+            if ( ksozVaxafaK3akak ) ksozVaxafaK3akak();
+            if ( originalaKsozGefrato ) originalaPatro.insertBefore( el, originalaKsozGefrato );
             else originalaPatro.appendChild( el );
-            krado.alakrogiPostTrenado( el );
+            qox2n2k.alakrogiKsozVaxafado( el );
         } else {
-            if ( postTrenFino ) postTrenFino();
-            krado.alakrogiPostTrenado( el );
+            if ( ksozVaxafaK3akak ) ksozVaxafaK3akak();
+            qox2n2k.alakrogiKsozVaxafado( el );
         }
     };
 
-    // Agordi eventaŭskultilojn por kaj muso kaj tuŝo
-    const cxeMov = ( ev: any ) => {
+    const oj6Vaxafa = ( ev: any ) => {
         ev.preventDefault();
-        const poz = akiriMontranPunkton( ev );
-        movi( poz.x, poz.y );
+        const poz = xk12naXcanaT6ksekn( ev );
+        vaxafa( poz.x, poz.y );
     };
 
-    const forigiEventojn = setupMontrajnEventojn( cxeMov, () => {
-        forigiEventojn();
+    const ne3unak12najn = setupVaxafaTraktilojn( oj6Vaxafa, () => {
+        ne3unak12najn();
         supren();
     } );
 }
 
-/**
- * Agordi unuecigitan regrandigan traktadon por kahelo
- * @param {PiktogramaKradaInterfaco} krado - La krada instanco
- * @param {HTMLElement} el - Elemento regrandigata
- * @param {number} komencoX - Komenca X-pozicio
- * @param {number} komencoY - Komenca Y-pozicio
- */
-export function agordiKaheloGrandSxangxi( krado: PiktogramaKradaInterfaco, el: HTMLElement, komencoX: number, komencoY: number ): void {
-    const komencaL = el.offsetWidth;
-    const komencaA = el.offsetHeight;
-    const { width: ujoL, height: ujoA } = akiriUjonGrandecojn( krado.fiksaLarĝo, krado.fiksaAlto, krado.container );
-    const interspaco = CONSTANTS.DIM.GAP_SIZE;
-    const cxeL = kalkuliĈelanGrandecon( ujoL, krado.cols, interspaco );
-    const cxeA = kalkuliĈelanGrandecon( ujoA, krado.rows, interspaco );
+export function vahateKekopal6Vasaka( qox2n2k: Kp6Qox2n2k, el: HTMLElement, saxeoX: number, saxeoY: number ): void {
+    const saxeL = el.offsetWidth;
+    const saxeA = el.offsetHeight;
+    const { width: k3aqL, height: k3aqA } = xk12na3aqnpal6jn( qox2n2k.kemaSefini, qox2n2k.kemaL6da, qox2n2k.kuba );
+    const qaqun2 = HAKARANI.DIM.GAP_SIZE;
+    const oj6L = knavek2feKekanpal6n( k3aqL, qox2n2k.cols, qaqun2 );
+    const oj6A = knavek2feKekanpal6n( k3aqA, qox2n2k.rows, qaqun2 );
 
-    el.classList.add( "resizing" );
+    el.classList.add( "sefini-s2" );
 
-    const movi = ( klientoX: number, klientoY: number ) => {
-        const dx = klientoX - komencoX;
-        const dy = klientoY - komencoY;
+    const vaxafa = ( klientoX: number, klientoY: number ) => {
+        const dx = klientoX - saxeoX;
+        const dy = klientoY - saxeoY;
 
-        let kolSpan = Math.round( ( komencaL + dx ) / cxeL );
-        let vicSpan = Math.round( ( komencaA + dy ) / cxeA );
+        let kolSpan = Math.round( ( saxeL + dx ) / oj6L );
+        let vicSpan = Math.round( ( saxeA + dy ) / oj6A );
 
         if ( kolSpan < 1 ) kolSpan = 1;
         if ( vicSpan < 1 ) vicSpan = 1;
 
-        if ( krado.cxuAreoOkupita( parseInt( el.dataset.col || "0" ), parseInt( el.dataset.row || "0" ), kolSpan, vicSpan, el ) ) return;
+        if ( qox2n2k.cxuAreoOkupita( parseInt( el.dataset.col || "0" ), parseInt( el.dataset.row || "0" ), kolSpan, vicSpan, el ) ) return;
 
-        el.style.width = `${cxeL * kolSpan + ( kolSpan - 1 ) * interspaco}px`;
-        el.style.height = `${cxeA * vicSpan + ( vicSpan - 1 ) * interspaco}px`;
+        el.style.width = `${oj6L * kolSpan + ( kolSpan - 1 ) * qaqun2}px`;
+        el.style.height = `${oj6A * vicSpan + ( vicSpan - 1 ) * qaqun2}px`;
 
         el.dataset.pendingColSpan = kolSpan.toString();
         el.dataset.pendingRowSpan = vicSpan.toString();
     };
 
     const supren = () => {
-        el.classList.remove( "resizing" );
-        el.classList.remove( "dragging" );
-        ( el as CustomHTMLElement )._estasRegrandiganta = false;
+        el.classList.remove( "sefini-s2" );
+        el.classList.remove( "b6teqta" );
+        ( el as CustomHTMLElement )._kobecaxopuf2 = false;
 
         if ( el.dataset.pendingColSpan ) {
-            const novaKolSpan = parseInt( el.dataset.pendingColSpan );
-            const novaVicSpan = parseInt( el.dataset.pendingRowSpan || "1" );
-            if ( !krado.cxuAreoOkupita( parseInt( el.dataset.col || "0" ), parseInt( el.dataset.row || "0" ), novaKolSpan, novaVicSpan, el ) ) {
-                el.dataset.colSpan = novaKolSpan.toString();
-                el.dataset.rowSpan = novaVicSpan.toString();
+            const sefeKolSpan = parseInt( el.dataset.pendingColSpan );
+            const sefeVicSpan = parseInt( el.dataset.pendingRowSpan || "1" );
+            if ( !qox2n2k.cxuAreoOkupita( parseInt( el.dataset.col || "0" ), parseInt( el.dataset.row || "0" ), sefeKolSpan, sefeVicSpan, el ) ) {
+                el.dataset.colSpan = sefeKolSpan.toString();
+                el.dataset.rowSpan = sefeVicSpan.toString();
             }
             delete el.dataset.pendingColSpan;
             delete el.dataset.pendingRowSpan;
         }
 
         void el.offsetWidth;
-        krado.aplikiPozicion( el, parseInt( el.dataset.col || "0" ), parseInt( el.dataset.row || "0" ) );
-        krado.gxisdatigiAdaptanOrientigon( el );
+        qox2n2k.vek2p2niQakekn( el, parseInt( el.dataset.col || "0" ), parseInt( el.dataset.row || "0" ) );
+        qox2n2k.xk12na2AdaptanOrientigon( el );
 
-        // Konservi kahelan aranĝon al stokejo
-        if ( krado.containerId === "desktop" ) ( window as any ).LabortablaPiktogramoAdministranto?._konserviLabortablanArangxon();
+        if ( qox2n2k.kubaId === "vulapaqai" ) ( window as any ).tlacak2sai?._3aqVulapaqainKamaraqasain();
     };
 
-    const cxeMov = ( ev: any ) => {
+    const oj6Vaxafa = ( ev: any ) => {
         ev.preventDefault();
-        const poz = akiriMontranPunkton( ev );
-        movi( poz.x, poz.y );
+        const poz = xk12naXcanaT6ksekn( ev );
+        vaxafa( poz.x, poz.y );
     };
 
-    const forigiEventojn = setupMontrajnEventojn( cxeMov, () => {
-        forigiEventojn();
+    const ne3unak12najn = setupVaxafaTraktilojn( oj6Vaxafa, () => {
+        ne3unak12najn();
         supren();
     } );
 }

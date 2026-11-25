@@ -1,336 +1,300 @@
-// ≺⧼ Piktograma Krada Klaso ⧽≻
+// ≺⧼ ſ͕ɭɜᶗ‹ ꞁȷ̀ɹ }ʃɹƽ 🔲 ⧽≻
 
-declare const CONSTANTS: any;
-declare const EnigaAdministranto: any;
-declare const akiriTaskobreton: any;
-declare const akiriElementajnSpanojn: any;
-declare const akiriPiktogramanFonon: any;
+declare const HAKARANI: any;
+declare const caxk12na: any;
+declare const xk12naQavek2p2nion: any;
+declare const xk12naElementajnSpanojn: any;
+declare const xk12naTahaqken2qaianFonon: any;
 
-import { AppData, IconGridConfig, CustomHTMLElement } from "./ꞁȷ̀ɜ ı],ɔ ŋᷠᴜ }ʃꞇ.js";
-import { akiriUjonGrandecojn, akiriElementanPozicion, kalkuliĈelanGrandecon } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/ſɟᴜ ſɭɔƽ.js";
-import { agordiKaheloTreni, agordiKaheloGrandSxangxi } from "./ſɟɔ }ʃᴜ.js";
+import { S2k2p2niVop2, IconGridConfig, CustomHTMLElement } from "./ꞁȷ̀ɜ ı],ɔ ŋᷠᴜ }ʃꞇ.js";
+import { xk12na3aqnpal6jn, xk12naElementanQakekn, knavek2feKekanpal6n } from "./ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ/j͑ʃ'ɔ ſɟᴜ ı],ɹͷ̗ ꞁȷ̀ᴜ }ʃꞇ.js";
+import { vahateKekoVaxafi, vahateKekopal6Vasaka } from "./ʃэ ɭʃɔȝ ꞁȷ̀ᴜ }ʃꞇ.js";
 
-// ⟪ Porteblaj Kradaj Dimensiaj Aliajnimoj ( el CONSTANTS ) ⟫
-export const MOBILE_GRID_ROWS = CONSTANTS.DIM.MOBILE_ROWS;
-export const MOBILE_GRID_COLS = CONSTANTS.DIM.MOBILE_COLS;
-export const DESKTOP_GRID_ROWS = CONSTANTS.DIM.DEFAULT_ROWS;
-export const DESKTOP_GRID_COLS = CONSTANTS.DIM.DEFAULT_COLS;
+// ⟪ ſ͕ɭɜ ı],ɹ }ʃɹƽ ʌ j͑ʃɔ ſȷꞇ }ʃꞇ ⟫
+export const VAXAFABLA_QOX2N2K_HASAK = HAKARANI.DIM.MOBILE_ROWS;
+export const VAXAFABLA_QOX2N2K_HACEPUSAK = HAKARANI.DIM.MOBILE_COLS;
+export const VULAPAQAI_QOX2N2K_HASAK = HAKARANI.DIM.DEFAULT_ROWS;
+export const VULAPAQAI_QOX2N2K_HACEPUSAK = HAKARANI.DIM.DEFAULT_COLS;
 
-// Originala labortabla krado ( uzata kiam la krado-spegulado estas malŝaltita )
-const ORIGINAL_GRID_ROWS = 0o10;   // 8 vicoj
-const ORIGINAL_GRID_COLS = 0o20;   // 16 kolumnoj
+const ORIGINAL_GRID_ROWS = 0o10;
+const ORIGINAL_GRID_COLS = 0o20;
 
-// ⟪ Piktograma Krado ⟫
+// ⟪ ɭʃᴜ ֭ſɭᴜ ſ͕ɭƽɔ }ʃɹ ſ͕ɭᴜꞇ ʌ ſ͕ɭɜ ı],ɹ }ʃɹƽ ⟫
 
-export class PiktogramaKrado {
-    containerId: string;
-    container: HTMLElement | null;
+export class qox2n2k {
+    kubaId: string;
+    kuba: HTMLElement | null;
     config: IconGridConfig;
-    estasPortebla: boolean;
+    catama: boolean;
     rows: number = 0;
     cols: number = 0;
-    komencajVicoj: number;
-    komencajKolumnoj: number;
+    saxeHasak: number;
+    saxeHacepuSak: number;
     bottomUp: boolean;
-    fiksaLarĝo: number | null;
-    fiksaAlto: number | null;
-    redaktaReĝimo: boolean;
-    pagigas: boolean;
-    randaPaĝumo: boolean;
-    etikedReĝimo: string;
-    nunaPaĝo: number;
-    tutajPaĝoj: number;
-    tuŝaKomencoY: number;
-    tuŝaKomencoX: number;
-    musPremita: boolean;
-    musKomencoY: number;
-    musKomencoX: number;
+    kemaSefini: number | null;
+    kemaL6da: number | null;
+    j͑ʃᴜS2: boolean;
+    vulaHa: boolean;
+    k12taniVulaumo: boolean;
+    k61eS2: string;
+    kxeteVulao: number;
+    l2haVula: number;
+    eventaSaxeoY: number;
+    eventaSaxeoX: number;
+    musPe: boolean;
+    musSaxeoY: number;
+    musSaxeoX: number;
 
-    constructor( containerId: string, config: IconGridConfig = {} ) {
-        this.containerId = containerId;
-        this.container = document.getElementById( containerId );
+    constructor( kubaId: string, config: IconGridConfig = {} ) {
+        this.kubaId = kubaId;
+        this.kuba = document.getElementById( kubaId );
         this.config = config;
 
-        // Aŭtomate detekti porteblan vs labortablan
-        this.estasPortebla = this.cxuPortebla();
+        this.catama = this.cxuCatama();
         this.rekomputiDimensiojn();
-        this.komencajVicoj = this.rows;
-        this.komencajKolumnoj = this.cols;
+        this.saxeHasak = this.rows;
+        this.saxeHacepuSak = this.cols;
         this.bottomUp = config.bottomUp || false;
-        this.fiksaLarĝo = config.width ?? null;
-        this.fiksaAlto = config.height ?? null;
-        this.redaktaReĝimo = false;
-        this.pagigas = false;
-        this.randaPaĝumo = false;
-        this.etikedReĝimo = config.labelMode || "external";
-        this.nunaPaĝo = 0;
-        this.tutajPaĝoj = 1;
-        this.tuŝaKomencoY = 0;
-        this.tuŝaKomencoX = 0;
-        this.musPremita = false;
-        this.musKomencoY = 0;
-        this.musKomencoX = 0;
+        this.kemaSefini = config.width ?? null;
+        this.kemaL6da = config.height ?? null;
+        this.j͑ʃᴜS2 = false;
+        this.vulaHa = false;
+        this.k12taniVulaumo = false;
+        this.k61eS2 = config.labelMode || "p6sca";
+        this.kxeteVulao = 0;
+        this.l2haVula = 1;
+        this.eventaSaxeoY = 0;
+        this.eventaSaxeoX = 0;
+        this.musPe = false;
+        this.musSaxeoY = 0;
+        this.musSaxeoX = 0;
 
-        if ( !this.container ) return;
+        if ( !this.kuba ) return;
 
-        this.container.addEventListener( "dblclick", ( e: MouseEvent ) => {
-            const estasKlakeblaFono = this.containerId === "desktop" || this.containerId === "start-menu";
-            if ( estasKlakeblaFono && e.target === this.container ) {
-                this.baskuligiRedaktadon();
+        this.kuba.addEventListener( "dblclick", ( e: MouseEvent ) => {
+            const kobep2Fono = this.kubaId === "vulapaqai" || this.kubaId === "n2tanu";
+            if ( kobep2Fono && e.target === this.kuba ) {
+                this.basaboSakan();
             }
         } );
 
-        // Tuŝaj eventoj por svinga paĝado
-        this.container.addEventListener( "touchstart", ( e: TouchEvent ) => this.pritraktiTuŝanKomencon( e ), { passive: true } );
-        this.container.addEventListener( "touchmove", ( e: TouchEvent ) => this.pritraktiTuŝanMovon( e ), { passive: false } );
-        this.container.addEventListener( "touchend", ( e: TouchEvent ) => this.pritraktiTuŝanFinon( e ), { passive: true } );
+        this.kuba.addEventListener( "touchstart", ( e: TouchEvent ) => this.caqaxk12na12naanSaxeon( e ), { passive: true } );
+        this.kuba.addEventListener( "touchmove", ( e: TouchEvent ) => this.caqaxk12na12naanVaxafan( e ), { passive: false } );
+        this.kuba.addEventListener( "touchend", ( e: TouchEvent ) => this.caqaxk12na12naanFinon( e ), { passive: true } );
 
-        // Musa trenado por paĝado ( labortabla krado )
-        this.container.addEventListener( "mousedown", ( e: MouseEvent ) => this.pritraktiMusanKomencon( e ) );
-        window.addEventListener( "mousemove", ( e: MouseEvent ) => this.pritraktiMusanMovon( e ) );
-        window.addEventListener( "mouseup", ( e: MouseEvent ) => this.pritraktiMusanFinon( e ) );
+        this.kuba.addEventListener( "mousedown", ( e: MouseEvent ) => this.caqaxk12naC2w2kaianSaxeon( e ) );
+        window.addEventListener( "mousemove", ( e: MouseEvent ) => this.caqaxk12naC2w2kaianVaxafan( e ) );
+        window.addEventListener( "mouseup", ( e: MouseEvent ) => this.caqaxk12naC2w2kaianFinon( e ) );
 
-        // Aŭskulti ekran-grandajn ŝanĝojn
-        window.addEventListener( "resize", () => this.pritraktiEkrananGrandSxangxon() );
+        window.addEventListener( "resize", () => this.caqaxk12naTahaqanpal6Vasakan() );
 
-        this.inicii();
+        this.saxe();
     }
 
-    cxuPortebla(): boolean {
-        return window.innerWidth < CONSTANTS.BREAKPOINTS.MOBILE || window.innerHeight < CONSTANTS.BREAKPOINTS.MOBILE;
+    cxuCatama(): boolean {
+        return window.innerWidth < HAKARANI.BREAKPOINTS.MOBILE || window.innerHeight < HAKARANI.BREAKPOINTS.MOBILE;
     }
 
-    // Ĉu la ĉefa ( labortabla ) krado spegulas la porteblan aranĝon ( faldebla 6 × 8 )
-    cxuCxefaKradoSpegulita(): boolean {
-        return CONSTANTS.DIM.MOBILE_GRID_SEPARATE === false;
+    cxuPuf2Qox2n2kPeqeniha(): boolean {
+        return HAKARANI.DIM.MOBILE_GRID_SEPARATE === false;
     }
 
-    // Rekomputi la krad-dimensiojn laŭ la nuna reĝimo ( vokita ĉe agorda ŝanĝo )
     rekomputiDimensiojn(): void {
-        if ( this.containerId === "start-menu-content" ) {
-            // Tirujo poŝte: 6 vicoj × 2 kolumnoj; labortable: plena 8 × 8 krado
-            this.rows = this.estasPortebla ? 0o6 : 0o10;
-            this.cols = this.estasPortebla ? 0o2 : 0o10;
-        } else if ( this.containerId === "desktop" && !this.estasPortebla && !this.cxuCxefaKradoSpegulita() ) {
-            // Spegulado malŝaltita: la originala labortabla krado
+        if ( this.kubaId === "n2tanu-kfeni" ) {
+            this.rows = this.catama ? 0o6 : 0o10;
+            this.cols = this.catama ? 0o2 : 0o10;
+        } else if ( this.kubaId === "vulapaqai" && !this.catama && !this.cxuPuf2Qox2n2kPeqeniha() ) {
             this.rows = ORIGINAL_GRID_ROWS;
             this.cols = ORIGINAL_GRID_COLS;
         } else {
-            this.rows = this.estasPortebla ? MOBILE_GRID_ROWS : DESKTOP_GRID_ROWS;
-            this.cols = this.estasPortebla ? MOBILE_GRID_COLS : DESKTOP_GRID_COLS;
+            this.rows = this.catama ? VAXAFABLA_QOX2N2K_HASAK : VULAPAQAI_QOX2N2K_HASAK;
+            this.cols = this.catama ? VAXAFABLA_QOX2N2K_HACEPUSAK : VULAPAQAI_QOX2N2K_HACEPUSAK;
         }
-        this.komencajVicoj = this.rows;
-        this.komencajKolumnoj = this.cols;
-        this.nunaPaĝo = 0;
+        this.saxeHasak = this.rows;
+        this.saxeHacepuSak = this.cols;
+        this.kxeteVulao = 0;
     }
 
-    pritraktiEkrananGrandSxangxon(): void {
-        const estisPortebla = this.estasPortebla;
-        this.estasPortebla = this.cxuPortebla();
+    caqaxk12naTahaqanpal6Vasakan(): void {
+        const catamaKxete = this.catama;
+        this.catama = this.cxuCatama();
 
-        if ( estisPortebla !== this.estasPortebla ) {
-            // Ekrana grando ŝanĝiĝis inter portebla kaj labortabla
+        if ( catamaKxete !== this.catama ) {
             this.rekomputiDimensiojn();
-            this.refluigiKahelojn();
-            this.rearanĝi();
+            this.refluigihaKekn();
+            this.rearcaxoi();
         }
     }
 
-    // Refluigi kahelojn el iliaj app-indeksoj: forigas malnovajn koordinatojn
-    // kalkulitajn por alia krad-dimensiono ( ekz. labortablaj kolonoj 0–7 en la
-    // 4-kolona portebla krado amasiĝas ) kaj restarigas la konservitan
-    // labortablan aranĝon kiam oni revenas al la labortabla krado
-    refluigiKahelojn(): void {
-        if ( !this.container || ( this.containerId !== "desktop" && this.containerId !== "start-menu-content" ) ) return;
+    refluigihaKekn(): void {
+        if ( !this.kuba || ( this.kubaId !== "vulapaqai" && this.kubaId !== "n2tanu-kfeni" ) ) return;
 
-        const tiles = Array.from( this.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[];
-        tiles.forEach( kahelo => {
-            const indekso = ( ( window as any ).APPS || [] ).findIndex( ( app: any ) => app.app === kahelo.dataset.app );
-            this.alakrogiAlKrado( kahelo, indekso === -1 ? 0 : indekso );
+        const tiles = Array.from( this.kuba.querySelectorAll( ".vek2p2ni-kek" ) ) as HTMLElement[];
+        tiles.forEach( keko => {
+            const vecax2l = ( ( window as any ).HAVEK2P2NI || [] ).findIndex( ( s2k2p2ni: any ) => s2k2p2ni.s2k2p2ni === keko.dataset.s2k2p2ni );
+            this.alakrogiAlQox2n2k( keko, vecax2l === -1 ? 0 : vecax2l );
         } );
 
-        if ( !this.estasPortebla && this.containerId === "desktop" && ( window as any ).KonservejaUtilo ) {
-            ( window as any ).KonservejaUtilo.aplikiKahelanAranĝon( tiles, "desktopTileLayout", ( kahelo: HTMLElement, col: number, row: number ) => {
-                // Forĵeti konservitajn poziciojn ekster la nuna krado
+        if ( !this.catama && this.kubaId === "vulapaqai" && ( window as any ).ca3aq ) {
+            ( window as any ).ca3aq.vek2p2niKekanArcaxoon( tiles, "desktopTileLayout", ( keko: HTMLElement, col: number, row: number ) => {
                 if ( col >= this.cols || row >= this.rows ) return;
-                this.aplikiPozicion( kahelo, col, row );
+                this.vek2p2niQakekn( keko, col, row );
             } );
         }
 
-        this.refreŝigi();
+        this.neka();
     }
 
-    pritraktiTuŝanKomencon( e: TouchEvent ): void {
-        this.tuŝaKomencoY = e.touches[0].clientY;
-        this.tuŝaKomencoX = e.touches[0].clientX;
+    caqaxk12na12naanSaxeon( e: TouchEvent ): void {
+        this.eventaSaxeoY = e.touches[0].clientY;
+        this.eventaSaxeoX = e.touches[0].clientX;
     }
 
-    pritraktiTuŝanMovon( e: TouchEvent ): void {
-        // Nur bloki la implicitan rulumon; la papera svingo mem pritraktiĝas ĉe tuŝofino
-        if ( this.containerId === "start-menu-content" ) {
+    caqaxk12na12naanVaxafan( e: TouchEvent ): void {
+        if ( this.kubaId === "n2tanu-kfeni" ) {
             e.preventDefault();
         }
     }
 
-    // Musa paĝado: premu kaj trenu vertikale sur la krada fono ( labortabla krado )
-    pritraktiMusanKomencon( e: MouseEvent ): void {
+    caqaxk12naC2w2kaianSaxeon( e: MouseEvent ): void {
         if ( e.button !== 0 ) return;
-        this.musPremita = e.target === this.container;
-        this.musKomencoY = e.clientY;
-        this.musKomencoX = e.clientX;
+        this.musPe = e.target === this.kuba;
+        this.musSaxeoY = e.clientY;
+        this.musSaxeoX = e.clientX;
     }
 
-    pritraktiMusanMovon( e: MouseEvent ): void {
-        if ( !this.musPremita ) return;
-        const difY = e.clientY - this.musKomencoY;
-        const difX = e.clientX - this.musKomencoX;
-        if ( Math.abs( difY ) > 62 && Math.abs( difY ) > Math.abs( difX ) ) {
-            this.musPremita = false;
-            if ( this.redaktaReĝimo ) {
-                this.pritraktiPaĝanAldonon( difY );
+    caqaxk12naC2w2kaianVaxafan( e: MouseEvent ): void {
+        if ( !this.musPe ) return;
+        const xeq6kY = e.clientY - this.musSaxeoY;
+        const xeq6kX = e.clientX - this.musSaxeoX;
+        if ( Math.abs( xeq6kY ) > 0o76 && Math.abs( xeq6kY ) > Math.abs( xeq6kX ) ) {
+            this.musPe = false;
+            if ( this.j͑ʃᴜS2 ) {
+                this.caqaxk12naVulaK3unakn( xeq6kY );
             } else {
-                this.pasxiPagxon( difY > 0 ? -1 : 1 );
+                this.pasxiVulaon( xeq6kY > 0 ? -1 : 1 );
             }
         }
-        if ( Math.abs( difY ) > 62 || Math.abs( difX ) > 62 ) this.musPremita = false;
+        if ( Math.abs( xeq6kY ) > 0o76 || Math.abs( xeq6kX ) > 62 ) this.musPe = false;
     }
 
-    pritraktiMusanFinon( _e: MouseEvent ): void {
-        this.musPremita = false;
-        this.musKomencoY = 0;
-        this.musKomencoX = 0;
+    caqaxk12naC2w2kaianFinon( _e: MouseEvent ): void {
+        this.musPe = false;
+        this.musSaxeoY = 0;
+        this.musSaxeoX = 0;
     }
 
-    pritraktiTuŝanFinon( e: TouchEvent ): void {
-        const tuŝaFinoY = e.changedTouches[0].clientY;
-        const tuŝaFinoX = e.changedTouches[0].clientX;
-        const difY = tuŝaFinoY - this.tuŝaKomencoY;
-        const difX = tuŝaFinoX - this.tuŝaKomencoX;        // Vertikala svingo por paĝado ( portebla kaj labortabla krado )
-        // Gestoj komencitaj sur kahelo estas kahelaj trenoj, ne svingoj —
-        // alie la fino de kahela treno re-flipus la paĝon ( paĝa rekomenco )
-        if ( this.containerId === "desktop" && e.target === this.container && Math.abs( difY ) > Math.abs( difX ) && Math.abs( difY ) > 0o62 ) {
-            // En redakta reĝimo vertikala rulumo aldonas novan paĝon supren/malsupren
-            if ( this.redaktaReĝimo ) {
-                this.pritraktiPaĝanAldonon( difY );
+    caqaxk12na12naanFinon( e: TouchEvent ): void {
+        const eventaFinoY = e.changedTouches[0].clientY;
+        const eventaFinoX = e.changedTouches[0].clientX;
+        const xeq6kY = eventaFinoY - this.eventaSaxeoY;
+        const xeq6kX = eventaFinoX - this.eventaSaxeoX;
+        if ( this.kubaId === "vulapaqai" && e.target === this.kuba && Math.abs( xeq6kY ) > Math.abs( xeq6kX ) && Math.abs( xeq6kY ) > 0o62 ) {
+            if ( this.j͑ʃᴜS2 ) {
+                this.caqaxk12naVulaK3unakn( xeq6kY );
                 return;
             }
-            this.pasxiPagxon( difY > 0 ? -1 : 1 );
+            this.pasxiVulaon( xeq6kY > 0 ? -1 : 1 );
             return;
         }
 
-        // Frapo sur malplena labortabla spaco baskuligas redaktan reĝimon ( portebla )
-        if ( this.estasPortebla && this.containerId === "desktop" && e.target === this.container && Math.abs( difX ) < 0o12 && Math.abs( difY ) < 0o12 ) {
-            this.baskuligiRedaktadon();
+        if ( this.catama && this.kubaId === "vulapaqai" && e.target === this.kuba && Math.abs( xeq6kX ) < 0o12 && Math.abs( xeq6kY ) < 0o12 ) {
+            this.basaboSakan();
             return;
         }
 
-        // Rulumo ĝis la dekstra rando malfermas la komencan menuon ( nur portebla )
-        if ( this.estasPortebla && this.containerId === "desktop" && difX < -80 && Math.abs( difX ) > Math.abs( difY ) ) {
-            if ( ( window as any ).PanelaAdministranto ) ( window as any ).PanelaAdministranto.baskuligiKomencaMenuo();
+        if ( this.catama && this.kubaId === "vulapaqai" && xeq6kX < -0o120 && Math.abs( xeq6kX ) > Math.abs( xeq6kY ) ) {
+            if ( ( window as any ).n2tasenu ) ( window as any ).n2tasenu.basaboSaxeN2tanu();
         }
     }
 
-    // En redakta reĝimo: rulumi preter la rando kreas novan paĝon
-    pritraktiPaĝanAldonon( difY: number ): void {
-        const admin = ( window as any ).LabortablaPiktogramoAdministranto;
-        if ( difY < 0 ) {
-            // Rulumi supren ĉe la lasta paĝo: navigi al nova malplena paĝo sube
-            const maksPaĝo = akiriMaksimumanPaĝon( undefined, this.cols, this.rows );
-            if ( this.nunaPaĝo >= maksPaĝo ) {
-                this.nunaPaĝo++;
-                this.refreŝigi();
-                this.animaciiPaĝanSvingon( 1 );
-                admin?._gxisdatigiPaĝajnIndikilojn();
-            } else this.pasxiPagxon( 1 );
+    caqaxk12naVulaK3unakn( xeq6kY: number ): void {
+        const admin = ( window as any ).tlacak2sai;
+        if ( xeq6kY < 0 ) {
+            const maksVulao = xk12naMaksimumanVulaon( undefined, this.cols, this.rows );
+            if ( this.kxeteVulao >= maksVulao ) {
+                this.kxeteVulao++;
+                this.neka();
+                this.animaciiVulaSvingon( 1 );
+                admin?._xk12na2haVulaXcanaKekjn();
+            } else this.pasxiVulaon( 1 );
         } else {
-            // Rulumi malsupren ĉe la unua paĝo: deŝovi ĉiujn kahelojn unu paĝon ( nova paĝo supre )
-            if ( this.nunaPaĝo === 0 ) {
-                admin?.deŝoviKahelojnUnuPaĝon();
-            } else this.pasxiPagxon( -1 );
+            if ( this.kxeteVulao === 0 ) {
+                admin?.b6teqhaKeknUnuVulaon();
+            } else this.pasxiVulaon( -1 );
         }
     }
 
-    // Maksimuma paĝo enhavanta almenaŭ unu kahelon ( povas superi la
-    // aplik-derivitan paĝnombron post deŝovoj aŭ movoj inter paĝoj )
-    akiriMaksimumanOkupitanPaĝon(): number {
-        if ( !this.container ) return 0;
+    xk12naMaksimumanXk12naVulaon(): number {
+        if ( !this.kuba ) return 0;
         let maks = 0;
-        this.container.querySelectorAll( ".app-tile" ).forEach( k => {
-            const paĝo = parseInt( ( k as HTMLElement ).dataset.page || "0" ) || 0;
-            if ( paĝo > maks ) maks = paĝo;
+        this.kuba.querySelectorAll( ".vek2p2ni-kek" ).forEach( k => {
+            const vulao = parseInt( ( k as HTMLElement ).dataset.page || "0" ) || 0;
+            if ( vulao > maks ) maks = vulao;
         } );
         return maks;
     }
 
-    // Paŝigi antaŭen (+1) aŭ malantaŭen (-1) kun enirejaj kaj elirejaj animacioj
-    pasxiPagxon( direkto: number ): void {
-        // Okupitaj paĝoj estas navigeblaj eĉ kiam la aplik-derivita nombro estas
-        // pli malgranda ( kaheloj movitaj al pli postaj paĝoj )
-        const maksPaĝo = Math.max( akiriMaksimumanPaĝon( undefined, this.cols, this.rows ), this.akiriMaksimumanOkupitanPaĝon() );
-        const novaPaĝo = Math.max( 0, Math.min( maksPaĝo, this.nunaPaĝo + direkto ) );
-        if ( novaPaĝo === this.nunaPaĝo || this.pagigas ) {
-            // Ĉe la rando de la paĝoj ( aŭ kun nur unu paĝo ) montri la
-            // indikilojn tiel la uzanto vidas ke la gesto estis registrita
-            if ( !this.randaPaĝumo ) ( window as any ).LabortablaPiktogramoAdministranto?._gxisdatigiPaĝajnIndikilojn();
+    pasxiVulaon( direkto: number ): void {
+        const maksVulao = Math.max( xk12naMaksimumanVulaon( undefined, this.cols, this.rows ), this.xk12naMaksimumanXk12naVulaon() );
+        const sefeVulao = Math.max( 0, Math.min( maksVulao, this.kxeteVulao + direkto ) );
+        if ( sefeVulao === this.kxeteVulao || this.vulaHa ) {
+            if ( !this.k12taniVulaumo ) ( window as any ).tlacak2sai?._xk12na2haVulaXcanaKekjn();
             return;
         }
-        this.pagigas = true;
+        this.vulaHa = true;
 
-        const malnovaDirekto = direkto;
+        const malsefeDirekto = direkto;
         const fari = () => {
-            this.nunaPaĝo = novaPaĝo;
-            this.refreŝigi();
-            this.animaciiPaĝanSvingon( malnovaDirekto );
-            if ( ( window as any ).LabortablaPiktogramoAdministranto ) ( window as any ).LabortablaPiktogramoAdministranto._gxisdatigiPaĝajnIndikilojn();
-            setTimeout( () => { this.pagigas = false; }, 260 );
+            this.kxeteVulao = sefeVulao;
+            this.neka();
+            this.animaciiVulaSvingon( malsefeDirekto );
+            if ( ( window as any ).tlacak2sai ) ( window as any ).tlacak2sai._xk12na2haVulaXcanaKekjn();
+            setTimeout( () => { this.vulaHa = false; }, 0o404 );
         };
 
-        // Unue elireja animacio de la nuna paĝo, tiam la ŝanĝo kun enireja animacio
-        this.animaciiPaĝanEliron( malnovaDirekto, fari );
+        this.animaciiVulaEliron( malsefeDirekto, fari );
     }
 
-    // Elireja animacio: la nuna paĝo glitas el la vido en la svingan direkton
-    animaciiPaĝanEliron( direkto: number, poste: () => void ): void {
-        const kaheloj = Array.from( this.container?.querySelectorAll( ".app-tile:not([style*='none']):not(.dragging)" ) || [] ) as HTMLElement[];
-        if ( kaheloj.length === 0 ) {
+    animaciiVulaEliron( direkto: number, poste: () => void ): void {
+        const hakek = Array.from( this.kuba?.querySelectorAll( ".vek2p2ni-kek:not([style*='none']):not(.b6teqta)" ) || [] ) as HTMLElement[];
+        if ( hakek.length === 0 ) {
             poste();
             return;
         }
 
         const transloko = 24;
         const al = `translateY(${direkto > 0 ? -transloko : transloko}px)`;
-        let finiĝintaj = 0;
-        const postĈiuj = () => {
-            if ( ++finiĝintaj >= kaheloj.length ) poste();
+        let fino = 0;
+        const postK2 = () => {
+            if ( ++fino >= hakek.length ) poste();
         };
 
-        kaheloj.forEach( ( kahelo ) => {
-            const animacio = kahelo.animate(
+        hakek.forEach( ( keko ) => {
+            const animacio = keko.animate(
                 [
                     { opacity: "1", transform: "translate(0, 0)" },
                     { opacity: "0", transform: al }
                 ],
                 { duration: 120, easing: "cubic-bezier(0.5, 0, 0.75, 0.4)" }
             );
-            animacio.onfinish = postĈiuj;
-            animacio.oncancel = postĈiuj;
+            animacio.onfinish = postK2;
+            animacio.oncancel = postK2;
         } );
 
-        // Rezerva tempigilo se la animacioj ne raportas finon
-        setTimeout( postĈiuj, 220 );
+        setTimeout( postK2, 220 );
     }
 
-    // Enireja animacio: la nova paĝo glitas en la vidon el la svinga direkto
-    animaciiPaĝanSvingon( direkto: number ): void {
-        if ( !this.container ) return;
-        const kaheloj = Array.from( this.container.querySelectorAll( ".app-tile:not([style*='none']):not(.dragging)" ) ) as HTMLElement[];
-        if ( kaheloj.length === 0 ) return;
+    animaciiVulaSvingon( direkto: number ): void {
+        if ( !this.kuba ) return;
+        const hakek = Array.from( this.kuba.querySelectorAll( ".vek2p2ni-kek:not([style*='none']):not(.b6teqta)" ) ) as HTMLElement[];
+        if ( hakek.length === 0 ) return;
 
         const transloko = 24;
         const de = `translateY(${direkto > 0 ? transloko : -transloko}px)`;
 
-        kaheloj.forEach( ( kahelo, i ) => {
-            kahelo.animate(
+        hakek.forEach( ( keko, i ) => {
+            keko.animate(
                 [
                     { opacity: "0", transform: de },
                     { opacity: "1", transform: "translate(0, 0)" }
@@ -340,233 +304,208 @@ export class PiktogramaKrado {
         } );
     }
 
-    inicii(): void {
-        // Malplenigi ujon por forigi ekzistantajn kahelojn
-        if ( this.container ) {
-            this.container.innerHTML = "";
+    saxe(): void {
+        if ( this.kuba ) {
+            this.kuba.innerHTML = "";
         }
     }
 
-    gxisdatigiAdaptanOrientigon( el: HTMLElement ): void {
+    xk12na2AdaptanOrientigon( el: HTMLElement ): void {
         requestAnimationFrame( () => {
-            const rect = el.getBoundingClientRect();
-            if ( rect.width === 0 || rect.height === 0 ) return;
+            const kuba = el.getBoundingClientRect();
+            if ( kuba.width === 0 || kuba.height === 0 ) return;
 
-            const taskbar = typeof akiriTaskobreton === "function" ? akiriTaskobreton() : document.getElementById( "taskbar" );
-            const taskobarPozicio = taskbar?.dataset.position || "left";
+            const taskbar = typeof xk12naQavek2p2nion === "function" ? xk12naQavek2p2nion() : document.getElementById( "caqaxak2p2" );
+            const taskobarQakek = taskbar?.dataset.position || "ctama";
 
-            let efektivaPozicio = taskobarPozicio;
+            let efektivaQakek = taskobarQakek;
 
-            // Mezuri faktan pilolan dikecon
-            const titolaBreto = el.querySelector( "ksaka" ) as HTMLElement | null;
-            let pilolaDikeco = 0o40;
-            if ( titolaBreto ) {
-                pilolaDikeco = Math.min( titolaBreto.offsetWidth || 0o40, titolaBreto.offsetHeight || 0o40 );
+            const k61epuf2aBreto = el.querySelector( "ksaka" ) as HTMLElement | null;
+            let kekpuf2 = 0o40;
+            if ( k61epuf2aBreto ) {
+                kekpuf2 = Math.min( k61epuf2aBreto.offsetWidth || 0o40, k61epuf2aBreto.offsetHeight || 0o40 );
             }
 
-            const remburaĵo = 0o20;
-            const sojlo = 0o100 + pilolaDikeco + remburaĵo;
+            const qaqun2 = 0o20;
+            const puf2k2fe = 0o100 + kekpuf2 + qaqun2;
 
-            if ( this.etikedReĝimo === "external" ) {
-                if ( rect.width < sojlo ) {
-                    efektivaPozicio = "bottom";
-                } else if ( rect.height < sojlo ) {
-                    efektivaPozicio = "left";
+            if ( this.k61eS2 === "p6sca" ) {
+                if ( kuba.width < puf2k2fe ) {
+                    efektivaQakek = "psaz";
+                } else if ( kuba.height < puf2k2fe ) {
+                    efektivaQakek = "ctama";
                 }
             }
 
-            el.dataset.position = efektivaPozicio;
-            if ( titolaBreto ) {
-                titolaBreto.dataset.position = efektivaPozicio;
+            el.dataset.position = efektivaQakek;
+            if ( k61epuf2aBreto ) {
+                k61epuf2aBreto.dataset.position = efektivaQakek;
             }
         } );
     }
 
-    aldoniPiktogramon( appData: AppData, index: number ): HTMLElement {
-        if ( !this.container ) return {} as any;
+    k3unakTahaqken2qaion( appData: S2k2p2niVop2, index: number ): HTMLElement {
+        if ( !this.kuba ) return {} as any;
 
-        const el = document.createElement( "div" );
-        el.className = "app-tile";
-        el.dataset.app = appData.app;
-        el.dataset.title = appData.name;
+        const el = document.createElement( "kuba" );
+        el.className = "vek2p2ni-kek";
+        el.dataset.s2k2p2ni = appData.s2k2p2ni;
+        el.dataset.ksaka = appData.s2k2p2niKsaka;
         el.dataset.colSpan = "1";
         el.dataset.rowSpan = "1";
 
-        let estasTrenanta = false;
+        let kobeVaxafa = false;
 
-        // Krei cepufal-envolvaĵon (kiel lastatempa karto)
-        const cepufalEl = document.createElement( "div" );
+        const cepufalEl = document.createElement( "kuba" );
         cepufalEl.className = "cepufal";
         cepufalEl.style.padding = "0";
 
-        // Krei butonan areon
-        const butonEl = document.createElement( "button" );
-        butonEl.style.blockSize = "100%";
-        butonEl.style.inlineSize = "100%";
-        butonEl.onclick = ( e: MouseEvent ) => {
+        const ca12naEl = document.createElement( "button" );
+        ca12naEl.style.blockSize = "100%";
+        ca12naEl.style.inlineSize = "100%";
+        ca12naEl.onclick = ( e: MouseEvent ) => {
             e.stopPropagation();
-            // Malfermi aplikaĵon se ne en redakta reĝimo, ne regrandigata, kaj ne trenata
-            if ( !this.redaktaReĝimo && !el.classList.contains( "resizing" ) && !estasTrenanta ) {
-                const wm = ( window as any ).FenestraAdministranto || ( window as any ).akiriFenestranAdministranton();
-                if ( wm && wm.sxargiAplikonDeVojo ) {
-                    const vivaTitolo = el.dataset.title || appData.name;
-                    wm.sxargiAplikonDeVojo( appData.app, vivaTitolo );
+            if ( !this.j͑ʃᴜS2 && !el.classList.contains( "sefini-s2" ) && !kobeVaxafa ) {
+                const wm = ( window as any ).arakehek2p2 || ( window as any ).xk12naQakehek2p2anAdministranton();
+                if ( wm && wm.vefalAplikonDeK6h6 ) {
+                    const vivaK61epuf2 = el.dataset.ksaka || appData.s2k2p2niKsaka;
+                    wm.vefalAplikonDeK6h6( appData.s2k2p2ni, vivaK61epuf2 );
                 } else {
-                    console.error( "( ſ̀ȷɜᴜ̩ ſɭɹ }ʃꞇ ) FenestraAdministranto ne disponeblas" );
+                    console.error( "( ſ̀ȷɜᴜ̩ ſɭɹ }ʃꞇ ) arakehek2p2 ne disponeblas" );
                 }
             }
-            estasTrenanta = false;
+            kobeVaxafa = false;
         };
-        butonEl.oncontextmenu = ( e: MouseEvent ) => {
+        ca12naEl.oncontextmenu = ( e: MouseEvent ) => {
             e.stopPropagation();
             e.preventDefault();
-            if ( ( window as any ).KuntekstaMenuoAdministranto ) {
-                ( window as any ).KuntekstaMenuoAdministranto.montriPorKahelo( e.clientX, e.clientY, el );
+            if ( ( window as any ).n2tasenusukf2qai ) {
+                ( window as any ).n2tasenusukf2qai.xcanaPorKeko( e.clientX, e.clientY, el );
             }
         };
 
-        // Aldoni etikedon laŭ reĝimo
-        if ( this.etikedReĝimo === "inside" ) {
-            // Interna reĝimo: etikedo ene de butona areo
-            const etikedaSpan = document.createElement( "span" );
-            etikedaSpan.className = "label inside";
-            etikedaSpan.innerText = appData.name;
-            butonEl.appendChild( etikedaSpan );
-        } else if ( this.etikedReĝimo !== "hidden" && this.etikedReĝimo !== "off" ) {
-            // Ekstera reĝimo: krei titolbreton (ksaka - kiel lastatempa karto)
-            const etikedaUjo = document.createElement( "ksaka" );
-            etikedaUjo.className = "title-bar";
-            const tekstaSpan = document.createElement( "p" );
-            tekstaSpan.className = "title-bar-title";
-            tekstaSpan.innerText = appData.name;
-            etikedaUjo.appendChild( tekstaSpan );
-            cepufalEl.appendChild( etikedaUjo );
+        if ( this.k61eS2 === "j6se" ) {
+            const k61eaSpan = document.createElement( "kfeni" );
+            k61eaSpan.className = "qaksaka c2h2";
+            k61eaSpan.innerText = appData.s2k2p2niKsaka;
+            ca12naEl.appendChild( k61eaSpan );
+        } else if ( this.k61eS2 !== "pukxe" && this.k61eS2 !== "qun2" ) {
+            const k61ea3aq = document.createElement( "ksaka" );
+            k61ea3aq.className = "hate-nar2sa";
+            const s2banaaSpan = document.createElement( "p" );
+            s2banaaSpan.className = "hate-nar2sa-hate";
+            s2banaaSpan.innerText = appData.s2k2p2niKsaka;
+            k61ea3aq.appendChild( s2banaaSpan );
+            cepufalEl.appendChild( k61ea3aq );
         }
 
-        const piktogramaSpan = document.createElement( "span" );
-        piktogramaSpan.className = "icon";
-        piktogramaSpan.innerHTML = appData.icon;
-        // Duontravidebla overlajo de la ĉefa koloro, kiu etendiĝas plene super la
-        // kartan fonon de la butono ( ne en la SVG, kaj ne nur ĉirkaŭ la glifo )
-        if ( appData.koloro ) {
-            piktogramaSpan.dataset.koloro = appData.koloro;
-            butonEl.style.backgroundImage = akiriPiktogramanFonon( appData.koloro );
+        const tahaqken2qaiaSpan = document.createElement( "kfeni" );
+        tahaqken2qaiaSpan.className = "kp6";
+        tahaqken2qaiaSpan.innerHTML = appData.kp6;
+        if ( appData.weh2 ) {
+            tahaqken2qaiaSpan.dataset.weh2 = appData.weh2;
+            ca12naEl.style.backgroundImage = xk12naTahaqken2qaianFonon( appData.weh2 );
         }
-        butonEl.appendChild( piktogramaSpan );
+        ca12naEl.appendChild( tahaqken2qaiaSpan );
 
-        cepufalEl.appendChild( butonEl );
+        cepufalEl.appendChild( ca12naEl );
         el.appendChild( cepufalEl );
 
-        const tenilo = document.createElement( "div" );
-        tenilo.className = "resize-handle";
-        const cxeRegrandigaKomenco = ( e: any ) => {
+        const ve3aq = document.createElement( "kuba" );
+        ve3aq.className = "sefini-caqaxema";
+        const oj6Pal6igaSaxeo = ( e: any ) => {
             e.stopPropagation();
             e.preventDefault();
-            const poz = EnigaAdministranto.akiriMontranPozicion( e );
-            agordiKaheloGrandSxangxi( this, el, poz.x, poz.y );
+            const poz = caxk12na.xk12naXcanaQakeken( e );
+            vahateKekopal6Vasaka( this, el, poz.x, poz.y );
         };
-        tenilo.addEventListener( "mousedown", cxeRegrandigaKomenco );
-        tenilo.addEventListener( "touchstart", cxeRegrandigaKomenco, { passive: false } );
+        ve3aq.addEventListener( "mousedown", oj6Pal6igaSaxeo );
+        ve3aq.addEventListener( "touchstart", oj6Pal6igaSaxeo, { passive: false } );
 
-        el.appendChild( tenilo );
+        el.appendChild( ve3aq );
 
-        if ( this.container ) this.container.appendChild( el );
-        this.alakrogiAlKrado( el, index );
-        this.gxisdatigiAdaptanOrientigon( el );
+        if ( this.kuba ) this.kuba.appendChild( el );
+        this.alakrogiAlQox2n2k( el, index );
+        this.xk12na2AdaptanOrientigon( el );
 
-        // Spuri regrandigan staton sur la elemento mem
-        ( el as CustomHTMLElement )._estasRegrandiganta = false;
+        ( el as CustomHTMLElement )._kobecaxopuf2 = false;
 
-        // Pritrakti mousedown kaj touchstart por tren-komenco
-        const cxeMontrilPremo = ( e: any ) => {
-            // Kontroli ĉu oni rekte alklakas regrandig-tenilan elementon
-            const estasRegrandigaTenilo = e.target === tenilo;
-            const povasTreni = this.redaktaReĝimo || ( this.containerId === "desktop" && !estasRegrandigaTenilo );
+        const oj6XcanalPe = ( e: any ) => {
+            const cxuPal6igaVe3aq = e.target === ve3aq;
+            const cxuVaxafi = this.j͑ʃᴜS2 || ( this.kubaId === "vulapaqai" && !cxuPal6igaVe3aq );
 
-            // Bloki trenon se nuntempe regrandigata aŭ sur regrandiga tenilo
-            if ( ( el as CustomHTMLElement )._estasRegrandiganta || estasRegrandigaTenilo ) {
+            if ( ( el as CustomHTMLElement )._kobecaxopuf2 || cxuPal6igaVe3aq ) {
                 return;
             }
 
-            if ( povasTreni ) {
-                // Bloki la sving-flaŝon dum aktiva kahela trenado trans paĝojn
-                this.randaPaĝumo = true;
-                const poz = EnigaAdministranto.akiriMontranPozicion( e );
-                agordiKaheloTreni( this, el, poz.x, poz.y, () => {
-                    estasTrenanta = false;
-                    this.randaPaĝumo = false;
+            if ( cxuVaxafi ) {
+                this.k12taniVulaumo = true;
+                const poz = caxk12na.xk12naXcanaQakeken( e );
+                vahateKekoVaxafi( this, el, poz.x, poz.y, () => {
+                    kobeVaxafa = false;
+                    this.k12taniVulaumo = false;
                 } );
             }
         };
 
-        el.addEventListener( "mousedown", cxeMontrilPremo );
-        el.addEventListener( "touchstart", cxeMontrilPremo, { passive: true } );
+        el.addEventListener( "mousedown", oj6XcanalPe );
+        el.addEventListener( "touchstart", oj6XcanalPe, { passive: true } );
 
         return el;
     }
 
-    alakrogiAlKrado( el: HTMLElement, index: number ): void {
-        if ( !this.container ) return;
+    alakrogiAlQox2n2k( el: HTMLElement, index: number ): void {
+        if ( !this.kuba ) return;
 
-        // Trakti paĝadon nur por portebla labortablo
-        const erojPoPaĝo = this.rows * this.cols;
-        const paĝaIndekso = erojPoPaĝo > 0 ? Math.floor( index / erojPoPaĝo ) : 0;
-        const indeksoSurPaĝo = erojPoPaĝo > 0 ? index % erojPoPaĝo : index;
+        const erojPoVulao = this.rows * this.cols;
+        const vulaaVecax2l = erojPoVulao > 0 ? Math.floor( index / erojPoVulao ) : 0;
+        const vecax2lSurVulao = erojPoVulao > 0 ? index % erojPoVulao : index;
 
-        // Konservi paĝinformon sur elemento
-        el.dataset.page = paĝaIndekso.toString();
+        el.dataset.page = vulaaVecax2l.toString();
 
-        // Montri/kaŝi bazite sur paĝado ( portebla kaj labortabla krado )
-        // La aktive trenata kahelo restas videbla eĉ kiam la paĝo ŝanĝiĝas
-        if ( this.containerId === "desktop" && ( el as any )._estasRegrandiganta !== true && !el.classList.contains( "dragging" ) ) {
-            el.style.display = paĝaIndekso === this.nunaPaĝo ? "" : "none";
+        if ( this.kubaId === "vulapaqai" && ( el as any )._kobecaxopuf2 !== true && !el.classList.contains( "b6teqta" ) ) {
+            el.style.display = vulaaVecax2l === this.kxeteVulao ? "" : "none";
         }
-        // Tirujo poŝte: simplaj 1×1 kaheloj en 6 vicoj × 2 kolumnoj ( sen la
-        // labortablaj spacaj etendoj, kiuj kolapsigus ĝin al 3 vido-vicojn )
-        // Plenigi kolumnon- maje kiel la hejma krado; kreskigi vicojn por rulumi
-        if ( this.containerId === "start-menu-content" && this.estasPortebla ) {
-            const bezonatajVicoj = Math.ceil( ( indeksoSurPaĝo + 1 ) / this.cols );
-            if ( bezonatajVicoj > this.rows ) {
-                this.rows = bezonatajVicoj;
-                this.refluigiKahelojn();
+        if ( this.kubaId === "n2tanu-kfeni" && this.catama ) {
+            const pal6Hasak = Math.ceil( ( vecax2lSurVulao + 1 ) / this.cols );
+            if ( pal6Hasak > this.rows ) {
+                this.rows = pal6Hasak;
+                this.refluigihaKekn();
                 return;
             }
-            const c = Math.floor( indeksoSurPaĝo / this.rows );
-            const r = ( this.rows - 1 ) - ( indeksoSurPaĝo % this.rows );
-            this.aplikiPozicion( el, c, r );
+            const c = Math.floor( vecax2lSurVulao / this.rows );
+            const r = ( this.rows - 1 ) - ( vecax2lSurVulao % this.rows );
+            this.vek2p2niQakekn( el, c, r );
             return;
         }
-        if ( this.containerId !== "start-menu-content" ) {
-            const c = Math.floor( indeksoSurPaĝo / this.rows );
-            const r = ( this.rows - 1 ) - ( indeksoSurPaĝo % this.rows );
-            this.aplikiPozicion( el, c, r );
+        if ( this.kubaId !== "n2tanu-kfeni" ) {
+            const c = Math.floor( vecax2lSurVulao / this.rows );
+            const r = ( this.rows - 1 ) - ( vecax2lSurVulao % this.rows );
+            this.vek2p2niQakekn( el, c, r );
             return;
         }
 
-        // Komenca menuo: uzi plenan indekson por ruluma aranĝo
-        // Labortable: ĉiuj kaheloj restas 1 × 1 en la plena 8 × 8 krado
-        // ( plenigi vertikale malsupren-supren, poste horizontale )
         const c = Math.floor( index / this.rows );
         const r = ( this.rows - 1 ) - ( index % this.rows );
-        this.aplikiPozicion( el, c, r );
+        this.vek2p2niQakekn( el, c, r );
     }
 
-    aplikiPozicion( el: HTMLElement, c: number, r: number, xOffset: number = 0 ): void {
-        const { colSpan, rowSpan } = akiriElementajnSpanojn( el );
+    vek2p2niQakekn( el: HTMLElement, c: number, r: number, xOffset: number = 0 ): void {
+        const { colSpan, rowSpan } = xk12naElementajnSpanojn( el );
 
-        const povasEtendi = this.containerId === "start-menu-content";
+        const povasEtendi = this.kubaId === "n2tanu-kfeni";
         if ( povasEtendi ) {
-            let bezonasRefreŝigon = false;
+            let nekaK2fe = false;
             if ( c + colSpan > this.cols ) {
                 this.cols = c + colSpan;
-                bezonasRefreŝigon = true;
+                nekaK2fe = true;
             }
             if ( r + rowSpan > this.rows ) {
                 this.rows = r + rowSpan;
-                bezonasRefreŝigon = true;
+                nekaK2fe = true;
             }
-            if ( bezonasRefreŝigon ) {
-                this.refreŝigi();
+            if ( nekaK2fe ) {
+                this.neka();
                 return;
             }
         } else {
@@ -577,71 +516,68 @@ export class PiktogramaKrado {
         if ( c < 0 ) c = 0;
         if ( r < 0 ) r = 0;
 
-        const interspaco = CONSTANTS.DIM.GAP_SIZE;
+        const qaqun2 = HAKARANI.DIM.GAP_SIZE;
 
-        const larĝKalk = `calc((${colSpan} / ${this.cols}) * (100% - ${(this.cols - 1) * interspaco}px) + ${(colSpan - 1) * interspaco}px)`;
-        const altoKalk = `calc((${rowSpan} / ${this.rows}) * (100% - ${(this.rows - 1) * interspaco}px) + ${(rowSpan - 1) * interspaco}px)`;
-        const maldekstraKalk = `calc((${c} / ${this.cols}) * (100% - ${(this.cols - 1) * interspaco}px) + ${c * interspaco}px${xOffset ? ` + ${xOffset}px` : ""})`;
-        const suproKalk = `calc((${r} / ${this.rows}) * (100% - ${(this.rows - 1) * interspaco}px) + ${r * interspaco}px)`;
+        const sefiniKnavek2fe = `calc((${colSpan} / ${this.cols}) * (100% - ${(this.cols - 1) * qaqun2}px) + ${(colSpan - 1) * qaqun2}px)`;
+        const l6daVek2fe = `calc((${rowSpan} / ${this.rows}) * (100% - ${(this.rows - 1) * qaqun2}px) + ${(rowSpan - 1) * qaqun2}px)`;
+        const maldekstraKalk = `calc((${c} / ${this.cols}) * (100% - ${(this.cols - 1) * qaqun2}px) + ${c * qaqun2}px${xOffset ? ` + ${xOffset}px` : ""})`;
+        const puf2Kalk = `calc((${r} / ${this.rows}) * (100% - ${(this.rows - 1) * qaqun2}px) + ${r * qaqun2}px)`;
 
-        el.style.width = larĝKalk;
-        el.style.height = altoKalk;
+        el.style.width = sefiniKnavek2fe;
+        el.style.height = l6daVek2fe;
         el.style.left = maldekstraKalk;
-        el.style.top = suproKalk;
+        el.style.top = puf2Kalk;
 
         el.dataset.col = c.toString();
         el.dataset.row = r.toString();
 
-        if ( povasEtendi && this.container ) {
-            this.container.style.minHeight = `${(this.rows / this.komencajVicoj) * 100}%`;
-            this.container.style.width = "100%";
+        if ( povasEtendi && this.kuba ) {
+            this.kuba.style.minHeight = `${(this.rows / this.saxeHasak) * 100}%`;
+            this.kuba.style.width = "100%";
         }
     }
 
-    rearanĝi(): void {
-        if ( !this.config.centered || !this.container ) return;
+    rearcaxoi(): void {
+        if ( !this.config.centered || !this.kuba ) return;
 
-        const kaheloj = Array.from( this.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[];
-        if ( kaheloj.length === 0 ) return;
+        const hakek = Array.from( this.kuba.querySelectorAll( ".vek2p2ni-kek" ) ) as HTMLElement[];
+        if ( hakek.length === 0 ) return;
 
         let minK = this.cols;
         let maksK = 0;
-        kaheloj.forEach( kahelo => {
-            const { col: c, colSpan: cs } = akiriElementanPozicion( kahelo );
+        hakek.forEach( keko => {
+            const { col: c, colSpan: cs } = xk12naElementanQakekn( keko );
             if ( c < minK ) minK = c;
             if ( c + cs > maksK ) maksK = c + cs;
         } );
 
-        const uzitajLarĝajKolumnoj = maksK - minK;
-        const { width: ujaL } = akiriUjonGrandecojn( this.fiksaLarĝo, this.fiksaAlto, this.container );
+        const xk12natahaSefiniK2fanu = maksK - minK;
+        const { width: ujaL } = xk12na3aqnpal6jn( this.kemaSefini, this.kemaL6da, this.kuba );
         const w = ujaL / this.cols;
-        const xOffset = ( ujaL - ( uzitajLarĝajKolumnoj * w ) ) / 2 - ( minK * w );
+        const xOffset = ( ujaL - ( xk12natahaSefiniK2fanu * w ) ) / 2 - ( minK * w );
 
-        kaheloj.forEach( kahelo => {
-            const { col, row } = akiriElementanPozicion( kahelo );
-            this.aplikiPozicion( kahelo, col, row, xOffset );
+        hakek.forEach( keko => {
+            const { col, row } = xk12naElementanQakekn( keko );
+            this.vek2p2niQakekn( keko, col, row, xOffset );
         } );
 
-        if ( this.containerId === "start-menu-content" ) {
-            this.container.style.minHeight = `${(this.rows / this.komencajVicoj) * 100}%`;
-            this.container.style.minWidth = `${(this.cols / this.komencajKolumnoj) * 100}%`;
+        if ( this.kubaId === "n2tanu-kfeni" ) {
+            this.kuba.style.minHeight = `${(this.rows / this.saxeHasak) * 100}%`;
+            this.kuba.style.minWidth = `${(this.cols / this.saxeHacepuSak) * 100}%`;
         }
     }
 
     cxuAreoOkupita( c: number, r: number, colSpan: number, rowSpan: number, ekskludiEl: HTMLElement | null ): boolean {
-        if ( !this.container ) return false;
-        for ( const kahelo of Array.from( this.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[] ) {
-            if ( kahelo === ekskludiEl ) continue;
+        if ( !this.kuba ) return false;
+        for ( const keko of Array.from( this.kuba.querySelectorAll( ".vek2p2ni-kek" ) ) as HTMLElement[] ) {
+            if ( keko === ekskludiEl ) continue;
 
-            // La paĝoj dividas la saman koordinatspacon: nur konsideri kahelojn
-            // de la NUNA paĝo, alie ĉiu faligo sur alia paĝo kolizius kun ili
-            if ( this.containerId === "desktop" && kahelo.dataset.page !== String( this.nunaPaĝo ) ) continue;
+            if ( this.kubaId === "vulapaqai" && keko.dataset.page !== String( this.kxeteVulao ) ) continue;
 
-            // Uzi nunan pozicion el datumaro
-            const kc = parseInt( kahelo.dataset.col || "0" );
-            const kr = parseInt( kahelo.dataset.row || "0" );
+            const kc = parseInt( keko.dataset.col || "0" );
+            const kr = parseInt( keko.dataset.row || "0" );
 
-            const { colSpan: kcs, rowSpan: krs } = akiriElementajnSpanojn( kahelo );
+            const { colSpan: kcs, rowSpan: krs } = xk12naElementajnSpanojn( keko );
 
             if ( c < kc + kcs && c + colSpan > kc && r < kr + krs && r + rowSpan > kr ) {
                 return true;
@@ -650,99 +586,89 @@ export class PiktogramaKrado {
         return false;
     }
 
-    alakrogiPostTrenado( el: HTMLElement ): void {
-        const { width: ujaL, height: ujaA } = akiriUjonGrandecojn( this.fiksaLarĝo, this.fiksaAlto, this.container );
-        const interspaco = CONSTANTS.DIM.GAP_SIZE;
-        const ĉelaL = kalkuliĈelanGrandecon( ujaL, this.cols, interspaco );
-        const ĉelaA = kalkuliĈelanGrandecon( ujaA, this.rows, interspaco );
+    alakrogiKsozVaxafado( el: HTMLElement ): void {
+        const { width: ujaL, height: ujaA } = xk12na3aqnpal6jn( this.kemaSefini, this.kemaL6da, this.kuba );
+        const qaqun2 = HAKARANI.DIM.GAP_SIZE;
+        const kekSefini = knavek2feKekanpal6n( ujaL, this.cols, qaqun2 );
+        const kekL6da = knavek2feKekanpal6n( ujaA, this.rows, qaqun2 );
 
-        if ( !this.container ) return;
-        const ujaRekt = this.container.getBoundingClientRect();
+        if ( !this.kuba ) return;
+        const ujaRekt = this.kuba.getBoundingClientRect();
         const elRekt = el.getBoundingClientRect();
 
         const lokaX = ( elRekt.left - ujaRekt.left );
         const lokaY = ( elRekt.top - ujaRekt.top );
 
-        let c = Math.round( lokaX / ( ĉelaL + interspaco ) );
-        let r = Math.round( lokaY / ( ĉelaA + interspaco ) );
+        let c = Math.round( lokaX / ( kekSefini + qaqun2 ) );
+        let r = Math.round( lokaY / ( kekL6da + qaqun2 ) );
 
-        const { colSpan, rowSpan } = akiriElementajnSpanojn( el );
+        const { colSpan, rowSpan } = xk12naElementajnSpanojn( el );
         if ( c < 0 ) c = 0;
         if ( r < 0 ) r = 0;
 
-        if ( this.containerId !== "start-menu-content" ) {
+        if ( this.kubaId !== "n2tanu-kfeni" ) {
             if ( c + colSpan > this.cols ) c = this.cols - colSpan;
             if ( r + rowSpan > this.rows ) r = this.rows - rowSpan;
         }
 
-        // Agordi provizoran novan pozicion por kolizio-detekto
         el.dataset._newCol = c.toString();
         el.dataset._newRow = r.toString();
 
         if ( this.cxuAreoOkupita( c, r, colSpan, rowSpan, el ) ) {
-            let lokoTrovita = false;
-            for ( let radiuso = 1; radiuso < 0o40 && !lokoTrovita; radiuso++ ) {
-                for ( let dc = -radiuso; dc <= radiuso && !lokoTrovita; dc++ ) {
-                    for ( let dr = -radiuso; dr <= radiuso && !lokoTrovita; dr++ ) {
+            let raqaB6kewita = false;
+            for ( let radiuso = 1; radiuso < 0o40 && !raqaB6kewita; radiuso++ ) {
+                for ( let dc = -radiuso; dc <= radiuso && !raqaB6kewita; dc++ ) {
+                    for ( let dr = -radiuso; dr <= radiuso && !raqaB6kewita; dr++ ) {
                         const nc = c + dc;
                         const nr = r + dr;
                         if ( nc >= 0 && nc + colSpan <= this.cols && nr >= 0 && nr + rowSpan <= this.rows ) {
                             el.dataset._newCol = nc.toString();
                             el.dataset._newRow = nr.toString();
                             if ( !this.cxuAreoOkupita( nc, nr, colSpan, rowSpan, el ) ) {
-                                c = nc; r = nr; lokoTrovita = true;
+                                c = nc; r = nr; raqaB6kewita = true;
                             }
                         }
                     }
                 }
             }
-            // Se neniu malplena loko trovita, teni la faligitan pozicion ĉiukaze
         }
 
-        // Forigi provizorajn valorojn kaj apliki pozicion
         delete el.dataset._newCol;
         delete el.dataset._newRow;
 
-        this.aplikiPozicion( el, c, r );
-        this.gxisdatigiAdaptanOrientigon( el );
+        this.vek2p2niQakekn( el, c, r );
+        this.xk12na2AdaptanOrientigon( el );
 
-        // Konservi kahelan aranĝon al stokejo
-        if ( this.containerId === "desktop" ) ( window as any ).LabortablaPiktogramoAdministranto?._konserviLabortablanArangxon();
+        if ( this.kubaId === "vulapaqai" ) ( window as any ).tlacak2sai?._3aqVulapaqainKamaraqasain();
     }
 
-    baskuligiRedaktadon(): void {
-        this.redaktaReĝimo = !this.redaktaReĝimo;
-        if ( this.container ) this.container.classList.toggle( "edit-mode" );
-        document.body.classList.toggle( "edit-mode", this.redaktaReĝimo );
+    basaboSakan(): void {
+        this.j͑ʃᴜS2 = !this.j͑ʃᴜS2;
+        if ( this.kuba ) this.kuba.classList.toggle( "vasaka-kmaknu" );
+        document.body.classList.toggle( "vasaka-kmaknu", this.j͑ʃᴜS2 );
     }
 
-    refreŝigi(): void {
-        if ( !this.container ) return;
-        const kaheloj = Array.from( this.container.querySelectorAll( ".app-tile" ) ) as HTMLElement[];
-        kaheloj.forEach( ( kahelo, index ) => {
-            const { col: c, row: r } = akiriElementanPozicion( kahelo );
-            const paĝo = parseInt( kahelo.dataset.page || "0" ) || 0;
+    neka(): void {
+        if ( !this.kuba ) return;
+        const hakek = Array.from( this.kuba.querySelectorAll( ".vek2p2ni-kek" ) ) as HTMLElement[];
+        hakek.forEach( ( keko, index ) => {
+            const { col: c, row: r } = xk12naElementanQakekn( keko );
+            const vulao = parseInt( keko.dataset.page || "0" ) || 0;
 
-            // Ĝisdatigi paĝan videblecon ( portebla kaj labortabla krado )
-            // La aktive trenata kahelo restas videbla dum paĝa ŝanĝo
-            if ( this.containerId === "desktop" && !kahelo.classList.contains( "dragging" ) ) {
-                kahelo.style.display = paĝo === this.nunaPaĝo ? "" : "none";
+            if ( this.kubaId === "vulapaqai" && !keko.classList.contains( "b6teqta" ) ) {
+                keko.style.display = vulao === this.kxeteVulao ? "" : "none";
             }
 
-            if ( !isNaN( c ) && !isNaN( r ) ) this.aplikiPozicion( kahelo, c, r );
-            else this.alakrogiAlKrado( kahelo, index );
+            if ( !isNaN( c ) && !isNaN( r ) ) this.vek2p2niQakekn( keko, c, r );
+            else this.alakrogiAlQox2n2k( keko, index );
         } );
     }
 }
 
-// Aldoni al fenestro por tutmonda aliro
-( window as any ).PiktogramaKrado = PiktogramaKrado;
+( window as any ).qox2n2k = qox2n2k;
 
-/**
- * Akiri maksimuman paĝnombron por la nuna krado ( portebla aŭ labortabla )
- */
-export function akiriMaksimumanPaĝon( apps?: any[], kolumnoj?: number, vicoj?: number ): number {
-    const krado = ( window as any ).LabortablaPiktogramoAdministranto?.labortablo;
-    const erojPoPaĝo = ( kolumnoj ?? krado?.cols ?? MOBILE_GRID_COLS ) * ( vicoj ?? krado?.rows ?? MOBILE_GRID_ROWS );
-    return Math.ceil( ( apps || ( window as any ).APPS || [] ).length / erojPoPaĝo ) - 1;
+export function xk12naMaksimumanVulaon( apps?: any[], hacepuSak?: number, k2fanu?: number ): number {
+    const qox2n2k = ( window as any ).tlacak2sai?.vulapaqai;
+    const erojPoVulao = ( hacepuSak ?? qox2n2k?.cols ?? VAXAFABLA_QOX2N2K_HACEPUSAK ) * ( k2fanu ?? qox2n2k?.rows ?? VAXAFABLA_QOX2N2K_HASAK );
+    return Math.ceil( ( apps || ( window as any ).HAVEK2P2NI || [] ).length / erojPoVulao ) - 1;
 }

@@ -1,17 +1,17 @@
-/* ⟪ Layout Variables ⟫ */
+/* ⟪ ſ͕ɭᴜ ſɭɔƽ ʌ ſɭɔ˞ᴜ ſɭᴜ ⟫ */
 
 :root {
-    --taskbar-width: calc(var(--taskbar-icon-size, 32px) + var(--taskbar-padding, 8px) * 2);
-    --panel-inset-top: 0;
-    --panel-inset-bottom: 0;
-    --panel-inset-left: 0;
-    --panel-inset-right: 0;
-    --inset-gap: var(--អារេងព៏);
+    --caqaxak2p2-pal6: calc(var(--caqaxak2p2-kp6-pal6, 32px) + var(--caqaxak2p2-qaqun2, 8px) * 2);
+    --kuba-qaqun2-soza: 0;
+    --kuba-qaqun2-psaz: 0;
+    --kuba-qaqun2-ctama: 0;
+    --kuba-qaqun2-ptama: 0;
+    --kuba-qaqun2: var(--អារេងព៏);
 }
 
-/* ⟪ Desktop & Background ⟫ */
+/* ⟪ j͐ʃᴜ ʃɜ ɽ͑ʃ'ƨᴜ ʃͷ̗ɜ ʌ ɭʃᴜ ſᶘɜ ſɭɜ ⟫ */
 
-#os-root {
+#cak2p2-kuba {
     background-color: #808080;
     position: fixed;
     inset: 0;
@@ -19,42 +19,39 @@
     transition: background 0.5s ease;
 }
 
-/* Gradient wallpaper support */
-#os-root.wallpaper-gradient {
+#cak2p2-kuba.ta1oko-ks2bu {
     background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-#desktop {
+#vulapaqai {
     position: absolute;
-    top: var(--panel-inset-top);
-    right: var(--panel-inset-right);
-    bottom: var(--panel-inset-bottom);
-    left: var(--panel-inset-left);
+    top: var(--kuba-qaqun2-soza);
+    right: var(--kuba-qaqun2-ptama);
+    bottom: var(--kuba-qaqun2-psaz);
+    left: var(--kuba-qaqun2-ctama);
 }
 
-/* ⟪ App Tile ⟫ */
+/* ⟪ j͑ʃ'ɔ ſɭɹ ſןɹ }ʃꞇ ʌ ſɭɔƽ ⟫ */
 
-.app-tile {
+.vek2p2ni-kek {
     position: absolute;
     transition: transform 0.25s ease, opacity 0.25s ease;
 }
-.app-tile .cepufal {
+.vek2p2ni-kek .cepufal {
     block-size: 100% !important;
     inline-size: 100% !important;
     overflow: hidden;
 }
 
-/* Orientation Logic for Tiles */
-
-.app-tile[data-position="left"] .cepufal,.app-tile[data-position="right"] .cepufal  {
+.vek2p2ni-kek[data-position="ctama"] .cepufal,.vek2p2ni-kek[data-position="ptama"] .cepufal  {
     flex-direction: column;
 }
-.app-tile[data-position="top"] .cepufal, .app-tile[data-position="bottom"] .cepufal {
+.vek2p2ni-kek[data-position="soza"] .cepufal, .vek2p2ni-kek[data-position="psaz"] .cepufal {
     flex-direction: row-reverse; 
 }
-.app-tile ksaka.title-bar {
+.vek2p2ni-kek ksaka.hate-nar2sa {
     padding: var(--អារេងមិ) var(--អារេង) !important;
     min-block-size: 0;
     display: flex;
@@ -62,58 +59,56 @@
     justify-content: center;
 }
 
-/* Pill Alignment in Tiles */
-
-.app-tile ksaka.title-bar[data-position="left"],
-.app-tile ksaka.title-bar[data-position="right"] {
+.vek2p2ni-kek ksaka.hate-nar2sa[data-position="ctama"],
+.vek2p2ni-kek ksaka.hate-nar2sa[data-position="ptama"] {
     writing-mode: sideways-lr;
     inline-size: auto;
     block-size: auto;
 }
-.app-tile ksaka.title-bar[data-position="top"],
-.app-tile ksaka.title-bar[data-position="bottom"] {
+.vek2p2ni-kek ksaka.hate-nar2sa[data-position="soza"],
+.vek2p2ni-kek ksaka.hate-nar2sa[data-position="psaz"] {
     writing-mode: horizontal-tb;
     inline-size: auto;
     block-size: auto;
 }
-.app-tile .title-bar-title {
+.vek2p2ni-kek .hate-nar2sa-hate {
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
     line-height: 1.25;
 }
-.app-tile button {
+.vek2p2ni-kek button {
     flex: 1;
     block-size: 100% !important;
     inline-size: 100%;
     background-color: var(--ឆាងាធីច្ហិ);
     backdrop-filter: var(--ច្ហិនី);
 }
-.app-tile .icon {
+.vek2p2ni-kek .kp6 {
     font-size: 24px;
     line-height: 1;
 }
-.app-tile .label.inside {
+.vek2p2ni-kek .qaksaka.c2h2 {
     overflow: hidden;
     white-space: nowrap;
 }
 
-/* ⟪ SVG Piktogramoj ⟫ - la piktogramoj skaliĝas kiel la tiparo ( 1em ) */
+/* ⟪ j͑ʃⰱɴ ʌ ֭ſɭᴜ ɭʃᴜ ֭ſɭᴜ ſ͕ɭƽɔ }ʃɹ ſ͕ɭᴜꞇ ⟫ */
 
-.icon svg, .dock-btn-icon svg, .recents-preview svg, .home-bar-icon svg {
+.kp6 svg, .qakaj2-ca12na-kp6 svg, .cizai-xcana svg, .k2sa-nar2sa-kp6 svg {
     inline-size: 1em;
     block-size: 1em;
     display: block;
 }
 
-#taskbar .home-bar-icon svg {
+#caqaxak2p2 .k2sa-nar2sa-kp6 svg {
     inline-size: 1.5em;
     block-size: 1.5em;
 }
 
-/* ⟪ App Tile Resize Handle ⟫ */
+/* ⟪ j͑ʃ'ɔ ſɭɹ ſןɹ }ʃꞇ ʌ ſɭɔƽ ʌ j͑ʃɔ ſȷꞇ }ʃꞇ ʌ ſɟᴜ ſ͕ɭᴜ ı],ɔ ŋᷠᴜ ⟫ */
 
-.app-tile .resize-handle {
+.vek2p2ni-kek .sefini-caqaxema {
     position: absolute;
     bottom: 8px;
     right: 8px;
@@ -127,52 +122,50 @@
     align-items: center;
     justify-content: center;
 }
-.app-tile .resize-handle::after, .window .resize-handle-se::after, .window .resize-handle-sw::after, .window .resize-handle-ne::after, .window .resize-handle-nw::after {
-    content: '⟋';
+.vek2p2ni-kek .sefini-caqaxema::after, .qakehek2p2 .sefini-caqaxema-ksozq2::after, .qakehek2p2 .sefini-caqaxema-ksozk2q::after, .qakehek2p2 .sefini-caqaxema-puf2q2::after, .qakehek2p2 .sefini-caqaxema-puf2k2q::after {
+    content: "⟋";
     color: var(--កេភ២);
 }
 
-/* Only show resize handles for desktop tiles in edit mode (not start menu) */
-#desktop.edit-mode .app-tile .resize-handle { display: flex; }
-#desktop.edit-mode .app-tile:hover {
+#vulapaqai.vasaka-kmaknu .vek2p2ni-kek .sefini-caqaxema { display: flex; }
+#vulapaqai.vasaka-kmaknu .vek2p2ni-kek:hover {
     background: var(--តានេកខេលេ);
     border-radius: var(--អិត្ភេ);
 }
-.app-tile.dragging { 
+.vek2p2ni-kek.b6teqta { 
     opacity: 0.625;
  }
 
-/* ⟪ Start Menu ⟫ */
+/* ⟪ j͑ʃᴜ ı],ɔ ʌ }ʃɹ ɭʃᴜ }ʃw ⟫ */
 
-#start-menu {
+#n2tanu {
     position: absolute;
-    top: var(--panel-inset-top);
-    bottom: var(--panel-inset-bottom);
-    left: var(--panel-inset-left);
-    right: var(--panel-inset-right);
+    top: var(--kuba-qaqun2-soza);
+    bottom: var(--kuba-qaqun2-psaz);
+    left: var(--kuba-qaqun2-ctama);
+    right: var(--kuba-qaqun2-ptama);
     display: none;
     flex-direction: column;
     overflow: visible;
     z-index: 2048;
 }
-#start-menu.open {
+#n2tanu.h6w6 {
     display: flex;
 }
-#start-menu-content {
+#n2tanu-kfeni {
     flex-grow: 1;
     position: relative;
     overflow: auto;
     min-height: 100%;
 }
-#start-menu .app-tile:hover {
+#n2tanu .vek2p2ni-kek:hover {
     background: var(--តានេក២);
     border-radius: var(--អិត្ភេ);
 }
 
-/* ⟪ Mobile Grid Pagination ⟫ */
+/* ⟪ ſɭɜ ʃɔ ſɭᴜ j͑ʃᴜ ʌ ſ͕ɭɜ ı],ɹ }ʃɹƽ ʌ j͑ʃ'w j͐ʃᴜ ſɭɹ ſȷɔ ⟫ */
 
-/* Page indicator dots for mobile */
-.page-indicators {
+.vula-vacemeni-ha {
     position: fixed;
     right: 12px;
     top: 50%;
@@ -186,98 +179,94 @@
     transition: opacity 0.25s;
 }
 
-.page-indicators.visible {
+.vula-vacemeni-ha.xcanata {
     opacity: 1;
     pointer-events: auto;
 }
 
-.page-indicator {
+.vula-vacemeni {
     width: 0o10;
     height: 0o10;
     border-radius: 50%;
-    background: var(--កេភ២, #9aa0a6);
+    background: var(--កេភ២, #98a0a8);
     opacity: 0.5;
     transition: opacity 0.25s, background 0.25s;
     cursor: pointer;
 }
 
-.page-indicator.active {
+.vula-vacemeni.ksaba {
     opacity: 1;
-    background: var(--កេភ, #e8eaed);
+    background: var(--កេភ, #e8e0e8);
 }
 
 @media (max-width: 767px), (max-height: 767px) {
-    /* Touch-friendly window controls on mobile */
-    .window .title-bar {
+    .qakehek2p2 .hate-nar2sa {
         min-height: 0o60;
         touch-action: none;
     }
     
-    .window .control-btn {
+    .qakehek2p2 .okano-ca12na {
         min-width: 0o60;
         min-height: 0o60;
     }
     
-    /* Larger resize handles for touch */
-    .window .resize-handle {
+    .qakehek2p2 .sefini-caqaxema {
         min-width: 0o30;
         min-height: 0o30;
     }
 }
 
-/* ⟪ Panels ⟫ */
+/* ⟪ ֭ſɭᴜ }ʃɹ ɭʃᴜ j͑ʃɔ ⟫ */
 
-.system-panel {
+.kna-n2tase {
     max-inline-size: 25vh;
 }
-#quick-settings-container,
-#notifications-panel,
-#recents-panel,
-#clock-panel,
-#taskbar-dock,
-#context-menu {
+#qasaka-kuba,
+#qataxna,
+#b6kxe,
+#castih2-kuba,
+#caqaxak2p2-kuba,
+#n2tanusukf2qꞁiai {
     position: fixed;
     display: none;
     z-index: 8192;
 }
-#quick-settings-sliders.visible,
-#quick-settings-buttons.visible,
-#notifications-panel.visible,
-#recents-panel.visible,
-#clock-panel.visible,
-#taskbar-dock.visible,
-#context-menu.visible,
-.system-panel.visible,
-#quick-settings-container.visible > .system-panel {
+#qasaka-sefini.xcanata,
+#qasaka-ca12na.xcanata,
+#qataxna.xcanata,
+#b6kxe.xcanata,
+#castih2-kuba.xcanata,
+#caqaxak2p2-kuba.xcanata,
+#n2tanusukf2qꞁiai.xcanata,
+.kna-n2tase.xcanata,
+#qasaka-kuba.xcanata > .kna-n2tase {
     display: flex !important;
 }
-#context-menu button {
+#n2tanusukf2qꞁiai button {
     block-size: auto;
 }
-#quick-settings-container {
+#qasaka-kuba {
     flex-direction: column;
 }
 
-/* Customization Visuals */
-
-.qs-editing .xeku1okek {
+.qasaka-vasaka .xeku1okek {
     cursor: grab;
     animation: qsWobble 0.25s ease-in-out infinite alternate;
     position: relative;
 }
-.qs-remove-btn {
+.qasaka-vah2weh2-ca12na {
     display: none;
 }
-.xeku1okek, .qs-editing .qs-remove-btn {
+.xeku1okek, .qasaka-vasaka .qasaka-vah2weh2-ca12na {
     display: flex;
 }
 .xeku1okek ciihii {
     inline-size: 100%;
 }
-.xeku1okek button:not( .qs-remove-btn ) {
+.xeku1okek button:not( .qasaka-vah2weh2-ca12na ) {
     flex: 1;
 }
-.qs-dragging {
+.qasaka-b6teqta {
     opacity: 0.5;
 }
 
@@ -286,27 +275,27 @@
     to { transform: translateY(1px); }
 }
 
-/* ⟪ Notifications ⟫ */
+/* ⟪ ſ͕ɭᴜ ɭʃᴜ ı],c̗ᴜ ⟫ */
 
-.notif-card {
+.qataxna-thala {
     display: flex;
     flex-direction: row;
     align-items: center;
     background: var(--តានេកខេលេ);
 }
-.notif-desc {
+.qataxna-s2bana {
     color: var(--កេភ២);
 }
-.notif-card > button {
+.qataxna-thala > button {
     margin-inline-start: auto;
 }
-.control-btn {
+.okano-ca12na {
     inline-size: 100%;
 }
 
-/* ⟪ Recent Apps ⟫ */
+/* ⟪ ſɟꞇ ſɭ,ᴜꞇ ʌ ֭ſɭᴜ j͑ʃ'ɔ ſɭɹ ſןɹ }ʃꞇ ⟫ */
 
-.recents-card {
+.cizai-thala {
     border-radius: var(--អិត្ភេចិ);
     display: flex;
     flex-direction: column;
@@ -314,16 +303,16 @@
     flex: 1;
     min-inline-size: 0;
 }
-#recents-list {
+#b6kxe-ca1ara {
     flex: 1;
     overflow: auto;
     overscroll-behavior: contain;
 }
-#recents-panel {
+#b6kxe {
     flex-direction: column;
     align-items: stretch;
 }
-.recents-card .recents-preview {
+.cizai-thala .cizai-xcana {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -335,8 +324,7 @@
     overflow: hidden;
 }
 
-/* Viva fenestra bildo ( klonita iframe ) plenigas la prezentaĵon */
-.recents-preview iframe {
+.cizai-xcana iframe {
     position: absolute;
     inset: 0;
     inline-size: 200% !important;
@@ -347,75 +335,74 @@
     transform-origin: top left;
     filter: blur(0.5px);
 }
-.recents-card:hover .recents-preview {
+.cizai-thala:hover .cizai-xcana {
     background: var(--តានេក២);
 }
 
-/* Malplena lastatempa listo ( anstataŭ generitaj enliniaj stiloj ) */
-.recents-empty {
+.cizai-k4l {
     padding: 24px;
     text-align: center;
     opacity: 0.5;
 }
 
-/* ⟪ Clock Flyout ⟫ */
+/* ⟪ ſɟᴜ j͑ʃƨꞇ ֭ſɭɹ ʌ }ʃɹ ɭʃᴜ }ʃw ⟫ */
 
-#clock-panel {
+#castih2-kuba {
     flex-direction: column;
     padding: var(--អារេងព៏);
 }
 
-/* ⟪ Taskbar ⟫ */
+/* ⟪ ſ͕ɭᴜ j͑ʃ'ɔ ſɭɹ ſןɹ }ʃꞇ ⟫ */
 
-#taskbar, #taskbar.thala {
+#caqaxak2p2, #caqaxak2p2.thala {
     position: absolute;
     justify-content: space-between;
     padding: var(--អារេង);
     writing-mode: horizontal-tb;
     align-items: center;
 }
-#taskbar[data-position="left"], #taskbar[data-position="right"] {
+#caqaxak2p2[data-position="ctama"], #caqaxak2p2[data-position="ptama"] {
     top: var(--អារេងព៏);
     bottom: var(--អារេងព៏);
-    width: var(--taskbar-width) !important;
+    width: var(--caqaxak2p2-pal6) !important;
     flex-direction: column;
 }
-#taskbar[data-position="left"] { left: var(--អារេងព៏); }
-#taskbar[data-position="right"] { right: var(--អារេងព៏); }
-#taskbar[data-position="bottom"], #taskbar[data-position="top"] {
+#caqaxak2p2[data-position="ctama"] { left: var(--អារេងព៏); }
+#caqaxak2p2[data-position="ptama"] { right: var(--អារេងព៏); }
+#caqaxak2p2[data-position="psaz"], #caqaxak2p2[data-position="soza"] {
     left: var(--អារេងព៏);
     right: var(--អារេងព៏);
-    height: var(--taskbar-width) !important;
+    height: var(--caqaxak2p2-pal6) !important;
     flex-direction: row;
 }
-#taskbar[data-position="bottom"] { bottom: var(--អារេងព៏); }
-#taskbar[data-position="top"] { top: var(--អារេងព៏); }
-#taskbar .taskbar-section {
+#caqaxak2p2[data-position="psaz"] { bottom: var(--អារេងព៏); }
+#caqaxak2p2[data-position="soza"] { top: var(--អារេងព៏); }
+#caqaxak2p2 .caqaxak2p2-qaroxema {
     display: flex;
     gap: var(--អារេង);
 }
-#taskbar[data-position="left"] > *,
-#taskbar[data-position="right"] > * {
+#caqaxak2p2[data-position="ctama"] > *,
+#caqaxak2p2[data-position="ptama"] > * {
     inline-size: 100%;
 }
-#taskbar[data-position="bottom"] > *,
-#taskbar[data-position="top"] > * {
+#caqaxak2p2[data-position="psaz"] > *,
+#caqaxak2p2[data-position="soza"] > * {
     block-size: 100%;
 }
-#taskbar[data-position="left"] .taskbar-section,
-#taskbar[data-position="right"] .taskbar-section {
+#caqaxak2p2[data-position="ctama"] .caqaxak2p2-qaroxema,
+#caqaxak2p2[data-position="ptama"] .caqaxak2p2-qaroxema {
     flex-direction: column;
 }
-#taskbar[data-position="bottom"] .taskbar-section,
-#taskbar[data-position="top"] .taskbar-section {
+#caqaxak2p2[data-position="psaz"] .caqaxak2p2-qaroxema,
+#caqaxak2p2[data-position="soza"] .caqaxak2p2-qaroxema {
     flex-direction: row;
 }
-#taskbar[data-position="bottom"] .taskbar-section button,
-#taskbar[data-position="top"] .taskbar-section button {
+#caqaxak2p2[data-position="psaz"] .caqaxak2p2-qaroxema button,
+#caqaxak2p2[data-position="soza"] .caqaxak2p2-qaroxema button {
     block-size: auto;
 }
 
-.home-bar {
+.k2sa-nar2sa {
     background: var(--កេភ);
     inline-size: 64px;
     block-size: 4px;
@@ -426,31 +413,30 @@
     align-items: center;
     justify-content: center;
 }
-#taskbar[data-position="left"] .home-bar, #taskbar[data-position="right"] .home-bar {
+#caqaxak2p2[data-position="ctama"] .k2sa-nar2sa, #caqaxak2p2[data-position="ptama"] .k2sa-nar2sa {
     inline-size: 4px;
     block-size: 64px;
 }
 
-/* ⟪ Statusaj Indikiloj ( vertikala baterio + reto ) ⟫ */
+/* ⟪ ſɟɹ ſɭɔ˞ᴜƽ ʌ ɭʃэ ſɭɔ˞ɔƽ ⟫ */
 
-.status-icons {
+.luj2-hakp6 {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: var(--អារេង);
 }
 
-/* La ikonoj sekvu la orientiĝon de la taskobreto ( kiel la aliaj sekcioj ) */
-#taskbar[data-position="left"] .status-icons,
-#taskbar[data-position="right"] .status-icons {
+#caqaxak2p2[data-position="ctama"] .luj2-hakp6,
+#caqaxak2p2[data-position="ptama"] .luj2-hakp6 {
     flex-direction: column;
 }
-#taskbar[data-position="bottom"] .status-icons,
-#taskbar[data-position="top"] .status-icons {
+#caqaxak2p2[data-position="psaz"] .luj2-hakp6,
+#caqaxak2p2[data-position="soza"] .luj2-hakp6 {
     flex-direction: row;
 }
 
-.battery-icon {
+.t6ksek-kp6 {
     display: inline-flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -458,7 +444,7 @@
     block-size: 22px;
 }
 
-.battery-body {
+.t6ksek-kek {
     inline-size: 100%;
     block-size: 100%;
     display: flex;
@@ -469,7 +455,7 @@
     overflow: hidden;
 }
 
-.battery-level {
+.t6ksek-kozunu {
     display: block;
     inline-size: 100%;
     block-size: 80%;
@@ -478,7 +464,7 @@
     transition: block-size 0.5s ease;
 }
 
-.wifi-icon {
+.c2ksak-kp6 {
     position: relative;
     display: inline-flex;
     justify-content: center;
@@ -487,7 +473,7 @@
     block-size: 18px;
 }
 
-.wifi-dot {
+.c2ksak-tanete {
     position: absolute;
     bottom: 3px;
     left: 50%;
@@ -498,7 +484,7 @@
     background: currentColor;
 }
 
-.wifi-arc {
+.c2ksak-kekaf2 {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -508,14 +494,14 @@
     border-radius: 50%;
 }
 
-.wifi-arc-1 { inline-size: 12px; block-size: 8px;  bottom: 4px; }
-.wifi-arc-2 { inline-size: 18px; block-size: 13px; bottom: 2px; }
-.wifi-arc-3 { inline-size: 24px; block-size: 18px; bottom: 0; }
+.c2ksak-kekaf2-1 { inline-size: 12px; block-size: 8px;  bottom: 4px; }
+.c2ksak-kekaf2-2 { inline-size: 18px; block-size: 13px; bottom: 2px; }
+.c2ksak-kekaf2-3 { inline-size: 24px; block-size: 18px; bottom: 0; }
 
-.wifi-icon.offline .wifi-arc { opacity: 0.25; }
-.wifi-icon.offline .wifi-dot { opacity: 0.4; }
+.c2ksak-kp6.nec2 .c2ksak-kekaf2 { opacity: 0.25; }
+.c2ksak-kp6.nec2 .c2ksak-tanete { opacity: 0.4; }
 
-.wifi-icon.offline::after {
+.c2ksak-kp6.nec2::after {
     content: "";
     position: absolute;
     top: 50%;
@@ -528,9 +514,9 @@
     opacity: 0.8;
 }
 
-/* ⟪ Docko de Minimumigitaj Fenestroj ⟫ */
+/* ⟪ ſ͕ɭᴜ ſɭᴜ ɭl̀ɹ ʌ ſɟᴜ ı],ɜ ı],ɔ ɭʃᴜ ʌ ֭ſɭᴜ ſ͕ɭᴜ ſɭɔ ֭ſɭɔ ſɭɹ ſןɹ ⟫ */
 
-#taskbar-dock {
+#caqaxak2p2-kuba {
     flex-direction: column;
     gap: var(--អារេង);
     padding: var(--អារេង);
@@ -541,34 +527,32 @@
     backdrop-filter: var(--ច្ហិនី);
 }
 
-/* Ancori la dokon kontraŭflanke de la taskobreto */
-
-#taskbar[data-position="left"] ~ #taskbar-dock {
+#caqaxak2p2[data-position="ctama"] ~ #caqaxak2p2-kuba {
     right: var(--អារេងព៏);
     top: 50%;
     transform: translateY(-50%);
 }
-#taskbar[data-position="right"] ~ #taskbar-dock {
+#caqaxak2p2[data-position="ptama"] ~ #caqaxak2p2-kuba {
     left: var(--អារេងព៏);
     top: 50%;
     transform: translateY(-50%);
 }
-#taskbar[data-position="top"] ~ #taskbar-dock {
+#caqaxak2p2[data-position="soza"] ~ #caqaxak2p2-kuba {
     bottom: var(--អារេងព៏);
     left: 50%;
     transform: translateX(-50%);
 }
-#taskbar[data-position="bottom"] ~ #taskbar-dock {
+#caqaxak2p2[data-position="psaz"] ~ #caqaxak2p2-kuba {
     top: var(--អារេងព៏);
     left: 50%;
     transform: translateX(-50%);
 }
 
-#taskbar-dock[data-portebla="true"] {
+#caqaxak2p2-kuba[data-portebla="true"] {
     display: none !important;
 }
 
-#taskbar-dock .dock-btn {
+#caqaxak2p2-kuba .qakaj2-ca12na {
     block-size: auto;
     justify-content: flex-start;
     gap: var(--អារេង);
@@ -576,12 +560,12 @@
     cursor: pointer;
 }
 
-.dock-btn-icon {
+.qakaj2-ca12na-kp6 {
     font-size: 16px;
     line-height: 1;
 }
 
-.dock-btn-title {
+.qakaj2-ca12na-hate {
     max-inline-size: 120px;
     white-space: nowrap;
     overflow: hidden;
@@ -589,19 +573,17 @@
     font-size-adjust: 0.625;
 }
 
-/* ⟪ Mobile view ⟫ - show home bar, hide start button */
+/* ⟪ ſɭɜ ʃɔ ſɭᴜ j͑ʃᴜ ʌ ı],ᴜ̭ᴜ }ʃᴜ ⟫ */
 
 @media (max-width: 767px), (max-height: 767px) {
-    /* Paneloj ( ombroj ) okupas la saman areon kiel plenekranaj fenestroj
-       ( la rondaj anguloj de la temo restas, kaj la enhavo rulumiĝas ) */
-    #quick-settings-container,
-    #notifications-panel,
-    #recents-panel,
-    #clock-panel {
-        top: var(--panel-inset-top, 0) !important;
-        bottom: var(--panel-inset-bottom, 0) !important;
-        left: var(--panel-inset-left, 0) !important;
-        right: var(--panel-inset-right, 0) !important;
+    #qasaka-kuba,
+    #qataxna,
+    #b6kxe,
+    #castih2-kuba {
+        top: var(--kuba-qaqun2-soza, 0) !important;
+        bottom: var(--kuba-qaqun2-psaz, 0) !important;
+        left: var(--kuba-qaqun2-ctama, 0) !important;
+        right: var(--kuba-qaqun2-ptama, 0) !important;
         inline-size: auto !important;
         block-size: auto !important;
         max-inline-size: none !important;
@@ -609,57 +591,55 @@
         overscroll-behavior: contain;
     }
 
-    /* Internaj paneloj plenigas la ujon sen la mallarĝa kapo */
-    .system-panel {
+    .kna-n2tase {
         max-inline-size: none !important;
         overflow: visible;
     }
-    #taskbar .home-bar {
+    #caqaxak2p2 .k2sa-nar2sa {
         display: flex !important;
         inline-size: 48px;
         block-size: 4px;
     }
-    #taskbar[data-position="left"] .home-bar,
-    #taskbar[data-position="right"] .home-bar {
+    #caqaxak2p2[data-position="ctama"] .k2sa-nar2sa,
+    #caqaxak2p2[data-position="ptama"] .k2sa-nar2sa {
         inline-size: 4px;
         block-size: 48px;
     }
-    #taskbar .home-bar-icon { display: none; }
+    #caqaxak2p2 .k2sa-nar2sa-kp6 { display: none; }
     
     @media (orientation: portrait) {
-        #taskbar[data-position="bottom"] {
+        #caqaxak2p2[data-position="psaz"] {
             display: flex !important;
         }
-        #taskbar[data-position="left"],
-        #taskbar[data-position="right"],
-        #taskbar[data-position="top"] {
+        #caqaxak2p2[data-position="ctama"],
+        #caqaxak2p2[data-position="ptama"],
+        #caqaxak2p2[data-position="soza"] {
             display: none !important;
         }
-        #taskbar[data-position="bottom"] .home-bar {
+        #caqaxak2p2[data-position="psaz"] .k2sa-nar2sa {
             inline-size: 48px;
             block-size: 4px;
         }
     }
     
     @media (orientation: landscape) {
-        #taskbar[data-position="left"],
-        #taskbar[data-position="right"] {
+        #caqaxak2p2[data-position="ctama"],
+        #caqaxak2p2[data-position="ptama"] {
             display: flex !important;
         }
-        #taskbar[data-position="bottom"],
-        #taskbar[data-position="top"] {
+        #caqaxak2p2[data-position="psaz"],
+        #caqaxak2p2[data-position="soza"] {
             display: none !important;
         }
-        /* Home bar vertical on side taskbars */
-        #taskbar[data-position="left"] .home-bar,
-        #taskbar[data-position="right"] .home-bar {
+        #caqaxak2p2[data-position="ctama"] .k2sa-nar2sa,
+        #caqaxak2p2[data-position="ptama"] .k2sa-nar2sa {
             inline-size: 4px;
             block-size: 48px;
         }
     }
 }
 @media (min-width: 768px) and (min-height: 768px) {
-    #taskbar .home-bar {
+    #caqaxak2p2 .k2sa-nar2sa {
         display: flex !important;
         inline-size: 48px !important;
         block-size: 48px !important;
@@ -667,22 +647,22 @@
         border-radius: var(--អិត្ភេចិ) !important;
         overflow: hidden;
     }
-    #taskbar .home-bar .home-bar-icon {
+    #caqaxak2p2 .k2sa-nar2sa .k2sa-nar2sa-kp6 {
         display: block;
     }
-    #taskbar .taskbar-app-btn { display: flex; }
+    #caqaxak2p2 .caqaxak2p2-vek2p2ni-ca12na { display: flex; }
 }
 
-/* ⟪ Windows ⟫ */
+/* ⟪ ֭ſɭᴜ ſ͕ɭᴜ ſɭɔ ֭ſɭɔ ſɭɹ ſןɹ ⟫ */
 
-#window-container {
+#qakehek2p2-kuba {
     position: absolute;
     inset: 0;
     pointer-events: none;
     block-size: 100%;
     inline-size: 100%;
 }
-.window {
+.qakehek2p2 {
     pointer-events: auto;
     position: absolute;
     min-inline-size: 256px;
@@ -691,44 +671,38 @@
     max-block-size: 100%;
     overflow: visible;
 }
-.window.minimized {
+.qakehek2p2.caxoxeta {
     visibility: hidden;
     pointer-events: none;
 }
-.window.maximized,
-.window.fullscreen {
+.qakehek2p2.caxopuf2ta,
+.qakehek2p2.k2tahaq {
     min-inline-size: 0;
     min-block-size: 0;
-    top: var(--panel-inset-top, 0) !important;
-    bottom: var(--panel-inset-bottom, 0) !important;
-    left: var(--panel-inset-left, 0) !important;
-    right: var(--panel-inset-right, 0) !important;
+    top: var(--kuba-qaqun2-soza, 0) !important;
+    bottom: var(--kuba-qaqun2-psaz, 0) !important;
+    left: var(--kuba-qaqun2-ctama, 0) !important;
+    right: var(--kuba-qaqun2-ptama, 0) !important;
     width: auto !important;
     height: auto !important;
 }
 
-/* Ĉe porteblaj ekranoj la plenekrana fenestro kaŝas la fenestran pilolon */
-
 @media (max-width: 767px), (max-height: 767px) {
-    .window.fullscreen ksaka { display: none !important; }
+    .qakehek2p2.k2tahaq ksaka { display: none !important; }
 }
 
-/* Horizontal Title Bars (Top/Bottom) */
-
-.title-bar[data-position="top"] {
+.hate-nar2sa[data-position="soza"] {
     order: -1; flex-direction: row-reverse;
 }
-.title-bar[data-position="bottom"] {
+.hate-nar2sa[data-position="psaz"] {
     order: 1; flex-direction: row-reverse;
 }
 
-/* Rotate controls for horizontal titlebars */
-
-.title-bar[data-position="top"] .window-controls,
-.title-bar[data-position="bottom"] .window-controls {
+.hate-nar2sa[data-position="soza"] .qakehek2p2-okano,
+.hate-nar2sa[data-position="psaz"] .qakehek2p2-okano {
     flex-direction: row-reverse;
 }
-.window .resize-handle {
+.qakehek2p2 .sefini-caqaxema {
     position: absolute;
     z-index: 128;
     display: block;
@@ -738,70 +712,59 @@
     background: transparent;
     pointer-events: auto;
 }
-.window:not(.maximized):not(.fullscreen) .resize-handle:hover {
+.qakehek2p2:not(.caxopuf2ta):not(.k2tahaq) .sefini-caqaxema:hover {
     opacity: 1;
     background-color: var(--តានេក);
 }
 
-/* Corner resize handles */
-
-.window .resize-handle-se, .window .resize-handle-sw, .window .resize-handle-ne, .window .resize-handle-nw {
+.qakehek2p2 .sefini-caqaxema-ksozq2, .qakehek2p2 .sefini-caqaxema-ksozk2q, .qakehek2p2 .sefini-caqaxema-puf2q2, .qakehek2p2 .sefini-caqaxema-puf2k2q {
     width: 24px;
     height: 24px;
 }
-.window .resize-handle-se { bottom: 0; right: 0; cursor: se-resize; }
-.window .resize-handle-sw { bottom: 0; left: 0; cursor: sw-resize; }
-.window .resize-handle-ne { top: 0; right: 0; cursor: ne-resize; }
-.window .resize-handle-nw { top: 0; left: 0; cursor: nw-resize; }
-.window .resize-handle-sw::after { transform: scaleX(-1); }
-.window .resize-handle-ne::after { transform: scaleY(-1); }
-.window .resize-handle-nw::after { transform: scale(-1); }
+.qakehek2p2 .sefini-caqaxema-ksozq2 { bottom: 0; right: 0; cursor: se-resize; }
+.qakehek2p2 .sefini-caqaxema-ksozk2q { bottom: 0; left: 0; cursor: sw-resize; }
+.qakehek2p2 .sefini-caqaxema-puf2q2 { top: 0; right: 0; cursor: ne-resize; }
+.qakehek2p2 .sefini-caqaxema-puf2k2q { top: 0; left: 0; cursor: nw-resize; }
+.qakehek2p2 .sefini-caqaxema-ksozk2q::after { transform: scaleX(-1); }
+.qakehek2p2 .sefini-caqaxema-puf2q2::after { transform: scaleY(-1); }
+.qakehek2p2 .sefini-caqaxema-puf2k2q::after { transform: scale(-1); }
 
-/* Edge resize handles - side resize */
+.qakehek2p2 .sefini-caqaxema-ksoz { bottom: -4px; left: 0; right: 0; height: 8px; cursor: s-resize; }
+.qakehek2p2 .sefini-caqaxema-puf2 { top: -4px; left: 0; right: 0; height: 8px; cursor: n-resize; }
+.qakehek2p2 .sefini-caqaxema-q2 { top: 0; right: -4px; bottom: 0; width: 8px; cursor: e-resize; }
+.qakehek2p2 .sefini-caqaxema-k2q { top: 0; left: -4px; bottom: 0; width: 8px; cursor: w-resize; }
+.qakehek2p2 > iframe { flex: 1; min-block-size: 0; min-inline-size: 0; }
 
-.window .resize-handle-s { bottom: -4px; left: 0; right: 0; height: 8px; cursor: s-resize; }
-.window .resize-handle-n { top: -4px; left: 0; right: 0; height: 8px; cursor: n-resize; }
-.window .resize-handle-e { top: 0; right: -4px; bottom: 0; width: 8px; cursor: e-resize; }
-.window .resize-handle-w { top: 0; left: -4px; bottom: 0; width: 8px; cursor: w-resize; }
-.window > iframe { flex: 1; min-block-size: 0; min-inline-size: 0; }
+/* ⟪ ֭ſɭᴜ ſ͕ɭᴜ ſɭɔ ֭ſɭɔ ſɭɹ ſןɹ ʌ ֭ſɭᴜ j͑ʃ'w j͐ʃᴜ ⟫ */
 
-/* ⟪ Fenestraj Taboj ⟫ */
-
-/* La tabstrio anstataŭigas la titolon en la pilolo.
-   La temo difinas "ksaka button" ( 56px larĝa ), do la tabaj butonoj
-   devas transpasi tiun regulojn por esti kompaktaj kaj rulumeblaj. */
-
-ksaka .tab-btn,
-ksaka .tab-add-btn {
+ksaka .vula-ca12na,
+ksaka .vula-h0ne-ca12na {
     inline-size: auto;
     block-size: auto;
     padding: var(--អារេងមិ) var(--អារេង);
 }
 
-ksaka .tab-add-btn {
+ksaka .vula-h0ne-ca12na {
     min-inline-size: 32px;
 }
 
-.window > .cepufal > .tab-enhavujo,
-.window > .tab-enhavujo {
+.qakehek2p2 > .cepufal > .vula-kek23aq,
+.qakehek2p2 > .vula-kek23aq {
     flex: 1;
     min-block-size: 0;
     min-inline-size: 0;
 }
 
-.window ksaka {
+.qakehek2p2 ksaka {
     min-inline-size: 0;
-    /* Bloki retumajn gestojn dum tuŝ-trenado de la pilolo, sed permesi
-       klakojn ( preventDefault ĉe tuŝstarto subpremus ilin ) */
     touch-action: none;
 }
 
-.window ksaka .tab-strip {
-    /* La tabstrio restas rulumebla per tuŝo horizontale */
+.qakehek2p2 ksaka .vula-s212 {
     touch-action: pan-x;
 }
 
-.tab-strip {
+.vula-s212 {
     flex: 1;
     min-inline-size: 0;
     flex-wrap: nowrap;
@@ -810,7 +773,7 @@ ksaka .tab-add-btn {
     overflow-block: hidden;
 }
 
-.tab-btn {
+.vula-ca12na {
     flex: none;
     display: flex;
     flex-direction: row;
@@ -823,14 +786,14 @@ ksaka .tab-add-btn {
     cursor: grab;
 }
 
-.tab-title {
+.vula-hate {
     max-inline-size: 128px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.tab-close {
+.vula-pukxe {
     cursor: pointer;
     font-size-adjust: 0.625;
     border-radius: var(--ចិង);
@@ -838,18 +801,18 @@ ksaka .tab-add-btn {
     background-color: var(--តានេក);
 }
 
-.tab-close:hover {
+.vula-pukxe:hover {
     background-color: var(--តានេក២);
 }
 
-.tab-add-btn {
+.vula-h0ne-ca12na {
     flex: none;
     min-inline-size: 32px;
     inline-size: auto;
     block-size: auto;
 }
 
-.tab-enhavujo {
+.vula-kek23aq {
     position: relative;
     flex: 1;
     min-block-size: 0;
@@ -858,7 +821,7 @@ ksaka .tab-add-btn {
     flex-direction: column;
 }
 
-.tab-enhavujo > .tab-enhavo {
+.vula-kek23aq > .vula-kek2 {
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -866,7 +829,7 @@ ksaka .tab-add-btn {
     min-inline-size: 0;
 }
 
-.tab-drag-ghost {
+.vula-b6teq-h6ste {
     position: fixed;
     z-index: 9999;
     pointer-events: none;
@@ -879,20 +842,20 @@ ksaka .tab-add-btn {
     white-space: nowrap;
 }
 
-.tab-btn.tab-dragging {
+.vula-ca12na.vula-b6teqta {
     opacity: 0.375;
 }
 
-.tab-strip.tab-drop-target {
+.vula-s212.vula-fu36-natakatomasai {
     outline: var(--សាកព៏២);
     outline-offset: calc(-1 * var(--អារេងមិ));
     border-radius: var(--អិត្ភេមិ);
 }
 
-/* ⟪ Utility Classes ⟫ */
+/* ⟪ ſɟᴜ ſ͕ɭᴜ ı],ɔ ŋᷠᴜ ʌ ſɭɔƽ ⟫ */
 
-.dragging { z-index: 1024 !important; }
-.taskbar-app-btn { opacity: 1; transition: opacity 0.25s ease; }
-#desktop.edit-mode, #start-menu-content.edit-mode { cursor: grab; }
-#desktop.edit-mode:active, #start-menu-content.edit-mode:active { cursor: grabbing; }
-#os-root[data-brightness] { filter: brightness(calc(0.5 + var(--brightness-value, 0.5))); }
+.b6teqta { z-index: 1024 !important; }
+.caqaxak2p2-vek2p2ni-ca12na { opacity: 1; transition: opacity 0.25s ease; }
+#vulapaqai.vasaka-kmaknu, #n2tanu-kfeni.vasaka-kmaknu { cursor: grab; }
+#vulapaqai.vasaka-kmaknu:active, #n2tanu-kfeni.vasaka-kmaknu:active { cursor: grabbing; }
+#cak2p2-kuba[data-brightness] { filter: brightness(calc(0.5 + var(--t6fani-vop2, 0.5))); }

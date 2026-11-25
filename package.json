@@ -1,23 +1,21 @@
 {
-  "name": "celiifudalkii",
+  "name": "dalk2",
   "version": "1.0.0",
-  "description": "",
+  "description": "ɭ(ᴜͷ̗ ſɭɹ",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npx tsgo --noEmit && vite build",
+    "build": "npx tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "echo \"( Error ) no test specified\" && exit 1"
+    "test": "echo \"( ֭ſɭɹ ſɟᴜ ſɭɹ ) ſɟᴜ ſɭɹ ſןᴜꞇ j͑ʃᴜ ⟅\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {},
   "devDependencies": {
-    "@types/node": "^25.5.0",
-    "@typescript/native-preview": "^7.0.0-dev.20260326.1",
-    "typescript": "^5.9.3",
-    "vite": "^8.0.16"
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5"
   }
 }

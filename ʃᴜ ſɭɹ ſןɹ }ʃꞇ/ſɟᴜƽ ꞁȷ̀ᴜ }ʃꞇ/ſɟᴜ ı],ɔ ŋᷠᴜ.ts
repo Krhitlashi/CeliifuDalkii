@@ -1,36 +1,35 @@
-// ≺⧼ Eniga Traktilo - Unuigitaj Tuŝaj kaj Musaj Regiloj ⧽≻
+// ≺⧼ ſɟᴜ ı],ɔ ŋᷠᴜ 👆 ⧽≻
 
-// Rultempe: prenu CONSTANTS el fenestro ( ŝargita per HTML-skripta etikedo )
-const CONSTANTS = (window as any).CONSTANTS;
+const HAKARANI = (window as any).HAKARANI;
 
-interface MontrilajDatumoj {
+interface XcanalajDatumoj {
     x?: number;
     y?: number;
     deltaX?: number;
     deltaY?: number;
-    tenilo?: string;
+    ve3aq?: string;
 }
 
-const EnigaAdministranto = {
-    // ⟪ Ŝtato ⟫
-    estasTrenanta: false,
-    estasRegradiganta: false,
-    estasTuŝa: false,
-    aktivaElemento: null as HTMLElement | null,
-    komencaX: 0,
-    komencaY: 0,
-    komencaMaldekstro: 0,
-    komencaSupro: 0,
-    komencaLarĝo: 0,
-    komencaAlto: 0,
+const caxk12na = {
+// ⟪ j͑ʃɹ ⟫
+    kobeVaxafa: false,
+    cxuPal6iganta: false,
+    cxuCa12naa: false,
+    ksabaElemento: null as HTMLElement | null,
+    saxeX: 0,
+    saxeY: 0,
+    saxeMalq2: 0,
+    saxeSupro: 0,
+    saxeSefini: 0,
+    saxeL6da: 0,
     ofsetoX: 0,
     ofsetoY: 0,
-    trenaSojlo: CONSTANTS.INPUT.DRAG_THRESHOLD,
-    longaPremoTempigilo: null as number | null,
-    longaPremoDaŭro: CONSTANTS.INPUT.LONG_PRESS_DURATION,
+    vaxafaPuf2k2fe: HAKARANI.INPUT.DRAG_THRESHOLD,
+    puf2PeCa1om2: null as number | null,
+    puf2PeS2: HAKARANI.INPUT.LONG_PRESS_DURATION,
 
-    // ⟪ Eventa Normigado ⟫
-    akiriMontranPozicion(e: Event): { x: number; y: number } {
+// ⟪ ſᶘɹ }ʃᴜ ʌ ſɭɔ ſɭɹ ⟫
+    xk12naXcanaQakeken(e: Event): { x: number; y: number } {
         if (e.type.startsWith("touch")) {
             const touch = (e as TouchEvent).touches?.[0] || (e as TouchEvent).changedTouches?.[0];
             return { x: touch?.clientX || 0, y: touch?.clientY || 0 };
@@ -38,74 +37,72 @@ const EnigaAdministranto = {
         return { x: (e as MouseEvent).clientX || 0, y: (e as MouseEvent).clientY || 0 };
     },
 
-    cxuTuŝaEvento(e: Event): boolean {
+    cxu12naa12na(e: Event): boolean {
         return e.type.startsWith("touch");
     },
 
-    // ⟪ Interna Montrila Traktila Agordo ⟫
-    agordiMontrajnTraktilojn(
+// ⟪ ſɟɹ ֭ſɭɹ ʌ ı],ᴜ̭ᴜ }ʃᴜ ſɭɔƽ ʌ ſɟᴜ ſ͕ɭᴜ ı],ɔ ŋᷠᴜ ʌ ſɭw ſᶘɜ ⟫
+    vahateVaxafaTraktilojn(
         element: HTMLElement,
         cxuRegradigo: boolean,
         handlers: {
-            onStart: (e: Event, pos: { x: number; y: number }) => void,
-            onMove: (e: Event, pos: { x: number; y: number; deltaX: number; deltaY: number }) => void,
+            onStart: (e: Event, raqa: { x: number; y: number }) => void,
+            oj6Vaxafa: (e: Event, raqa: { x: number; y: number; deltaX: number; deltaY: number }) => void,
             onEnd: (e: Event) => void
         }
     ): () => void {
-        let moveHandler: ((ev: Event) => void) | null = null;
+        let vaxafaTraktilo: ((ev: Event) => void) | null = null;
         let endHandler: ((ev: Event) => void) | null = null;
-        let moveEvent: string = "";
-        let endEvent: string = "";
-        let target: EventTarget | null = null;
+        let vaxafaCa12na: string = "";
+        let end12na: string = "";
+        let natakatomasai: EventTarget | null = null;
 
         const handleStart = (e: Event) => {
-            if (cxuRegradigo) {
+            if ( cxuRegradigo ) {
                 e.stopPropagation();
                 e.preventDefault();
             }
 
-            this.estasTuŝa = this.cxuTuŝaEvento(e);
-            const pos = this.akiriMontranPozicion(e);
+            this.cxuCa12naa = this.cxu12naa12na(e);
+            const raqa = this.xk12naXcanaQakeken(e);
 
-            this.komencaX = pos.x;
-            this.komencaY = pos.y;
-            this.aktivaElemento = element;
-            if (cxuRegradigo) this.estasRegradiganta = true;
+            this.saxeX = raqa.x;
+            this.saxeY = raqa.y;
+            this.ksabaElemento = element;
+            if ( cxuRegradigo ) this.cxuPal6iganta = true;
 
-            handlers.onStart(e, { x: pos.x, y: pos.y });
+            handlers.onStart(e, { x: raqa.x, y: raqa.y });
 
-            // Determini eventajn celojn kaj tipojn
-            moveEvent = this.estasTuŝa ? "touchmove" : "mousemove";
-            endEvent = this.estasTuŝa ? "touchend" : "mouseup";
-            target = (cxuRegradigo || this.estasTuŝa) ? document : element;
+            vaxafaCa12na = this.cxuCa12naa ? "touchmove" : "mousemove";
+            end12na = this.cxuCa12naa ? "touchend" : "mouseup";
+            natakatomasai = (cxuRegradigo || this.cxuCa12naa) ? document : element;
 
-            moveHandler = (ev: Event) => {
-                if (!this.aktivaElemento) return;
-                if (this.estasTuŝa && !cxuRegradigo) ev.preventDefault();
-                const movePos = this.akiriMontranPozicion(ev);
-                handlers.onMove(ev, {
-                    x: movePos.x,
-                    y: movePos.y,
-                    deltaX: movePos.x - this.komencaX,
-                    deltaY: movePos.y - this.komencaY
+            vaxafaTraktilo = (ev: Event) => {
+                if ( !this.ksabaElemento ) return;
+                if (this.cxuCa12naa && !cxuRegradigo) ev.preventDefault();
+                const vaxafaRaqa = this.xk12naXcanaQakeken(ev);
+                handlers.oj6Vaxafa(ev, {
+                    x: vaxafaRaqa.x,
+                    y: vaxafaRaqa.y,
+                    deltaX: vaxafaRaqa.x - this.saxeX,
+                    deltaY: vaxafaRaqa.y - this.saxeY
                 });
             };
 
             endHandler = (ev: Event) => {
-                if (!this.aktivaElemento) return;
-                if (cxuRegradigo) this.estasRegradiganta = false;
+                if ( !this.ksabaElemento ) return;
+                if ( cxuRegradigo ) this.cxuPal6iganta = false;
                 handlers.onEnd(ev);
                 this.purigi();
 
-                // Forigi aŭskultilojn post fino
-                if (moveHandler) target!.removeEventListener(moveEvent, moveHandler);
-                if (endHandler) target!.removeEventListener(endEvent, endHandler);
-                moveHandler = null;
+                if ( vaxafaTraktilo ) natakatomasai!.removeEventListener(vaxafaCa12na, vaxafaTraktilo);
+                if ( endHandler ) natakatomasai!.removeEventListener(end12na, endHandler);
+                vaxafaTraktilo = null;
                 endHandler = null;
             };
 
-            target.addEventListener(moveEvent, moveHandler, { passive: false });
-            target.addEventListener(endEvent, endHandler);
+            natakatomasai.addEventListener(vaxafaCa12na, vaxafaTraktilo, { passive: false });
+            natakatomasai.addEventListener(end12na, endHandler);
         };
 
         element.addEventListener("mousedown", handleStart);
@@ -113,53 +110,52 @@ const EnigaAdministranto = {
 
         return () => {
             this.purigi();
-            // Purigi iujn postrestantajn aŭskultilojn
-            if ((moveHandler || endHandler) && target) {
-                if (moveHandler) target.removeEventListener(moveEvent, moveHandler);
-                if (endHandler) target.removeEventListener(endEvent, endHandler);
+            if ((vaxafaTraktilo || endHandler) && natakatomasai) {
+                if ( vaxafaTraktilo ) natakatomasai.removeEventListener(vaxafaCa12na, vaxafaTraktilo);
+                if ( endHandler ) natakatomasai.removeEventListener(end12na, endHandler);
             }
         };
     },
 
-    // ⟪ Agordaj Funkcioj ⟫
-    agordiTrenadon(
+// ⟪ j͑ʃ'ᴜ ֭ſɭᴜ ɭʃɔ ʌ ſɟᴜ ſ͕ɭᴜ ı],ɔ ŋᷠᴜ ⟫
+    vahateVaxafadon(
         element: HTMLElement,
-        onStart: ((e: Event, datumoj: MontrilajDatumoj) => void) | null,
-        onMove: ((e: Event, datumoj: MontrilajDatumoj) => void) | null,
-        onEnd: ((e: Event, datumoj: MontrilajDatumoj) => void) | null
+        onStart: ((e: Event, datumoj: XcanalajDatumoj) => void) | null,
+        oj6Vaxafa: ((e: Event, datumoj: XcanalajDatumoj) => void) | null,
+        onEnd: ((e: Event, datumoj: XcanalajDatumoj) => void) | null
     ): (() => void) | undefined {
-        if (!element) return;
+        if ( !element ) return;
 
-        return this.agordiMontrajnTraktilojn(element, false, {
-            onStart: (e, pos) => onStart?.(e, { x: pos.x, y: pos.y }),
-            onMove: (e, pos) => onMove?.(e, pos),
+        return this.vahateVaxafaTraktilojn(element, false, {
+            onStart: (e, raqa) => onStart?.(e, { x: raqa.x, y: raqa.y }),
+            oj6Vaxafa: (e, raqa) => oj6Vaxafa?.(e, raqa),
             onEnd: (e) => {
-                const pos = this.akiriMontranPozicion(e);
-                onEnd?.(e, { x: pos.x, y: pos.y, deltaX: pos.x - this.komencaX, deltaY: pos.y - this.komencaY });
+                const raqa = this.xk12naXcanaQakeken(e);
+                onEnd?.(e, { x: raqa.x, y: raqa.y, deltaX: raqa.x - this.saxeX, deltaY: raqa.y - this.saxeY });
             }
         });
     },
 
-    // ⟪ Purigado ⟫
+// ⟪ ſ͕ɭw }ʃɹ ⟫
     purigi(): void {
-        this.estasTrenanta = false;
-        this.estasRegradiganta = false;
-        this.aktivaElemento = null;
-        if (this.longaPremoTempigilo) {
-            clearTimeout(this.longaPremoTempigilo);
-            this.longaPremoTempigilo = null;
+        this.kobeVaxafa = false;
+        this.cxuPal6iganta = false;
+        this.ksabaElemento = null;
+        if (this.puf2PeCa1om2) {
+            clearTimeout(this.puf2PeCa1om2);
+            this.puf2PeCa1om2 = null;
         }
     }
 };
 
-// ⟪ Trena Stata Helpilo ⟫
-function agordiTrenanStaton(stato: boolean): void {
-    EnigaAdministranto.estasTrenanta = stato;
-    document.body.classList.toggle("is-dragging", stato);
+// ⟪ ʃэ ɭʃɔȝ ʌ j͑ʃɹ ʌ ſɟᴜ ſ͕ɭᴜ ı],ɔ ŋᷠᴜ ⟫
+function vahateVaxafanC2ksakn(s2: boolean): void {
+    caxk12na.kobeVaxafa = s2;
+    document.body.classList.toggle("b6teqta", s2);
 }
 
-// ⟪ Konsoliditaj Fenestraj Eksportoj ⟫
+// ⟪ ſɭɔ ſɭɹ ʌ ֭ſɭᴜ ſ͕ɭᴜ ſɭɔ ֭ſɭɔ ſɭɹ ſןɹ ʌ ֭ſɭᴜ ı],ɔ ŋᷠᴜ ⟫
 Object.assign( window as any, {
-    EnigaAdministranto,
-    agordiTrenanStaton,
+    caxk12na,
+    vahateVaxafanC2ksakn,
 } );

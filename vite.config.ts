@@ -1,3 +1,4 @@
+// ≺⧼ vite ʌ ſɭw ſᶘɜ 📦 ⧽≻
 import { defineConfig } from "vite";
 import { resolve, relative, dirname, join, isAbsolute, extname } from "path";
 import { readdirSync, statSync, copyFileSync, mkdirSync, existsSync } from "fs";
@@ -6,81 +7,77 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Helper to find all HTML files
-function getHtmlEntries(dir: string, allFiles: Record<string, string> = {}) {
+function xk12naHtmlCaqavop2jn(dir: string, allFiles: Record<string, string> = {}) {
   const files = readdirSync(dir);
 
   files.forEach(( file ) => {
-    const filePath = resolve(dir, file);
-    if ( statSync(filePath).isDirectory() ) {
+    const caqavop2K6h6 = resolve(dir, file);
+    if ( statSync( caqavop2K6h6 ).isDirectory() ) {
       if ( file !== "node_modules" && file !== "dist" && file !== ".git" ) {
-        getHtmlEntries(filePath, allFiles);
+        xk12naHtmlCaqavop2jn(caqavop2K6h6, allFiles);
       }
-    } else if ( file.endsWith(".html") ) {
-      const relativePath = relative(__dirname, filePath);
-      const name = relativePath.replace(/\.html$/, "").replace(/[\\/]/g, "_");
-      allFiles[name] = filePath;
+    } else if ( file.endsWith( ".html" ) ) {
+      const partaK6h6 = relative(__dirname, caqavop2K6h6);
+      const caqavop2Ksaka = partaK6h6.replace(/\.html$/, "").replace(/[\\/]/g, "_");
+      allFiles[caqavop2Ksaka] = caqavop2K6h6;
     }
   });
 
   return allFiles;
 }
 
-// Plugin to copy remaining static JS / TXT files to dist.
-const copyStaticFilesPlugin = {
-  name: "copy-static-files",
+const cutfaKukeHaCaqavop2n = {
+  name: "cutfa-kuke-caqavop2j",
   closeBundle() {
-    const distDir = join(__dirname, "dist");
-    const excludedDirs = [ "node_modules", "dist", ".git", ".github", ".idea", ".vscode", ".freebuff" ];
+    const dista3aq = join(__dirname, "dist");
+    const ne3unakHaCaqavop2j = [ "node_modules", "dist", ".git", ".github", ".idea", ".vscode", ".freebuff" ];
 
-    function findStaticFiles(dir: string, files: string[] = []): string[] {
+    function b6keweKukeHaCaqavop2jn(dir: string, files: string[] = []): string[] {
       const entries = readdirSync(dir, { withFileTypes: true });
 
       for ( const entry of entries ) {
-        const fullPath = join(dir, entry.name);
+        const l2haK6h6 = join(dir, entry.name);
 
-        if ( entry.isDirectory() && excludedDirs.includes(entry.name) ) {
+        if ( entry.isDirectory() && ne3unakHaCaqavop2j.includes(entry.name) ) {
           continue;
         }
 
         if ( entry.isDirectory() ) {
-          findStaticFiles(fullPath, files);
-        } else if ( entry.isFile() && ( entry.name.endsWith(".js") || entry.name.endsWith(".txt") || entry.name.endsWith(".xlsx") || entry.name.endsWith(".json") || entry.name.endsWith(".ico") ) ) {
-          files.push(fullPath);
+          b6keweKukeHaCaqavop2jn(l2haK6h6, files);
+        } else if ( entry.isFile() && ( entry.name.endsWith( ".js" ) || entry.name.endsWith( ".txt" ) || entry.name.endsWith( ".xlsx" ) || entry.name.endsWith( ".json" ) || entry.name.endsWith( ".ico" ) ) ) {
+          files.push(l2haK6h6);
         }
       }
 
       return files;
     }
 
-    const staticFiles = findStaticFiles(__dirname);
-    let copiedCount = 0;
+    const kukeHaCaqavop2j = b6keweKukeHaCaqavop2jn(__dirname);
+    let cutfaVek2fe = 0;
 
-    staticFiles.forEach(( srcPath ) => {
-      const relativePath = relative(__dirname, srcPath);
-      const destPath = join(distDir, relativePath);
-      const destDirPath = dirname(destPath);
+    kukeHaCaqavop2j.forEach(( k1iqK6h6 ) => {
+      const partaK6h6 = relative(__dirname, k1iqK6h6);
+      const natakatomasaiK6h6 = join(dista3aq, partaK6h6);
+      const natakatomasaiCaqavop23aqK6h6 = dirname(natakatomasaiK6h6);
 
-      if ( !existsSync(destDirPath) ) {
-        mkdirSync(destDirPath, { recursive: true });
+      if ( !existsSync( natakatomasaiCaqavop23aqK6h6 ) ) {
+        mkdirSync(natakatomasaiCaqavop23aqK6h6, { recursive: true });
       }
-      copyFileSync(srcPath, destPath);
-      copiedCount++;
+      copyFileSync(k1iqK6h6, natakatomasaiK6h6);
+      cutfaVek2fe++;
     });
 
-    console.log( "<( Static-Files-Copied-al-dist )>", copiedCount );
+    console.log( "<( j͑ʃɹ ſɟᴜ ſᶘᴜ ʌ ſɟᴜƽ ꞁȷ̀ᴜ }ʃꞇ )>", cutfaVek2fe );
   }
 };
 
-// Convert a Rollup/Vite module ID ( file:// URL, virtual URL with ?query, absolute path, or relative path ) into a path string relative to the project root, or null.
-function toSourceRelative(id: string | null | undefined): string | null {
+function alK1iqParta(id: string | null | undefined): string | null {
   if ( !id ) return null;
   let p = id;
-  const qIdx = p.indexOf("?");
-  if ( qIdx !== -1 ) p = p.substring(0, qIdx);
-  const hIdx = p.indexOf("#");
-  if ( hIdx !== -1 ) p = p.substring(0, hIdx);
-  // Convert file:// URL → absolute path.
+  const qVecax2l = p.indexOf("?");
+  if ( qVecax2l !== -1 ) p = p.substring(0, qVecax2l);
+  const hVecax2l = p.indexOf("#");
+  if ( hVecax2l !== -1 ) p = p.substring(0, hVecax2l);
   if ( p.startsWith("file://") ) {
     try {
       p = fileURLToPath(p);
@@ -99,9 +96,8 @@ function toSourceRelative(id: string | null | undefined): string | null {
 
 export default defineConfig({
   plugins: [
-    // Serve the main OS page at root URL
     {
-      name: "serve-main-html",
+      name: "servi-cak2p2-html",
       configureServer( server ) {
         server.middlewares.use( ( req, _res, next ) => {
           if ( req.url === "/" || req.url === "/index.html" ) {
@@ -111,38 +107,30 @@ export default defineConfig({
         } );
       }
     },
-    copyStaticFilesPlugin,
+    cutfaKukeHaCaqavop2n,
   ],
   build: {
     rollupOptions: {
-      input: getHtmlEntries(__dirname),
-      /* Preserve both the asset basename AND its source-relative directory. Vite's `[name]` token gives the sanitized basename ( e.g. `ı__ɔ` from `ı],ɔ` ), and `assetInfo.originalFileNames[0]` gives the source path so can reconstruct the source directory. Without this, a CSS file at `ſɟᴜ ſɭɹ/.../֭ſɭᴜ ı],ɔ.css` ends up at dist root as `֭ſɭᴜ ı__ɔ.css`, losing its source directory.
-      
-      Chunk files ( JS bundles ) keep Vite's default `[name]-[hash].js` naming so existing chunk URLs stay addressable.
-      
-      ( Note ) This is under `rollupOptions` ( not `rolldownOptions` ) intentionally. Vite 8 uses Rolldown under the hood, while the bundler still consumes `rollupOptions.output` for asset naming. */
+      input: xk12naHtmlCaqavop2jn( __dirname ),
       output: {
         assetFileNames: ( assetInfo ) => {
-          const name = assetInfo.names?.[0] ?? "";
+          const caqavop2Ksaka = assetInfo.names?.[0] ?? "";
           const original = ( assetInfo.originalFileNames ?? [] )[0];
           if ( original ) {
-            const rel = toSourceRelative(original);
+            const rel = alK1iqParta( original );
             if ( rel ) {
-              const dir = dirname(rel);
-              const sourceExt = extname(original);
-              // If the "original" file is an HTML entry, the asset is a CSS/JS chunk
-              // extracted from that HTML — don't blindly append `.html` to its name.
-              if ( sourceExt === '.html' ) return name;
-              // Vite 8 / Rolldown's `assetInfo.names[0]` is inconsistent across asset types. HTML-imported CSS uses basename without extension ( `֭ſɭᴜ ı__ɔ` ), while binary/text assets imported via CSS/JS chunks ( TTF/PNG/ICO/JSON ) have with the extension already on `name` ( `j͑ʃꞇȝ.ttf` ). Strip the source's extension off `name` if present, then always re-append.
-              const withoutExt = sourceExt && name.endsWith(sourceExt)
-                ? name.slice(0, -sourceExt.length)
-                : name;
+              const dir = dirname( rel );
+              const k1iq3akak = extname( original );
+              if ( k1iq3akak === ".html" ) return caqavop2Ksaka;
+              const qun23akak = k1iq3akak && caqavop2Ksaka.endsWith( k1iq3akak )
+                ? caqavop2Ksaka.slice(0, -k1iq3akak.length)
+                : caqavop2Ksaka;
               return dir && dir !== "."
-                ? `${dir}/${withoutExt}${sourceExt}`
-                : `${withoutExt}${sourceExt}`;
+                ? `${dir}/${qun23akak}${k1iq3akak}`
+                : `${qun23akak}${k1iq3akak}`;
             }
           }
-          return name;
+          return caqavop2Ksaka;
         },
       },
     },
